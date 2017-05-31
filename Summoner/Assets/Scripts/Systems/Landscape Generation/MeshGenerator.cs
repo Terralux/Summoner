@@ -2,14 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class MeshGenerator : MonoBehaviour {
+public class MeshGenerator {
 
 	//public SquareGrid squareGrid;
 	public CubeGrid cubeGrid;
 	List<Vector3> vertices;
 	List<int> triangles;
 
-	public void GenerateMesh(List<int[,]> maps, float squareSize) {
+	public void GenerateMesh(List<int[,]> maps, float squareSize, MeshFilter mf) {
 		//squareGrid = new SquareGrid(map, squareSize);
 		cubeGrid = new CubeGrid(maps, squareSize);
 
@@ -25,9 +25,7 @@ public class MeshGenerator : MonoBehaviour {
 		}
 
 		Mesh mesh = new Mesh();
-		GetComponent<MeshFilter>().mesh = mesh;
-
-		Debug.Log (vertices.Count);
+		mf.mesh = mesh;
 
 		mesh.vertices = vertices.ToArray();
 		mesh.triangles = triangles.ToArray();

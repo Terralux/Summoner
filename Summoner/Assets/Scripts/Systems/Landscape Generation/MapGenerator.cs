@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class MapGenerator : MonoBehaviour {
+public class MapGenerator {
 
 	public int width;
 	public int depth;
@@ -17,25 +17,27 @@ public class MapGenerator : MonoBehaviour {
 
 	int[,] map;
 
-	void Start() {
-		GenerateMap();
+	public void Create(MeshFilter target) {
+		GenerateMap(target);
 	}
 
-	void Update() {
+	void Update(MeshFilter target) {
 		if (Input.GetMouseButtonDown(0)) {
-			GenerateMap();
-			UpdateCollision ();
+			GenerateMap(target);
+			//UpdateCollision (target);
 		}
 	}
 
-	void UpdateCollision(){
-		if (GetComponent<MeshCollider> () == null) {
-			gameObject.AddComponent<MeshCollider> ();
+	/*
+	void UpdateCollision(MeshFilter target){
+		if (target.GetComponent<MeshCollider> () == null) {
+			target.AddComponent<MeshCollider> ();
 		}
-		GetComponent<MeshCollider>().sharedMesh = GetComponent<MeshFilter> ().sharedMesh;
+		target.GetComponent<MeshCollider>().sharedMesh = target.sharedMesh;
 	}
+	*/
 
-	void GenerateMap() {
+	void GenerateMap(MeshFilter target) {
 		List<int[,]> maps = new List<int[,]> ();
 
 		for(int i = 0; i < height; i++){
@@ -48,8 +50,9 @@ public class MapGenerator : MonoBehaviour {
 			maps.Add (map);
 		}
 
-		MeshGenerator meshGen = GetComponent<MeshGenerator>();
-		meshGen.GenerateMesh(maps, 1);
+		MeshGenerator meshGen = new MeshGenerator ();
+
+		meshGen.GenerateMesh (maps, 1, target);
 	}
 
 
