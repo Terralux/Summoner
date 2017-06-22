@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class MapGenerator {
+public class MapGenerator : MonoBehaviour {
 
 	public int width;
 	public int depth;
@@ -15,33 +15,105 @@ public class MapGenerator {
 	[Range(0,100)]
 	public int randomFillPercent;
 
-	int[,] map;
+	bool[,] map;
 
-	public void Create(MeshFilter target) {
-		GenerateMap(target);
+	public bool useTestCube;
+
+	[Header("Cube Generation")]
+	[Space(5)]
+	[Header("Top")]
+	public bool cubeTopForwardLeft;
+	public bool cubeTopForwardRight;
+	public bool cubeTopBackRight;
+	public bool cubeTopBackLeft;
+
+	[Space(5)]
+	[Header("Bottom")]
+	public bool cubeBottomForwardLeft;
+	public bool cubeBottomForwardRight;
+	public bool cubeBottomBackRight;
+	public bool cubeBottomBackLeft;
+
+	void Start() {
+		if (useTestCube) {
+			GenerateTestCube ();
+		} else {
+			GenerateMap ();
+		}
 	}
 
-	void Update(MeshFilter target) {
+	void Update() {
+		if (Input.GetKeyDown (KeyCode.Alpha1)) {
+			cubeTopForwardLeft = !cubeTopForwardLeft;
+			GenerateTestCube ();
+		}
+
+		if (Input.GetKeyDown (KeyCode.Alpha2)) {
+			cubeTopForwardRight = !cubeTopForwardRight;
+			GenerateTestCube ();
+		}
+
+		if (Input.GetKeyDown (KeyCode.Alpha3)) {
+			cubeTopBackRight = !cubeTopBackRight;
+			GenerateTestCube ();
+		}
+
+		if (Input.GetKeyDown (KeyCode.Alpha4)) {
+			cubeTopBackLeft = !cubeTopBackLeft;
+			GenerateTestCube ();
+		}
+
+		if (Input.GetKeyDown (KeyCode.Alpha5)) {
+			cubeBottomForwardLeft = !cubeBottomForwardLeft;
+			GenerateTestCube ();
+		}
+
+		if (Input.GetKeyDown (KeyCode.Alpha6)) {
+			cubeBottomForwardRight = !cubeBottomForwardRight;
+			GenerateTestCube ();
+		}
+
+		if (Input.GetKeyDown (KeyCode.Alpha7)) {
+			cubeBottomBackRight = !cubeBottomBackRight;
+			GenerateTestCube ();
+		}
+
+		if (Input.GetKeyDown (KeyCode.Alpha8)) {
+			cubeBottomBackLeft = !cubeBottomBackLeft;
+			GenerateTestCube ();
+		}
+
 		if (Input.GetMouseButtonDown(0)) {
-			GenerateMap(target);
-			//UpdateCollision (target);
+			if (useTestCube) {
+				GenerateTestCube ();
+			} else {
+				GenerateMap ();
+				UpdateCollision ();
+			}
 		}
 	}
 
-	/*
-	void UpdateCollision(MeshFilter target){
-		if (target.GetComponent<MeshCollider> () == null) {
-			target.AddComponent<MeshCollider> ();
-		}
-		target.GetComponent<MeshCollider>().sharedMesh = target.sharedMesh;
-	}
-	*/
+	void GenerateTestCube(){
+		List<bool[,]> maps = new List<bool[,]> ();
+		maps.Add (new bool[,]{ { cubeBottomBackLeft, cubeBottomForwardLeft }, { cubeBottomBackRight, cubeBottomForwardRight } });
+		maps.Add (new bool[,]{ { cubeTopBackLeft, cubeTopForwardLeft }, { cubeTopBackRight, cubeTopForwardRight } });
 
-	void GenerateMap(MeshFilter target) {
-		List<int[,]> maps = new List<int[,]> ();
+		MeshGenerator meshGen = GetComponent<MeshGenerator>();
+		meshGen.GenerateMesh(maps, 1);
+	}
+
+	void UpdateCollision(){
+		if (GetComponent<MeshCollider> () == null) {
+			gameObject.AddComponent<MeshCollider> ();
+		}
+		GetComponent<MeshCollider>().sharedMesh = GetComponent<MeshFilter> ().sharedMesh;
+	}
+
+	void GenerateMap() {
+		List<bool[,]> maps = new List<bool[,]> ();
 
 		for(int i = 0; i < height; i++){
-			map = new int[width, depth];
+			map = new bool[width, depth];
 			RandomFillMap();
 
 			for (int s = 0; s < 5; s++) {
@@ -50,11 +122,9 @@ public class MapGenerator {
 			maps.Add (map);
 		}
 
-		MeshGenerator meshGen = new MeshGenerator ();
-
-		meshGen.GenerateMesh (maps, 1, target);
+		MeshGenerator meshGen = GetComponent<MeshGenerator>();
+		meshGen.GenerateMesh(maps, 1);
 	}
-
 
 	void RandomFillMap() {
 		if (useRandomSeed) {
@@ -65,12 +135,15 @@ public class MapGenerator {
 
 		for (int x = 0; x < width; x ++) {
 			for (int y = 0; y < depth; y ++) {
+				map [x, y] = (pseudoRandom.Next (0, 100) < randomFillPercent) ? true : false;
+				/*
 				if (x == 0 || x == width-1 || y == 0 || y == depth -1) {
-					map[x,y] = 1;
+					map[x,y] = true;
 				}
 				else {
-					map[x,y] = (pseudoRandom.Next(0,100) < randomFillPercent)? 1: 0;
+					map [x, y] = (pseudoRandom.Next (0, 100) < randomFillPercent) ? true : false;
 				}
+				*/
 			}
 		}
 	}
@@ -81,9 +154,9 @@ public class MapGenerator {
 				int neighbourWallTiles = GetSurroundingWallCount(x,y);
 
 				if (neighbourWallTiles > 4)
-					map[x,y] = 1;
+					map[x,y] = true;
 				else if (neighbourWallTiles < 4)
-					map[x,y] = 0;
+					map[x,y] = false;
 
 			}
 		}
@@ -95,7 +168,7 @@ public class MapGenerator {
 			for (int neighbourY = gridY - 1; neighbourY <= gridY + 1; neighbourY ++) {
 				if (neighbourX >= 0 && neighbourX < width && neighbourY >= 0 && neighbourY < depth) {
 					if (neighbourX != gridX || neighbourY != gridY) {
-						wallCount += map[neighbourX,neighbourY];
+						wallCount += map [neighbourX, neighbourY] ? 1 : 0;
 					}
 				}
 				else {
@@ -106,18 +179,4 @@ public class MapGenerator {
 
 		return wallCount;
 	}
-
-	/*
-	void OnDrawGizmos() {
-		if (map != null) {
-			for (int x = 0; x < width; x ++) {
-				for (int y = 0; y < depth; y ++) {
-					Gizmos.color = (map[x,y] == 1)?Color.black:Color.white;
-					Vector3 pos = new Vector3(-width/2 + x + .5f,0, -depth/2 + y+.5f);
-					Gizmos.DrawCube(pos,Vector3.one);
-				}
-			}
-		}
-	}
-	*/
 }
