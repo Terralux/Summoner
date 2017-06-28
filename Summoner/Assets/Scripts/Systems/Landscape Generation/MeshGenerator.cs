@@ -1238,6 +1238,24 @@ public class MeshGenerator : MonoBehaviour {
 			CreateQuad (points [9], points [5], points [3], points [7]);
 			break;
 		case 48:
+			points = new Node[] {
+				cube.bottomSquare.forwardRight,
+				cube.middleForwardRight,
+				cube.bottomSquare.centreForward,
+				cube.bottomSquare.centreRight,
+
+				cube.bottomSquare.forwardLeft,
+				cube.middleForwardLeft,
+				cube.bottomSquare.centreLeft
+			};
+			AssignVertices (points);
+			CreateCornerMesh (points [0], points [1], points [2], points [3], false);
+			CreateCornerMesh (points [4], points [5], points [6], points [2], false);
+
+			CreateQuad (points[1], points[5], points[3], points [2]);
+			CreateQuad (points[3], points[6], points[2], points [5]);
+			break;
+		case 49:
 			break;
 		default:
 			Debug.LogWarning ("Mesh Setup not completed yet!");
