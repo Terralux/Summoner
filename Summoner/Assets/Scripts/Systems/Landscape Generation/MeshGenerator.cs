@@ -6,8 +6,8 @@ public class MeshGenerator : MonoBehaviour {
 
 	//public SquareGrid squareGrid;
 	public CubeGrid cubeGrid;
-	List<Vector3> vertices;
-	List<int> triangles;
+	public List<Vector3> vertices;
+	public List<int> triangles;
 
 	[Range(0f,10f)]
 	public float xOffset = 1f;
@@ -5405,6 +5405,8 @@ public class MeshGenerator : MonoBehaviour {
 			CreateQuad (points[1], points[9], points[3], points[5]);
 			break;
 		default:
+			ExtendedMeshGenerator emg = new ExtendedMeshGenerator();
+			emg.ExtendedMeshGeneration(this, cube);
 			Debug.LogWarning ("Mesh Setup not completed yet!");
 			break;
 		}
