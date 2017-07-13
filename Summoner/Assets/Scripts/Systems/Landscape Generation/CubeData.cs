@@ -53,49 +53,40 @@ public struct Cube {
 		middleBackwardRight = bottomSquare.backwardRight.above;
 		middleBackwardLeft = bottomSquare.backwardLeft.above;
 
-		int count = 0;
 		configuration = 0;
 		controlNodesActive = 0;
 
 		if (bottomSquare.backwardLeft.active){
 			configuration += 128;
-			count++;
 			controlNodesActive++;
 		}
 		if (bottomSquare.backwardRight.active){
 			configuration += 64;
-			count++;
 			controlNodesActive++;
 		}
 		if (bottomSquare.forwardRight.active){
 			configuration += 32;
-			count++;
 			controlNodesActive++;
 		}
 		if (bottomSquare.forwardLeft.active){
 			configuration += 16;
-			count++;
 			controlNodesActive++;
 		}
 
 		if (topSquare.backwardLeft.active){
 			configuration += 8;
-			count++;
 			controlNodesActive++;
 		}
 		if (topSquare.backwardRight.active){
 			configuration += 4;
-			count++;
 			controlNodesActive++;
 		}
 		if (topSquare.forwardRight.active){
 			configuration += 2;
-			count++;
 			controlNodesActive++;
 		}
 		if (topSquare.forwardLeft.active){
 			configuration += 1;
-			count++;
 			controlNodesActive++;
 		}
 	}
