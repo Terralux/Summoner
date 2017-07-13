@@ -15,6 +15,9 @@ public class MapGenerator : MonoBehaviour {
 	[Range(0,100)]
 	public int randomFillPercent;
 
+	[Range(0f,100f)]
+	public float randomAdditionPercent;
+
 	bool[,] map;
 
 	public bool useTestCube;
@@ -110,6 +113,7 @@ public class MapGenerator : MonoBehaviour {
 	}
 
 	void GenerateMap() {
+		/*
 		List<bool[,]> maps = new List<bool[,]> ();
 
 		for(int i = 0; i < height; i++){
@@ -121,9 +125,19 @@ public class MapGenerator : MonoBehaviour {
 			}
 			maps.Add (map);
 		}
+		*/
 
+		map = new bool[width, depth];
+		RandomFillMap();
+
+		for (int s = 0; s < 5; s++) {
+			SmoothMap();
+		}
+
+		Generator gen = new Generator();
 		MeshGenerator meshGen = new MeshGenerator();
-		meshGen.GenerateMesh (GetComponent<MeshFilter>(), maps, 1);
+
+		meshGen.GenerateMesh (GetComponent<MeshFilter>(), gen.Generate(Direction.XPositive, map, randomAdditionPercent), 1);
 	}
 
 	void RandomFillMap() {
