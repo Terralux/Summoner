@@ -6,12 +6,12 @@ public class ExtendedMeshGenerator {
 
 	private MeshGenerator mg;
 
-	public void ExtendedMeshGeneration(MeshGenerator newMG, MeshGenerator.Cube cube){
+	public void ExtendedMeshGeneration(MeshGenerator newMG, Cube cube){
 		mg = newMG;
-		MeshGenerator.Node[] points;
+		Node[] points;
 		switch (cube.configuration) {
 		case 194:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.centreForward,
 
 				cube.topSquare.forwardRight,
@@ -52,7 +52,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [2], points [4], points [9], points [3]);
 			break;
 		case 195:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -97,7 +97,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [8], points [1], points [10], points [3]);
 			break;
 		case 196:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.centreRight,
 
 				cube.topSquare.backwardRight,
@@ -131,7 +131,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [2], points [4], points [8], points [3]);
 			break;
 		case 197:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.centreLeft,
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
@@ -176,7 +176,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [6], points [8], points [12], points [7]);
 			break;
 		case 198:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.centreForward,
 
 				cube.topSquare.forwardRight,
@@ -217,7 +217,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [5], points [7], points [11], points [6]);
 			break;
 		case 199:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -264,7 +264,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [10], points [1], points [11], points [3]);
 			break;
 		case 200:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.centreLeft,
 
 				cube.middleBackwardRight,
@@ -298,7 +298,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [1], points [4], points [8], points [2]);
 			break;
 		case 201:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -338,7 +338,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [7], points [1], points [8], points [3]);
 			break;
 		case 202:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.centreForward,
 				cube.topSquare.centreLeft,
 
@@ -383,7 +383,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [5], points [8], points [12], points [6]);
 			break;
 		case 203:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -430,7 +430,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [10], points [1], points [11], points [3]);
 			break;
 		case 204:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.centreLeft,
 
 				cube.topSquare.forwardLeft,
@@ -470,7 +470,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [5], points [8], points [12], points [6]);
 			break;
 		case 205:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.centreForward,
 				cube.topSquare.centreLeft,
 
@@ -515,7 +515,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [9], points [3], points [10], points [1]);
 			break;
 		case 206:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.centreForward,
 				cube.topSquare.centreLeft,
 
@@ -560,7 +560,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [6], points [9], points [13], points [7]);
 			break;
 		case 207:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -607,7 +607,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [11], points [1], points [12], points [3]);
 			break;
 		case 208:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.bottomSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.bottomSquare.centreForward,
@@ -637,7 +637,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [2], points [6], points [4], points [1]);
 			break;
 		case 209:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -679,7 +679,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [5], points [1], points [9], points [3]);
 			break;
 		case 210:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardRight,
 				cube.middleForwardRight,
 				cube.topSquare.centreRight,
@@ -722,7 +722,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [4], points [1], points [2], points [10]);
 			break;
 		case 211:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -768,7 +768,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [8], points [1], points [11], points [3]);
 			break;
 		case 212:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.middleForwardLeft,
 
 				cube.topSquare.centreRight,
@@ -810,7 +810,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [3], points [5], points [11], points [4]);
 			break;
 		case 213:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -857,7 +857,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [8], points [1], points [11], points [3]);
 			break;
 		case 214:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
 
@@ -904,7 +904,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [1], points [8], points [7], points [0]);
 			break;
 		case 215:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -952,7 +952,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [10], points [1], points [13], points [3]);
 			break;
 		case 216:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.middleForwardLeft,
 				cube.topSquare.centreLeft,
 
@@ -989,7 +989,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [0], points [3], points [2], points [1]);
 			break;
 		case 217:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -1033,7 +1033,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [7], points [1], points [10], points [3]);
 			break;
 		case 218:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
 				cube.topSquare.centreLeft,
@@ -1080,7 +1080,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [9], points [0], points [12], points [2]);
 			break;
 		case 219:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -1128,7 +1128,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [10], points [1], points [13], points [3]);
 			break;
 		case 220:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
 				cube.topSquare.centreLeft,
@@ -1174,7 +1174,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [8], points [0], points [11], points [2]);
 			break;
 		case 221:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -1221,7 +1221,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [9], points [1], points [12], points [3]);
 			break;
 		case 222:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
 				cube.topSquare.centreLeft,
@@ -1269,7 +1269,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [10], points [0], points [13], points [2]);
 			break;
 		case 223:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -1318,7 +1318,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [11], points [1], points [14], points [3]);
 			break;
 		case 224:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.middleForwardRight,
 				cube.middleBackwardRight,
 				cube.middleBackwardLeft,
@@ -1350,7 +1350,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [3], points [8], points [4], points [6]);
 			break;
 		case 225:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.centreForward,
 
 				cube.topSquare.forwardLeft,
@@ -1395,7 +1395,7 @@ public class ExtendedMeshGenerator {
 
 			break;
 		case 226:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.centreForward,
 
 				cube.topSquare.forwardRight,
@@ -1436,7 +1436,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [2], points [4], points [9], points [3]);
 			break;
 		case 227:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -1482,7 +1482,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [8], points [1], points [10], points [3]);
 			break;
 		case 228:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.middleForwardRight,
 				cube.topSquare.centreRight,
 
@@ -1519,7 +1519,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [3], points [5], points [11], points [4]);
 			break;
 		case 229:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -1566,7 +1566,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [9], points [1], points [11], points [3]);
 			break;
 		case 230:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.centreForward,
 				cube.topSquare.centreLeft,
 
@@ -1612,7 +1612,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [6], points [8], points [14], points [7]);
 			break;
 		case 231:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -1660,7 +1660,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [10], points [1], points [12], points [3]);
 			break;
 		case 232:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -1705,7 +1705,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [9], points [14], points [10], points [12]);
 			break;
 		case 233:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -1752,7 +1752,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [9], points [14], points [10], points [12]);
 			break;
 		case 234:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.centreForward,
 				cube.topSquare.centreLeft,
 
@@ -1800,7 +1800,7 @@ public class ExtendedMeshGenerator {
 			break;
 			
 		case 235:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -1848,7 +1848,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [10], points [1], points [12], points [3]);
 			break;
 		case 236:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -1896,7 +1896,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [7], points [10], points [16], points [8]);
 			break;
 		case 237:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -1944,7 +1944,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [10], points [1], points [12], points [3]);
 			break;
 		case 238:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.centreForward,
 				cube.topSquare.centreLeft,
 
@@ -1991,7 +1991,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [6], points [9], points [15], points [7]);
 			break;
 		case 239:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -2040,7 +2040,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [11], points [1], points [13], points [3]);
 			break;
 		case 240:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.bottomSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.bottomSquare.centreForward,
@@ -2072,7 +2072,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [2], points [9], points [3], points [6]);
 			break;
 		case 241:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -2115,7 +2115,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [5], points [1], points [9], points [3]);
 			break;
 		case 242:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardRight,
 				cube.middleForwardRight,
 				cube.topSquare.centreRight,
@@ -2158,7 +2158,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [4], points [1], points [2], points [11]);
 			break;
 		case 243:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -2203,7 +2203,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [8], points [1], points [11], points [3]);
 			break;
 		case 244:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.backwardRight,
 				cube.middleBackwardRight,
 				cube.topSquare.centreBackward,
@@ -2247,7 +2247,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [13], points [8], points [11], points [9]);
 			break;
 		case 245:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -2295,7 +2295,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [9], points [1], points [12], points [3]);
 			break;
 		case 246:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
 
@@ -2340,7 +2340,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [15], points [10], points [13], points [11]);
 			break;
 		case 247:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -2389,7 +2389,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [10], points [1], points [13], points [3]);
 			break;
 		case 248:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.middleForwardLeft,
 				cube.topSquare.centreLeft,
 
@@ -2431,7 +2431,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [3], points [5], points [13], points [6]);
 			break;
 		case 249:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -2477,7 +2477,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [5], points [2], points [8], points [4]);
 			break;
 		case 250:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
 				cube.topSquare.centreLeft,
@@ -2525,7 +2525,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [9], points [0], points [12], points [2]);
 			break;
 		case 251:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -2574,7 +2574,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [10], points [1], points [13], points [3]);
 			break;
 		case 252:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.backwardRight,
 				cube.middleBackwardRight,
 				cube.topSquare.centreBackward,
@@ -2620,7 +2620,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [8], points [6], points[3], points [7]);
 			break;
 		case 253:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -2669,7 +2669,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [10], points [1], points [13], points [3]);
 			break;
 		case 254:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
 				cube.topSquare.centreLeft,
@@ -2718,7 +2718,7 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [10], points [0], points [13], points [2]);
 			break;
 		case 255:
-			points = new MeshGenerator.Node[] {
+			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
@@ -2767,17 +2767,17 @@ public class ExtendedMeshGenerator {
 			CreateQuad (points [11], points [1], points [14], points [3]);
 			break;
 		default:
-			Debug.LogWarning("Still working on this one!");
+			Debug.Log(cube.configuration);
 			break;
 		}
 	}
 
-	private void CreateQuad(MeshGenerator.Node center1, MeshGenerator.Node center2, MeshGenerator.Node edge1, MeshGenerator.Node edge2){
+	private void CreateQuad(Node center1, Node center2, Node edge1, Node edge2){
 		CreateTriangle (center1, edge1, center2);
 		CreateTriangle (center1, center2, edge2);
 	}
 
-	private void CreateCornerMesh(MeshGenerator.Node center, MeshGenerator.Node n1, MeshGenerator.Node n2, MeshGenerator.Node n3, bool closeCorner){
+	private void CreateCornerMesh(Node center, Node n1, Node n2, Node n3, bool closeCorner){
 		CreateTriangle (center, n1, n2);
 		CreateTriangle (center, n2, n3);
 		CreateTriangle (center, n3, n1);
@@ -2787,7 +2787,7 @@ public class ExtendedMeshGenerator {
 		}
 	}
 
-	void AssignVertices(MeshGenerator.Node[] points) {
+	void AssignVertices(Node[] points) {
 		for (int i = 0; i < points.Length; i ++) {
 			if (points[i].vertexIndex == -1) {
 				points[i].vertexIndex = mg.vertices.Count;
@@ -2796,7 +2796,7 @@ public class ExtendedMeshGenerator {
 		}
 	}
 
-	void CreateTriangle(MeshGenerator.Node a, MeshGenerator.Node b, MeshGenerator.Node c) {
+	void CreateTriangle(Node a, Node b, Node c) {
 		mg.triangles.Add(a.vertexIndex);
 		mg.triangles.Add(b.vertexIndex);
 		mg.triangles.Add(c.vertexIndex);

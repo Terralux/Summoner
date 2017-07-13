@@ -98,8 +98,8 @@ public class MapGenerator : MonoBehaviour {
 		maps.Add (new bool[,]{ { cubeBottomBackLeft, cubeBottomForwardLeft }, { cubeBottomBackRight, cubeBottomForwardRight } });
 		maps.Add (new bool[,]{ { cubeTopBackLeft, cubeTopForwardLeft }, { cubeTopBackRight, cubeTopForwardRight } });
 
-		MeshGenerator meshGen = GetComponent<MeshGenerator>();
-		meshGen.GenerateMesh(maps, 1);
+		MeshGenerator meshGen = new MeshGenerator();
+		meshGen.GenerateMesh (GetComponent<MeshFilter>(), maps, 1);
 	}
 
 	void UpdateCollision(){
@@ -122,8 +122,8 @@ public class MapGenerator : MonoBehaviour {
 			maps.Add (map);
 		}
 
-		MeshGenerator meshGen = GetComponent<MeshGenerator>();
-		meshGen.GenerateMesh(maps, 1);
+		MeshGenerator meshGen = new MeshGenerator();
+		meshGen.GenerateMesh (GetComponent<MeshFilter>(), maps, 1);
 	}
 
 	void RandomFillMap() {
