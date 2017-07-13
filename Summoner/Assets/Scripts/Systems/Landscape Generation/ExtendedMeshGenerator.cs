@@ -10,7 +10,602 @@ public class ExtendedMeshGenerator {
 		mg = newMG;
 		MeshGenerator.Node[] points;
 		switch (cube.configuration) {
+		case 194:
+			points = new MeshGenerator.Node[] {
+				cube.topSquare.centreForward,
+
+				cube.topSquare.forwardRight,
+				cube.middleForwardRight,
+				cube.topSquare.centreRight,
+
+				cube.middleBackwardRight,
+				cube.middleBackwardLeft,
+
+				cube.bottomSquare.centreForward,
+				cube.bottomSquare.centreLeft,
+
+				cube.bottomSquare.forwardRight,
+				cube.bottomSquare.centreRight,
+
+				cube.bottomSquare.backwardRight,
+				cube.bottomSquare.centreBackward,
+
+				cube.bottomSquare.backwardLeft
+			};
+			AssignVertices (points);
+			CreateCornerMesh (points [1], points [2], points [3], points [0], false);
+
+			CreateCornerMesh (points [10], points [4], points [9], points [11], false);
+			CreateCornerMesh (points [12], points [5], points [11], points [7], false);
+
+			CreateTriangle (points [5], points [4], points [11]);
+
+			CreateTriangle (points [7], points [11], points [9]);
+
+			CreateTriangle (points [7], points [9], points [2]);
+			CreateTriangle (points [3], points [4], points [5]);
+
+			CreateTriangle (points [0], points [3], points [5]);
+			CreateTriangle (points [0], points [5], points [7]);
+			CreateTriangle (points [0], points [7], points [2]);
+
+			CreateQuad (points [2], points [4], points [9], points [3]);
+			break;
+		case 195:
+			points = new MeshGenerator.Node[] {
+				cube.topSquare.forwardLeft,
+				cube.middleForwardLeft,
+				cube.topSquare.centreForward,
+				cube.topSquare.centreLeft,
+
+				cube.topSquare.forwardRight,
+				cube.middleForwardRight,
+				cube.topSquare.centreRight,
+
+				cube.middleBackwardRight,
+				cube.middleBackwardLeft,
+
+				cube.bottomSquare.centreForward,
+				cube.bottomSquare.centreLeft,
+
+				cube.bottomSquare.forwardRight,
+				cube.bottomSquare.centreRight,
+
+				cube.bottomSquare.backwardRight,
+				cube.bottomSquare.centreBackward,
+
+				cube.bottomSquare.backwardLeft
+			};
+			AssignVertices (points);
+			CreateCornerMesh (points [0], points [1], points [2], points [3], false);
+			CreateCornerMesh (points [4], points [5], points [6], points [2], false);
+
+			CreateCornerMesh (points [13], points [7], points [12], points [14], false);
+			CreateCornerMesh (points [15], points [8], points [14], points [10], false);
+
+			CreateTriangle (points [8], points [7], points [14]);
+			CreateTriangle (points [3], points [2], points [6]);
+
+			CreateTriangle (points [2], points [1], points [5]);
+			CreateTriangle (points [10], points [14], points [12]);
+
+			CreateQuad (points [1], points [12], points [10], points [5]);
+
+			CreateQuad (points [3], points [7], points [6], points [8]);
+
+			CreateQuad (points [5], points [7], points [12], points [6]);
+			CreateQuad (points [8], points [1], points [10], points [3]);
+			break;
+		case 196:
+			points = new MeshGenerator.Node[] {
+				cube.topSquare.centreRight,
+
+				cube.topSquare.backwardRight,
+				cube.middleBackwardRight,
+				cube.topSquare.centreBackward,
+
+				cube.middleBackwardLeft,
+
+				cube.bottomSquare.centreLeft,
+
+				cube.bottomSquare.centreRight,
+
+				cube.bottomSquare.backwardRight,
+				cube.bottomSquare.centreBackward,
+
+				cube.bottomSquare.backwardLeft
+			};
+			AssignVertices (points);
+			CreateCornerMesh (points [1], points [2], points [3], points [0], false);
+
+			CreateCornerMesh (points [7], points [2], points [6], points [8], false);
+			CreateCornerMesh (points [9], points [4], points [8], points [5], false);
+
+			CreateTriangle (points [6], points [0], points [5]);
+
+			CreateTriangle (points [8], points [6], points [5]);
+			CreateTriangle (points [6], points [2], points [0]);
+
+			CreateQuad (points [0], points [4], points [3], points [5]);
+
+			CreateQuad (points [2], points [4], points [8], points [3]);
+			break;
+		case 197:
+			points = new MeshGenerator.Node[] {
+				cube.topSquare.centreLeft,
+				cube.topSquare.forwardLeft,
+				cube.middleForwardLeft,
+				cube.topSquare.centreForward,
+
+				cube.topSquare.centreRight,
+
+				cube.topSquare.backwardRight,
+				cube.middleBackwardRight,
+				cube.topSquare.centreBackward,
+
+				cube.middleBackwardLeft,
+
+				cube.bottomSquare.centreLeft,
+
+				cube.bottomSquare.centreRight,
+
+				cube.bottomSquare.backwardRight,
+				cube.bottomSquare.centreBackward,
+
+				cube.bottomSquare.backwardLeft
+			};
+			AssignVertices (points);
+			CreateCornerMesh (points [1], points [2], points [3], points [0], false);
+			CreateCornerMesh (points [5], points [6], points [7], points [4], false);
+
+			CreateCornerMesh (points [11], points [6], points [10], points [12], false);
+			CreateCornerMesh (points [13], points [8], points [12], points [9], false);
+
+			CreateTriangle (points [12], points [10], points [9]);
+			CreateTriangle (points [10], points [6], points [4]);
+
+			CreateTriangle (points [0], points [7], points [8]);
+
+			CreateTriangle (points [10], points [4], points [3]);
+			CreateTriangle (points [10], points [3], points [2]);
+			CreateTriangle (points [10], points [2], points [9]);
+
+			CreateQuad (points [3], points [7], points [4], points [0]);
+			CreateQuad (points [2], points [8], points [0], points [9]);
+
+			CreateQuad (points [6], points [8], points [12], points [7]);
+			break;
+		case 198:
+			points = new MeshGenerator.Node[] {
+				cube.topSquare.centreForward,
+
+				cube.topSquare.forwardRight,
+				cube.middleForwardRight,
+				cube.topSquare.centreRight,
+
+				cube.topSquare.backwardRight,
+				cube.middleBackwardRight,
+				cube.topSquare.centreBackward,
+
+				cube.middleBackwardLeft,
+
+				cube.bottomSquare.centreLeft,
+
+				cube.bottomSquare.centreRight,
+
+				cube.bottomSquare.backwardRight,
+				cube.bottomSquare.centreBackward,
+
+				cube.bottomSquare.backwardLeft
+			};
+			AssignVertices (points);
+			CreateCornerMesh (points [1], points [2], points [3], points [0], false);
+			CreateCornerMesh (points [4], points [5], points [6], points [3], false);
+
+			CreateCornerMesh (points [10], points [5], points [9], points [11], false);
+			CreateCornerMesh (points [12], points [7], points [11], points [8], false);
+
+			CreateTriangle (points [11], points [9], points [8]);
+			CreateTriangle (points [0], points [3], points [6]);
+
+			CreateTriangle (points [0], points [6], points [7]);
+			CreateTriangle (points [8], points [9], points [2]);
+
+			CreateQuad (points [0], points [8], points [7], points [2]);
+
+			CreateQuad (points [2], points [5], points [9], points [3]);
+			CreateQuad (points [5], points [7], points [11], points [6]);
+			break;
+		case 199:
+			points = new MeshGenerator.Node[] {
+				cube.topSquare.forwardLeft,
+				cube.middleForwardLeft,
+				cube.topSquare.centreForward,
+				cube.topSquare.centreLeft,
+
+				cube.topSquare.forwardRight,
+				cube.middleForwardRight,
+				cube.topSquare.centreRight,
+
+				cube.topSquare.backwardRight,
+				cube.middleBackwardRight,
+				cube.topSquare.centreBackward,
+
+				cube.middleBackwardLeft,
+
+				cube.bottomSquare.centreLeft,
+
+				cube.bottomSquare.centreRight,
+
+				cube.bottomSquare.backwardRight,
+				cube.bottomSquare.centreBackward,
+
+				cube.bottomSquare.backwardLeft
+			};
+			AssignVertices (points);
+			CreateCornerMesh (points [0], points [1], points [2], points [3], false);
+			CreateCornerMesh (points [4], points [5], points [6], points [2], false);
+			CreateCornerMesh (points [7], points [8], points [9], points [6], false);
+
+			CreateCornerMesh (points [13], points [8], points [12], points [14], false);
+			CreateCornerMesh (points [15], points [10], points [14], points [11], false);
+
+			CreateTriangle (points [3], points [9], points [10]);
+
+			CreateTriangle (points [5], points [2], points [1]);
+			CreateTriangle (points [14], points [12], points [11]);
+
+			CreateQuad (points [12], points [1], points [5], points [11]);
+
+			CreateQuad (points [2], points [9], points [6], points [3]);
+
+			CreateQuad (points [5], points [8], points [12], points [6]);
+			CreateQuad (points [8], points [10], points [14], points [9]);
+			CreateQuad (points [10], points [1], points [11], points [3]);
+			break;
+		case 200:
+			points = new MeshGenerator.Node[] {
+				cube.topSquare.centreLeft,
+
+				cube.middleBackwardRight,
+				cube.topSquare.centreBackward,
+
+				cube.topSquare.backwardLeft,
+				cube.middleBackwardLeft,
+
+				cube.bottomSquare.centreLeft,
+
+				cube.bottomSquare.centreRight,
+
+				cube.bottomSquare.backwardRight,
+				cube.bottomSquare.centreBackward,
+
+				cube.bottomSquare.backwardLeft
+			};
+			AssignVertices (points);
+			CreateCornerMesh (points [3], points [4], points [0], points [2], false);
+
+			CreateCornerMesh (points [7], points [1], points [6], points [8], false);
+			CreateCornerMesh (points [9], points [4], points [8], points [5], false);
+
+			CreateTriangle (points [0], points [4], points [5]);
+			CreateTriangle (points [5], points [8], points [6]);
+
+			CreateTriangle (points [0], points [5], points [6]);
+
+			CreateQuad (points [0], points [1], points [6], points [2]);
+
+			CreateQuad (points [1], points [4], points [8], points [2]);
+			break;
+		case 201:
+			points = new MeshGenerator.Node[] {
+				cube.topSquare.forwardLeft,
+				cube.middleForwardLeft,
+				cube.topSquare.centreForward,
+				cube.topSquare.centreLeft,
+
+				cube.middleBackwardRight,
+				cube.topSquare.centreBackward,
+
+				cube.topSquare.backwardLeft,
+				cube.middleBackwardLeft,
+
+				cube.bottomSquare.centreLeft,
+
+				cube.bottomSquare.centreRight,
+
+				cube.bottomSquare.backwardRight,
+				cube.bottomSquare.centreBackward,
+
+				cube.bottomSquare.backwardLeft
+			};
+			AssignVertices (points);
+			CreateCornerMesh (points [0], points [1], points [2], points [3], false);
+			CreateCornerMesh (points [6], points [7], points [3], points [5], false);
+
+			CreateCornerMesh (points [10], points [4], points [9], points [11], false);
+			CreateCornerMesh (points [12], points [7], points [11], points [8], false);
+
+			CreateTriangle (points [3], points [2], points [5]);
+			CreateTriangle (points [9], points [8], points [11]);
+
+			CreateTriangle (points [4], points [5], points [2]);
+			CreateTriangle (points [1], points [8], points [9]);
+
+			CreateQuad (points [2], points [9], points [1], points [4]);
+
+			CreateQuad (points [4], points [7], points [11], points [5]);
+			CreateQuad (points [7], points [1], points [8], points [3]);
+			break;
+		case 202:
+			points = new MeshGenerator.Node[] {
+				cube.topSquare.centreForward,
+				cube.topSquare.centreLeft,
+
+				cube.topSquare.forwardRight,
+				cube.middleForwardRight,
+				cube.topSquare.centreRight,
+
+				cube.middleBackwardRight,
+				cube.topSquare.centreBackward,
+
+				cube.topSquare.backwardLeft,
+				cube.middleBackwardLeft,
+
+				cube.bottomSquare.centreLeft,
+
+				cube.bottomSquare.centreRight,
+
+				cube.bottomSquare.backwardRight,
+				cube.bottomSquare.centreBackward,
+
+				cube.bottomSquare.backwardLeft
+			};
+			AssignVertices (points);
+			CreateCornerMesh (points [2], points [3], points [4], points [0], false);
+			CreateCornerMesh (points [7], points [8], points [1], points [6], false);
+
+			CreateCornerMesh (points [11], points [5], points [10], points [12], false);
+			CreateCornerMesh (points [13], points [8], points [12], points [9], false);
+
+			CreateTriangle (points [4], points [5], points [6]);
+
+			CreateTriangle (points [1], points [8], points [9]);
+			CreateTriangle (points [9], points [12], points [10]);
+
+			CreateTriangle (points [9], points [10], points [3]);
+			CreateTriangle (points [9], points [3], points [0]);
+			CreateTriangle (points [9], points [0], points [1]);
+
+			CreateQuad (points [0], points [6], points [4], points [1]);
+
+			CreateQuad (points [3], points [5], points [10], points [4]);
+			CreateQuad (points [5], points [8], points [12], points [6]);
+			break;
+		case 203:
+			points = new MeshGenerator.Node[] {
+				cube.topSquare.forwardLeft,
+				cube.middleForwardLeft,
+				cube.topSquare.centreForward,
+				cube.topSquare.centreLeft,
+
+				cube.topSquare.forwardRight,
+				cube.middleForwardRight,
+				cube.topSquare.centreRight,
+
+				cube.middleBackwardRight,
+				cube.topSquare.centreBackward,
+
+				cube.topSquare.backwardLeft,
+				cube.middleBackwardLeft,
+
+				cube.bottomSquare.centreLeft,
+
+				cube.bottomSquare.centreRight,
+
+				cube.bottomSquare.backwardRight,
+				cube.bottomSquare.centreBackward,
+
+				cube.bottomSquare.backwardLeft
+			};
+			AssignVertices (points);
+			CreateCornerMesh (points [0], points [1], points [2], points [3], false);
+			CreateCornerMesh (points [4], points [5], points [6], points [2], false);
+			CreateCornerMesh (points [9], points [10], points [3], points [8], false);
+
+			CreateCornerMesh (points [13], points [7], points [12], points [14], false);
+			CreateCornerMesh (points [15], points [10], points [14], points [11], false);
+
+			CreateTriangle (points [6], points [7], points [8]);
+
+			CreateTriangle (points [5], points [2], points [1]);
+			CreateTriangle (points [14], points [12], points [11]);
+
+			CreateQuad (points [12], points [1], points [5], points [11]);
+
+			CreateQuad (points [2], points [8], points [6], points [3]);
+
+			CreateQuad (points [5], points [7], points [12], points [6]);
+			CreateQuad (points [7], points [10], points [14], points [8]);
+			CreateQuad (points [10], points [1], points [11], points [3]);
+			break;
+		case 204:
+			points = new MeshGenerator.Node[] {
+				cube.topSquare.centreLeft,
+
+				cube.topSquare.forwardLeft,
+				cube.middleForwardLeft,
+				cube.topSquare.centreRight,
+
+				cube.topSquare.backwardRight,
+				cube.middleBackwardRight,
+				cube.topSquare.centreBackward,
+
+				cube.topSquare.backwardLeft,
+				cube.middleBackwardLeft,
+
+				cube.bottomSquare.centreLeft,
+
+				cube.bottomSquare.centreRight,
+
+				cube.bottomSquare.backwardRight,
+				cube.bottomSquare.centreBackward,
+
+				cube.bottomSquare.backwardLeft
+			};
+			AssignVertices (points);
+			CreateCornerMesh (points [4], points [5], points [6], points [3], false);
+			CreateCornerMesh (points [7], points [8], points [0], points [6], false);
+
+			CreateCornerMesh (points [11], points [5], points [10], points [12], false);
+			CreateCornerMesh (points [13], points [8], points [12], points [9], false);
+
+			CreateTriangle (points [8], points [9], points [0]);
+			CreateTriangle (points [10], points [5], points [3]);
+			CreateTriangle (points [10], points [9], points [12]);
+			CreateTriangle (points [0], points [3], points [6]);
+
+			CreateQuad (points [3], points [9], points [0], points [10]);
+
+			CreateQuad (points [5], points [8], points [12], points [6]);
+			break;
+		case 205:
+			points = new MeshGenerator.Node[] {
+				cube.topSquare.centreForward,
+				cube.topSquare.centreLeft,
+
+				cube.topSquare.forwardLeft,
+				cube.middleForwardLeft,
+				cube.topSquare.centreRight,
+
+				cube.topSquare.backwardRight,
+				cube.middleBackwardRight,
+				cube.topSquare.centreBackward,
+
+				cube.topSquare.backwardLeft,
+				cube.middleBackwardLeft,
+
+				cube.bottomSquare.centreLeft,
+
+				cube.bottomSquare.centreRight,
+
+				cube.bottomSquare.backwardRight,
+				cube.bottomSquare.centreBackward,
+
+				cube.bottomSquare.backwardLeft
+			};
+			AssignVertices (points);
+			CreateCornerMesh (points [2], points [3], points [0], points [1], false);
+			CreateCornerMesh (points [5], points [6], points [7], points [4], false);
+			CreateCornerMesh (points [8], points [9], points [1], points [7], false);
+
+			CreateCornerMesh (points [12], points [6], points [11], points [13], false);
+			CreateCornerMesh (points [14], points [9], points [13], points [10], false);
+
+			CreateTriangle (points [11], points [6], points [4]);
+			CreateTriangle (points [11], points [10], points [13]);
+
+			CreateTriangle (points [11], points [4], points [0]);
+			CreateTriangle (points [11], points [0], points [3]);
+			CreateTriangle (points [11], points [3], points [10]);
+
+			CreateQuad (points [0], points [7], points [4], points [1]);
+
+			CreateQuad (points [6], points [9], points [13], points [7]);
+			CreateQuad (points [9], points [3], points [10], points [1]);
+			break;
+		case 206:
+			points = new MeshGenerator.Node[] {
+				cube.topSquare.centreForward,
+				cube.topSquare.centreLeft,
+
+				cube.topSquare.forwardRight,
+				cube.middleForwardRight,
+				cube.topSquare.centreRight,
+
+				cube.topSquare.backwardRight,
+				cube.middleBackwardRight,
+				cube.topSquare.centreBackward,
+
+				cube.topSquare.backwardLeft,
+				cube.middleBackwardLeft,
+
+				cube.bottomSquare.centreLeft,
+
+				cube.bottomSquare.centreRight,
+
+				cube.bottomSquare.backwardRight,
+				cube.bottomSquare.centreBackward,
+
+				cube.bottomSquare.backwardLeft
+			};
+			AssignVertices (points);
+			CreateCornerMesh (points [2], points [3], points [4], points [0], false);
+			CreateCornerMesh (points [5], points [6], points [7], points [4], false);
+			CreateCornerMesh (points [8], points [9], points [1], points [7], false);
+
+			CreateCornerMesh (points [12], points [6], points [11], points [13], false);
+			CreateCornerMesh (points [14], points [9], points [13], points [10], false);
+
+			CreateTriangle (points [1], points [9], points [10]);
+			CreateTriangle (points [10], points [13], points [11]);
+
+			CreateTriangle (points [10], points [11], points [3]);
+			CreateTriangle (points [10], points [3], points [0]);
+			CreateTriangle (points [10], points [0], points [1]);
+
+			CreateQuad (points [0], points [7], points [4], points [1]);
+
+			CreateQuad (points [3], points [6], points [11], points [4]);
+			CreateQuad (points [6], points [9], points [13], points [7]);
+			break;
 		case 207:
+			points = new MeshGenerator.Node[] {
+				cube.topSquare.forwardLeft,
+				cube.middleForwardLeft,
+				cube.topSquare.centreForward,
+				cube.topSquare.centreLeft,
+
+				cube.topSquare.forwardRight,
+				cube.middleForwardRight,
+				cube.topSquare.centreRight,
+
+				cube.topSquare.backwardRight,
+				cube.middleBackwardRight,
+				cube.topSquare.centreBackward,
+
+				cube.topSquare.backwardLeft,
+				cube.middleBackwardLeft,
+
+				cube.bottomSquare.centreLeft,
+
+				cube.bottomSquare.centreRight,
+
+				cube.bottomSquare.backwardRight,
+				cube.bottomSquare.centreBackward,
+
+				cube.bottomSquare.backwardLeft
+			};
+			AssignVertices (points);
+			CreateCornerMesh (points [0], points [1], points [2], points [3], false);
+			CreateCornerMesh (points [4], points [5], points [6], points [2], false);
+			CreateCornerMesh (points [7], points [8], points [9], points [6], false);
+			CreateCornerMesh (points [10], points [11], points [3], points [9], false);
+
+			CreateCornerMesh (points [14], points [8], points [13], points [15], false);
+			CreateCornerMesh (points [16], points [11], points [15], points [12], false);
+
+			CreateTriangle (points [5], points [2], points [1]);
+			CreateTriangle (points [15], points [13], points [12]);
+
+			CreateQuad (points [13], points [1], points [5], points [12]);
+
+			CreateQuad (points [2], points [9], points [6], points [3]);
+
+			CreateQuad (points [5], points [8], points [13], points [6]);
+			CreateQuad (points [8], points [11], points [15], points [9]);
+			CreateQuad (points [11], points [1], points [12], points [3]);
+			break;
 		case 208:
 			points = new MeshGenerator.Node[] {
 				cube.bottomSquare.forwardLeft,
