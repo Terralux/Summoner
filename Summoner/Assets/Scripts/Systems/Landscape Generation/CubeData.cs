@@ -18,7 +18,20 @@ public struct CubeGrid {
 			for (int x = 0; x < nodeCountX; x ++) {
 				for (int z = 0; z < nodeCountZ; z ++) {
 					Vector3 pos = new Vector3(-mapWidth/2 + x * squareSize + squareSize/2, -maps.Count/2 + y * squareSize + squareSize/2, -mapDepth/2 + z * squareSize + squareSize/2);
-					controlNodes[y, x, z] = new ControlNode(pos, maps[y][x, z], squareSize);
+
+					if(maps[y][x,z]){
+						if(y - 1 > 0 && y + 1 < maps.Count && x - 1 > 0 && x + 1 < nodeCountX && z - 1 > 0 && z + 1 < nodeCountZ){
+							if(maps[y - 1][x,z] && maps[y + 1][x,z] && maps[y][x - 1,z] && maps[y][x + 1,z] && maps[y][x,z - 1] && maps[y][x,z + 1]){
+								controlNodes[y, x, z] = new ControlNode(pos, false, squareSize);
+							}else{
+								controlNodes[y, x, z] = new ControlNode(pos, true, squareSize);
+							}
+						}else{
+							controlNodes[y, x, z] = new ControlNode(pos, true, squareSize);
+						}
+					}else{
+						controlNodes[y, x, z] = new ControlNode(pos, maps[y][x, z], squareSize);
+					}
 				}
 			}
 		}
