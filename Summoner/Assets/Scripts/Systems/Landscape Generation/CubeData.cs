@@ -2,18 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct CubeGrid {
-	public Cube[,,] cubes;
+public struct Chunk {
+	public Slice[] slices;
 
-	public CubeGrid(List<bool[,]> maps, float squareSize) {
+	public Chunk(List<bool[,]> maps, float squareSize) {
 
-		int nodeCountX = maps[0].GetLength(0);
-		int nodeCountZ = maps[0].GetLength(1);
-		float mapWidth = nodeCountX * squareSize;
-		float mapDepth = nodeCountZ * squareSize;
+		int nodeCount = maps[0].GetLength(0);
 
-		ControlNode[,,] controlNodes = new ControlNode[maps.Count, nodeCountX, nodeCountZ];
-
+		/*
 		for(int y = 0; y < maps.Count; y ++) {
 			for (int x = 0; x < nodeCountX; x ++) {
 				for (int z = 0; z < nodeCountZ; z ++) {
@@ -35,15 +31,69 @@ public struct CubeGrid {
 				}
 			}
 		}
+		*/
 
-		cubes = new Cube[maps.Count - 1, nodeCountX - 1, nodeCountZ - 1];
+		slices = new Slice[nodeCount];
+		slices [0] = new Slice(nodeCount, squareSize);
 
-		for(int y = 0; y < maps.Count - 1; y ++) {
-			for (int x = 0; x < nodeCountX - 1; x ++) {
-				for (int z = 0; z < nodeCountZ - 1; z ++) {
-					cubes[y, x, z] = new Cube(controlNodes[y + 1, x, z + 1], controlNodes[y + 1, x + 1, z + 1], controlNodes[y + 1, x + 1, z], controlNodes[y + 1, x, z], 
-						controlNodes[y, x, z + 1], controlNodes[y, x + 1, z + 1], controlNodes[y, x + 1, z], controlNodes[y, x, z]);
-				}
+		for(int y = 1; y < slices.Length; y ++) {
+			float height = -(float)maps.Count/2 + y * squareSize + squareSize/2;
+			slices[y] = new Slice(maps [y], squareSize, height, slices [y - 1]);
+		}
+	}
+}
+
+public struct Slice {
+	public Cube[,] cubes;
+
+	public Slice(bool[,] slice, float squareSize, float height, Slice previousSlice){
+		int nodeCount = slice.GetLength(0);
+
+		float mapWidth = nodeCount * squareSize;
+		float mapDepth = nodeCount * squareSize;
+
+		ControlNode [,] controlNodes = new ControlNode [nodeCount, nodeCount];
+
+		for (int x = 0; x < nodeCount; x ++) {
+			for (int z = 0; z < nodeCount; z ++) {
+				Vector3 pos = new Vector3(-mapWidth/2 + x * squareSize + squareSize/2, height, -mapDepth/2 + z * squareSize + squareSize/2);
+				controlNodes [x, z] = new ControlNode (pos, slice [x, z], squareSize);
+			}
+		}
+
+		cubes = new Cube[nodeCount - 1, nodeCount - 1];
+
+		for (int x = 0; x < nodeCount - 1; x ++) {
+			for (int z = 0; z < nodeCount - 1; z ++) {
+				cubes[x, z] = new Cube(controlNodes[x, z + 1], controlNodes[x + 1, z + 1], controlNodes[x + 1, z], controlNodes[x, z], 
+					previousSlice.cubes [x, z].topSquare.forwardLeft, previousSlice.cubes [x, z].topSquare.forwardRight, 
+					previousSlice.cubes [x, z].topSquare.backwardRight, previousSlice.cubes [x, z].topSquare.backwardLeft);
+			}
+		}
+	}
+
+	public Slice(int nodeCount, float squareSize){
+
+		float mapWidth = nodeCount * squareSize;
+		float mapDepth = nodeCount * squareSize;
+
+		ControlNode [,] controlNodesTop = new ControlNode [nodeCount, nodeCount];
+		ControlNode [,] controlNodesBottom = new ControlNode [nodeCount, nodeCount];
+
+		for (int x = 0; x < nodeCount; x ++) {
+			for (int z = 0; z < nodeCount; z ++) {
+				Vector3 pos = new Vector3(-mapWidth/2 + x * squareSize + squareSize/2, 0f, -mapDepth/2 + z * squareSize + squareSize/2);
+				controlNodesTop [x, z] = new ControlNode (pos + Vector3.up * (-(float)nodeCount/2 + 0 * squareSize + squareSize/2), true, squareSize);
+				controlNodesBottom [x, z] = new ControlNode (pos + Vector3.up * (-(float)nodeCount/2 + -1f * squareSize + squareSize/2), true, squareSize);
+			}
+		}
+
+		cubes = new Cube[nodeCount - 1, nodeCount - 1];
+
+		for (int x = 0; x < nodeCount - 1; x ++) {
+			for (int z = 0; z < nodeCount - 1; z ++) {
+				cubes[x, z] = new Cube(controlNodesTop[x, z + 1], controlNodesTop[x + 1, z + 1], controlNodesTop[x + 1, z], controlNodesTop[x, z],
+					controlNodesBottom[x, z + 1], controlNodesBottom[x + 1, z + 1], controlNodesBottom[x + 1, z], controlNodesBottom[x, z]);
 			}
 		}
 	}
