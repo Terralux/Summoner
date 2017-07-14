@@ -5,15 +5,16 @@ using System;
 
 public class MapGenerator : MonoBehaviour {
 
-	public int width;
-	public int depth;
-	public int height;
+	public int dimension;
 
 	public string seed;
 	public bool useRandomSeed;
 
 	[Range(0,100)]
 	public int randomFillPercent;
+
+	[Range(0f,1f)]
+	public float randomAdditionPercent;
 
 	bool[,] map;
 
@@ -38,7 +39,8 @@ public class MapGenerator : MonoBehaviour {
 		if (useTestCube) {
 			GenerateTestCube ();
 		} else {
-			GenerateMap ();
+			GenerateStartCube ();
+			//GenerateMap ();
 		}
 	}
 
@@ -87,7 +89,7 @@ public class MapGenerator : MonoBehaviour {
 			if (useTestCube) {
 				GenerateTestCube ();
 			} else {
-				GenerateMap ();
+				GenerateStartCube ();
 				UpdateCollision ();
 			}
 		}
@@ -109,7 +111,24 @@ public class MapGenerator : MonoBehaviour {
 		GetComponent<MeshCollider>().sharedMesh = GetComponent<MeshFilter> ().sharedMesh;
 	}
 
+	void GenerateStartCube (){
+		map = new bool[dimension, dimension];
+
+		for(int x = 0; x < dimension; x++){
+			for(int z = 0; z < dimension; z++){
+				map[x,z] = true;
+			}
+		}
+
+		Generator gen = new Generator();
+		MeshGenerator meshGen = new MeshGenerator();
+
+		meshGen.GenerateMesh (GetComponent<MeshFilter>(), gen.GenerateStartCubeGrid(randomAdditionPercent, dimension), 1);
+		UpdateCollision();
+	}
+
 	void GenerateMap() {
+		/*
 		List<bool[,]> maps = new List<bool[,]> ();
 
 		for(int i = 0; i < height; i++){
@@ -121,9 +140,19 @@ public class MapGenerator : MonoBehaviour {
 			}
 			maps.Add (map);
 		}
+		*/
 
+		map = new bool[dimension, dimension];
+		RandomFillMap();
+
+		for (int s = 0; s < 5; s++) {
+			SmoothMap();
+		}
+
+		Generator gen = new Generator();
 		MeshGenerator meshGen = new MeshGenerator();
-		meshGen.GenerateMesh (GetComponent<MeshFilter>(), maps, 1);
+
+		meshGen.GenerateMesh (GetComponent<MeshFilter>(), gen.Generate(Direction.XPositive, map, randomAdditionPercent), 1);
 	}
 
 	void RandomFillMap() {
@@ -133,8 +162,8 @@ public class MapGenerator : MonoBehaviour {
 
 		System.Random pseudoRandom = new System.Random(seed.GetHashCode());
 
-		for (int x = 0; x < width; x ++) {
-			for (int y = 0; y < depth; y ++) {
+		for (int x = 0; x < dimension; x ++) {
+			for (int y = 0; y < dimension; y ++) {
 				map [x, y] = (pseudoRandom.Next (0, 100) < randomFillPercent) ? true : false;
 				/*
 				if (x == 0 || x == width-1 || y == 0 || y == depth -1) {
@@ -149,8 +178,8 @@ public class MapGenerator : MonoBehaviour {
 	}
 
 	void SmoothMap() {
-		for (int x = 0; x < width; x ++) {
-			for (int y = 0; y < depth; y ++) {
+		for (int x = 0; x < dimension; x ++) {
+			for (int y = 0; y < dimension; y ++) {
 				int neighbourWallTiles = GetSurroundingWallCount(x,y);
 
 				if (neighbourWallTiles > 4)
@@ -166,7 +195,7 @@ public class MapGenerator : MonoBehaviour {
 		int wallCount = 0;
 		for (int neighbourX = gridX - 1; neighbourX <= gridX + 1; neighbourX ++) {
 			for (int neighbourY = gridY - 1; neighbourY <= gridY + 1; neighbourY ++) {
-				if (neighbourX >= 0 && neighbourX < width && neighbourY >= 0 && neighbourY < depth) {
+				if (neighbourX >= 0 && neighbourX < dimension && neighbourY >= 0 && neighbourY < dimension) {
 					if (neighbourX != gridX || neighbourY != gridY) {
 						wallCount += map [neighbourX, neighbourY] ? 1 : 0;
 					}

@@ -18,7 +18,20 @@ public struct CubeGrid {
 			for (int x = 0; x < nodeCountX; x ++) {
 				for (int z = 0; z < nodeCountZ; z ++) {
 					Vector3 pos = new Vector3(-mapWidth/2 + x * squareSize + squareSize/2, -maps.Count/2 + y * squareSize + squareSize/2, -mapDepth/2 + z * squareSize + squareSize/2);
-					controlNodes[y, x, z] = new ControlNode(pos, maps[y][x, z], squareSize);
+
+					if(maps[y][x,z]){
+						if(y - 1 > 0 && y + 1 < maps.Count && x - 1 > 0 && x + 1 < nodeCountX && z - 1 > 0 && z + 1 < nodeCountZ){
+							if(maps[y - 1][x,z] && maps[y + 1][x,z] && maps[y][x - 1,z] && maps[y][x + 1,z] && maps[y][x,z - 1] && maps[y][x,z + 1]){
+								controlNodes[y, x, z] = new ControlNode(pos, false, squareSize);
+							}else{
+								controlNodes[y, x, z] = new ControlNode(pos, true, squareSize);
+							}
+						}else{
+							controlNodes[y, x, z] = new ControlNode(pos, true, squareSize);
+						}
+					}else{
+						controlNodes[y, x, z] = new ControlNode(pos, maps[y][x, z], squareSize);
+					}
 				}
 			}
 		}
@@ -53,49 +66,40 @@ public struct Cube {
 		middleBackwardRight = bottomSquare.backwardRight.above;
 		middleBackwardLeft = bottomSquare.backwardLeft.above;
 
-		int count = 0;
 		configuration = 0;
 		controlNodesActive = 0;
 
 		if (bottomSquare.backwardLeft.active){
 			configuration += 128;
-			count++;
 			controlNodesActive++;
 		}
 		if (bottomSquare.backwardRight.active){
 			configuration += 64;
-			count++;
 			controlNodesActive++;
 		}
 		if (bottomSquare.forwardRight.active){
 			configuration += 32;
-			count++;
 			controlNodesActive++;
 		}
 		if (bottomSquare.forwardLeft.active){
 			configuration += 16;
-			count++;
 			controlNodesActive++;
 		}
 
 		if (topSquare.backwardLeft.active){
 			configuration += 8;
-			count++;
 			controlNodesActive++;
 		}
 		if (topSquare.backwardRight.active){
 			configuration += 4;
-			count++;
 			controlNodesActive++;
 		}
 		if (topSquare.forwardRight.active){
 			configuration += 2;
-			count++;
 			controlNodesActive++;
 		}
 		if (topSquare.forwardLeft.active){
 			configuration += 1;
-			count++;
 			controlNodesActive++;
 		}
 	}
