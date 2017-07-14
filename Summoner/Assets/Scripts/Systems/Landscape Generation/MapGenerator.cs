@@ -35,6 +35,8 @@ public class MapGenerator : MonoBehaviour {
 	public bool cubeBottomBackRight;
 	public bool cubeBottomBackLeft;
 
+	public int configuration = 0;
+
 	void Start() {
 		if (useTestCube) {
 			GenerateTestCube ();
@@ -45,6 +47,11 @@ public class MapGenerator : MonoBehaviour {
 	}
 
 	void Update() {
+		if(Input.GetKeyDown(KeyCode.Space)){
+			configuration++;
+			GenerateTestCube();
+		}
+
 		if (Input.GetKeyDown (KeyCode.Alpha1)) {
 			cubeTopForwardLeft = !cubeTopForwardLeft;
 			GenerateTestCube ();
@@ -90,16 +97,19 @@ public class MapGenerator : MonoBehaviour {
 				GenerateTestCube ();
 			} else {
 				GenerateStartCube ();
-				UpdateCollision ();
 			}
 		}
 	}
 
 	void GenerateTestCube(){
 		List<bool[,]> maps = new List<bool[,]> ();
+
+		//maps.Add (new bool[,]{ { configuration%256==255?true:false, configuration%32==31?true:false }, { configuration%128==127?true:false, configuration%64==63?true:false } });
+		//maps.Add (new bool[,]{ { configuration%16==15?true:false, configuration%2==1?true:false }, { configuration%8==7?true:false, configuration%4==3?true:false } });
+		/*
 		maps.Add (new bool[,]{ { cubeBottomBackLeft, cubeBottomForwardLeft }, { cubeBottomBackRight, cubeBottomForwardRight } });
 		maps.Add (new bool[,]{ { cubeTopBackLeft, cubeTopForwardLeft }, { cubeTopBackRight, cubeTopForwardRight } });
-
+		*/
 		MeshGenerator meshGen = new MeshGenerator();
 		meshGen.GenerateMesh (GetComponent<MeshFilter>(), maps, 1);
 	}
