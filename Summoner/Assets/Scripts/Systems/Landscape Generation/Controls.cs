@@ -2,15 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Controls : CharacterActions {
-	
-	// Update is called once per frame
+public class Controls : MonoBehaviour {
+
+	public CharacterStats stats;
+	private CharacterActions actions;
+
+	void Awake(){
+		actions = new CharacterActions (GetComponent<Rigidbody> (), stats);
+	}
+
 	void Update () {
-		//CharacterActions actions = GetComponent<CharacterActions>();
 		float h = Input.GetAxis ("Horizontal");
 		float v = Input.GetAxis ("Vertical");
-		if (Input.GetKey (KeyCode.Space)) {
-			movement ();
+
+		actions.Movement (new Vector2 (h, v));
+
+		if (Input.GetKeyDown (KeyCode.Q)) {
+			actions.jump ();
 		}
+	}
+
+	void OnGUI(){
+		GUI.Box (new Rect (10, 10, 100, 30), actions.isGrounded + "");
 	}
 }

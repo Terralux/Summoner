@@ -2,14 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterStats : MonoBehaviour{
-
+[System.Serializable]
+public class CharacterStats {
 	public float moveSpeed = 5f;
 	public float rotSpeed;
 	public float jumpForce;
-
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }
