@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class MeshGenerator {
 
-	public CubeGrid cubeGrid;
+	public Chunk chunk;
 	public List<Vector3> vertices;
 	public List<int> triangles;
 
@@ -12,15 +12,15 @@ public class MeshGenerator {
 	public float xOffset = 1f;
 
 	public void GenerateMesh(MeshFilter mf, List<bool[,]> maps, float squareSize) {
-		cubeGrid = new CubeGrid(maps, squareSize);
+		chunk = new Chunk(maps, squareSize);
 
 		vertices = new List<Vector3>();
 		triangles = new List<int>();
 
-		for(int y = 0; y < cubeGrid.cubes.GetLength(0); y++){
-			for (int x = 0; x < cubeGrid.cubes.GetLength(1); x ++) {
-				for (int z = 0; z < cubeGrid.cubes.GetLength(2); z ++) {
-					CreateMeshUsingSwitchCase(cubeGrid.cubes[y, x, z]);
+		for(int y = 0; y < chunk.slices.Length; y++){
+			for (int x = 0; x < chunk.slices[y].cubes.GetLength(0); x ++) {
+				for (int z = 0; z < chunk.slices[y].cubes.GetLength(0); z ++) {
+					CreateMeshUsingSwitchCase(chunk.slices[y].cubes[x, z]);
 				}
 			}
 		}
@@ -38,20 +38,20 @@ public class MeshGenerator {
 	private int total;
 
 	void OnDrawGizmos(){
-		if (cubeGrid.cubes.GetLength(0) > 0) {
-			for (int y = 0; y < cubeGrid.cubes.GetLength(0); y ++) {
-				for (int x = 0; x < cubeGrid.cubes.GetLength(1); x ++) {
-					for (int z = 0; z < cubeGrid.cubes.GetLength (2); z++) {
+		if (chunk.slices.Length > 0) {
+			for (int y = 0; y < chunk.slices.Length; y ++) {
+				for (int x = 0; x < chunk.slices[y].cubes.GetLength (0); x ++) {
+					for (int z = 0; z < chunk.slices[y].cubes.GetLength (0); z++) {
 						total = 0;
-						total += DrawCube (cubeGrid.cubes [y, x, z].topSquare.forwardLeft, 1);
-						total += DrawCube (cubeGrid.cubes [y, x, z].topSquare.forwardRight, 2);
-						total += DrawCube (cubeGrid.cubes [y, x, z].topSquare.backwardRight, 4);
-						total += DrawCube (cubeGrid.cubes [y, x, z].topSquare.backwardLeft, 8);
+						total += DrawCube (chunk.slices[y].cubes [x, z].topSquare.forwardLeft, 1);
+						total += DrawCube (chunk.slices[y].cubes [x, z].topSquare.forwardRight, 2);
+						total += DrawCube (chunk.slices[y].cubes [x, z].topSquare.backwardRight, 4);
+						total += DrawCube (chunk.slices[y].cubes [x, z].topSquare.backwardLeft, 8);
 
-						total += DrawCube (cubeGrid.cubes [y, x, z].bottomSquare.forwardLeft, 16);
-						total += DrawCube (cubeGrid.cubes [y, x, z].bottomSquare.forwardRight, 32);
-						total += DrawCube (cubeGrid.cubes [y, x, z].bottomSquare.backwardRight, 64);
-						total += DrawCube (cubeGrid.cubes [y, x, z].bottomSquare.backwardLeft, 128);
+						total += DrawCube (chunk.slices[y].cubes [x, z].bottomSquare.forwardLeft, 16);
+						total += DrawCube (chunk.slices[y].cubes [x, z].bottomSquare.forwardRight, 32);
+						total += DrawCube (chunk.slices[y].cubes [x, z].bottomSquare.backwardRight, 64);
+						total += DrawCube (chunk.slices[y].cubes [x, z].bottomSquare.backwardLeft, 128);
 					}
 				}
 			}

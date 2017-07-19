@@ -16,7 +16,7 @@
             #include "Tessellation.cginc"
 
             struct appdata {
-                float x;
+            	float x;
                 float4 vertex : POSITION;
                 float3 normal : NORMAL;
                 float2 texcoord : TEXCOORD0;
