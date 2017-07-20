@@ -2,8 +2,43 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+public struct SlicePair {
+	public bool[,] top;
+	public bool[,] bottom;
+
+	public SlicePair(float ratio){
+		this.top = new bool[2,2];
+		this.bottom = new bool[2,2];
+
+		for(int x = 0; x < 2; x++){
+			for(int y = 0; y < 2; y++){
+				top[x,y] = Random.value * 100f < ratio;
+				bottom[x,y] = Random.value * 100f < ratio;
+			}
+		}
+	}
+
+	public SlicePair(bool[,] top, bool[,] bottom){
+		this.top = new bool[2,2];
+		this.bottom = new bool[2,2];
+
+		for(int x = 0; x < 2; x++){
+			for(int y = 0; y < 2; y++){
+				this.top[x,y] = top[x,y];
+				this.bottom[x,y] = bottom[x,y];
+			}
+		}
+	}
+}
+*/
+
 public struct Chunk {
 	public Slice[] slices;
+
+	public Chunk(float squareSize) {
+		throw new System.NotImplementedException();
+	}
 
 	public Chunk(List<bool[,]> maps, float squareSize) {
 
@@ -34,11 +69,16 @@ public struct Chunk {
 		*/
 
 		slices = new Slice[nodeCount];
-		slices [0] = new Slice(nodeCount, squareSize);
+		//slices [0] = new Slice(maps[0], squareSize);
 
-		for(int y = 1; y < slices.Length; y ++) {
-			float height = -(float)maps.Count/2 + y * squareSize + squareSize/2;
-			slices[y] = new Slice(maps [y], squareSize, height, slices [y - 1]);
+		for(int y = 1; y < nodeCount * 2; y += 2) {
+			//float height = -(float)maps.Count/2 + y * squareSize + squareSize/2;
+			if(y > 1){
+				slices [(y - 1)/2] = new Slice(maps[y - 1], maps[y], squareSize, (y - 1)/2);
+			}else{
+				slices [0] = new Slice(maps[y - 1], maps[y], squareSize, y - 1);
+			}
+			//slices[y] = new Slice(maps [y], squareSize, height, slices [y - 1]);
 		}
 	}
 }
@@ -46,33 +86,8 @@ public struct Chunk {
 public struct Slice {
 	public Cube[,] cubes;
 
-	public Slice(bool[,] slice, float squareSize, float height, Slice previousSlice){
-		int nodeCount = slice.GetLength(0);
-
-		float mapWidth = nodeCount * squareSize;
-		float mapDepth = nodeCount * squareSize;
-
-		ControlNode [,] controlNodes = new ControlNode [nodeCount, nodeCount];
-
-		for (int x = 0; x < nodeCount; x ++) {
-			for (int z = 0; z < nodeCount; z ++) {
-				Vector3 pos = new Vector3(-mapWidth/2 + x * squareSize + squareSize/2, height, -mapDepth/2 + z * squareSize + squareSize/2);
-				controlNodes [x, z] = new ControlNode (pos, slice [x, z], squareSize);
-			}
-		}
-
-		cubes = new Cube[nodeCount - 1, nodeCount - 1];
-
-		for (int x = 0; x < nodeCount - 1; x ++) {
-			for (int z = 0; z < nodeCount - 1; z ++) {
-				cubes[x, z] = new Cube(controlNodes[x, z + 1], controlNodes[x + 1, z + 1], controlNodes[x + 1, z], controlNodes[x, z], 
-					previousSlice.cubes [x, z].topSquare.forwardLeft, previousSlice.cubes [x, z].topSquare.forwardRight, 
-					previousSlice.cubes [x, z].topSquare.backwardRight, previousSlice.cubes [x, z].topSquare.backwardLeft);
-			}
-		}
-	}
-
-	public Slice(int nodeCount, float squareSize){
+	public Slice(bool[,] bottom, bool[,] top, float squareSize, int iteration){
+		int nodeCount = bottom.GetLength(0);
 
 		float mapWidth = nodeCount * squareSize;
 		float mapDepth = nodeCount * squareSize;
@@ -83,8 +98,8 @@ public struct Slice {
 		for (int x = 0; x < nodeCount; x ++) {
 			for (int z = 0; z < nodeCount; z ++) {
 				Vector3 pos = new Vector3(-mapWidth/2 + x * squareSize + squareSize/2, 0f, -mapDepth/2 + z * squareSize + squareSize/2);
-				controlNodesTop [x, z] = new ControlNode (pos + Vector3.up * (-(float)nodeCount/2 + 0 * squareSize + squareSize/2), true, squareSize);
-				controlNodesBottom [x, z] = new ControlNode (pos + Vector3.up * (-(float)nodeCount/2 + -1f * squareSize + squareSize/2), true, squareSize);
+				controlNodesTop [x, z] = new ControlNode (pos + Vector3.up * (-(float)nodeCount/2 + iteration * squareSize + squareSize/2), top[x, z], squareSize);
+				controlNodesBottom [x, z] = new ControlNode (pos + Vector3.up * (-(float)nodeCount/2 + (iteration - 1f) * squareSize + squareSize/2), bottom[x, z], squareSize);
 			}
 		}
 
