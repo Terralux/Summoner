@@ -33,6 +33,8 @@ public class MeshGenerator {
 		mesh.vertices = vertices.ToArray();
 		mesh.triangles = triangles.ToArray();
 		mesh.RecalculateNormals();
+
+		Debug.Log(System.DateTime.Now.Second + System.DateTime.Now.Millisecond);
 	}
 
 	private int total;
