@@ -4,7 +4,7 @@ using UnityEngine;
 
 [System.Serializable]
 public class CharacterStats {
-	public float moveSpeed = 5f;
+	public float moveSpeed;
 	public float rotSpeed;
 	public float jumpForce;
 }
