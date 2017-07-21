@@ -5,7 +5,7 @@ using System;
 
 public class MapGenerator : MonoBehaviour {
 
-	public int dimension;
+	private const int dimension = 17;
 
 	public string seed;
 	public bool useRandomSeed;
@@ -13,7 +13,7 @@ public class MapGenerator : MonoBehaviour {
 	[Range(0,100)]
 	public int randomFillPercent;
 
-	[Range(0f,1f)]
+	[Range(0f,100f)]
 	public float randomAdditionPercent;
 
 	bool[,] map;
@@ -42,7 +42,6 @@ public class MapGenerator : MonoBehaviour {
 			GenerateTestCube ();
 		} else {
 			GenerateStartCube ();
-			//GenerateMap ();
 		}
 	}
 
@@ -93,6 +92,11 @@ public class MapGenerator : MonoBehaviour {
 		}
 
 		if (Input.GetMouseButtonDown(0)) {
+
+			Debug.Log(System.DateTime.Now.Second + System.DateTime.Now.Millisecond);
+
+			configuration++;
+
 			if (useTestCube) {
 				GenerateTestCube ();
 			} else {
@@ -104,12 +108,53 @@ public class MapGenerator : MonoBehaviour {
 	void GenerateTestCube(){
 		List<bool[,]> maps = new List<bool[,]> ();
 
-		//maps.Add (new bool[,]{ { configuration%256==255?true:false, configuration%32==31?true:false }, { configuration%128==127?true:false, configuration%64==63?true:false } });
-		//maps.Add (new bool[,]{ { configuration%16==15?true:false, configuration%2==1?true:false }, { configuration%8==7?true:false, configuration%4==3?true:false } });
-		/*
-		maps.Add (new bool[,]{ { cubeBottomBackLeft, cubeBottomForwardLeft }, { cubeBottomBackRight, cubeBottomForwardRight } });
-		maps.Add (new bool[,]{ { cubeTopBackLeft, cubeTopForwardLeft }, { cubeTopBackRight, cubeTopForwardRight } });
-		*/
+		cubeBottomBackLeft = false;
+		cubeBottomForwardLeft = false;
+		cubeBottomBackRight = false;
+		cubeBottomForwardRight = false;
+		cubeTopBackLeft = false;
+		cubeTopForwardLeft = false;
+		cubeTopBackRight = false;
+		cubeTopForwardRight = false;
+
+		int tempConfig = configuration;
+
+		if(tempConfig >= 128){
+			tempConfig -= 128;
+			cubeBottomBackLeft = true;
+		}
+		if(tempConfig >= 64){
+			tempConfig -= 64;
+			cubeBottomBackRight = true;
+		}
+		if(tempConfig >= 32){
+			tempConfig -= 32;
+			cubeBottomForwardRight = true;
+		}
+		if(tempConfig >= 16){
+			tempConfig -= 16;
+			cubeBottomForwardLeft = true;
+		}
+		if(tempConfig >= 8){
+			tempConfig -= 8;
+			cubeTopBackLeft = true;
+		}
+		if(tempConfig >= 4){
+			tempConfig -= 4;
+			cubeTopBackRight = true;
+		}
+		if(tempConfig >= 2){
+			tempConfig -= 2;
+			cubeTopForwardRight = true;
+		}
+		if(tempConfig >= 1){
+			tempConfig -= 1;
+			cubeTopForwardLeft = true;
+		}
+
+		maps.Add(new bool[,]{ { cubeBottomBackLeft, cubeBottomForwardLeft }, { cubeBottomBackRight, cubeBottomForwardRight } });
+		maps.Add(new bool[,]{ { cubeTopBackLeft, cubeTopForwardLeft }, { cubeTopBackRight, cubeTopForwardRight } });
+
 		MeshGenerator meshGen = new MeshGenerator();
 		meshGen.GenerateMesh (GetComponent<MeshFilter>(), maps, 1);
 	}
@@ -122,14 +167,6 @@ public class MapGenerator : MonoBehaviour {
 	}
 
 	void GenerateStartCube (){
-		map = new bool[dimension, dimension];
-
-		for(int x = 0; x < dimension; x++){
-			for(int z = 0; z < dimension; z++){
-				map[x,z] = true;
-			}
-		}
-
 		Generator gen = new Generator();
 		MeshGenerator meshGen = new MeshGenerator();
 
@@ -137,20 +174,8 @@ public class MapGenerator : MonoBehaviour {
 		UpdateCollision();
 	}
 
+	/*
 	void GenerateMap() {
-		/*
-		List<bool[,]> maps = new List<bool[,]> ();
-
-		for(int i = 0; i < height; i++){
-			map = new bool[width, depth];
-			RandomFillMap();
-
-			for (int s = 0; s < 5; s++) {
-				SmoothMap();
-			}
-			maps.Add (map);
-		}
-		*/
 
 		map = new bool[dimension, dimension];
 		RandomFillMap();
@@ -175,14 +200,6 @@ public class MapGenerator : MonoBehaviour {
 		for (int x = 0; x < dimension; x ++) {
 			for (int y = 0; y < dimension; y ++) {
 				map [x, y] = (pseudoRandom.Next (0, 100) < randomFillPercent) ? true : false;
-				/*
-				if (x == 0 || x == width-1 || y == 0 || y == depth -1) {
-					map[x,y] = true;
-				}
-				else {
-					map [x, y] = (pseudoRandom.Next (0, 100) < randomFillPercent) ? true : false;
-				}
-				*/
 			}
 		}
 	}
@@ -218,4 +235,5 @@ public class MapGenerator : MonoBehaviour {
 
 		return wallCount;
 	}
+*/
 }

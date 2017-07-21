@@ -65,23 +65,16 @@ public struct Generator {
 	}
 
 	public List<bool[,]> GenerateStartCubeGrid (float randomAddition, int dimension){
-		List<bool[,]> maps = new List<bool[,]> ();
+		List<bool[,]> maps = new List<bool[,]>();
 
-		for(int x = 0; x < (dimension / 2); x++){
-			maps.Add(new bool[dimension, dimension]);
-
-			for(int y = 0; y < dimension; y++){
-				for(int z = 0; z < dimension; z++){
-
-					if(x < dimension/2){
-						maps[x][y,z] = true;
-					}
-				}
-			}
+		for(int x = 0; x < dimension; x++){
+			maps.Add(SliceFill(dimension));
 		}
-		maps.Add(SliceNoise(dimension, 50f));
+		maps = OptimizeSlices(maps);
 
-		while(maps.Count < dimension){
+		maps.Add(SliceNoise(dimension, randomAddition, 5));
+
+		while(maps.Count < dimension * 2){
 			maps.Add(SliceEmpty(dimension));
 		}
 
@@ -118,5 +111,51 @@ public struct Generator {
 		}
 
 		return maps;
+	}
+
+	public bool[,] SliceNoise(int dimension, float fillRatio, int safeZoneRadius){
+		bool[,] maps = new bool[dimension, dimension];
+
+		int center = (int)((float)dimension/2f);
+
+		for(int y = 0; y < dimension; y++){
+			for(int z = 0; z < dimension; z++){
+				if(z < center + safeZoneRadius && z > center - safeZoneRadius && y < center + safeZoneRadius && y > center - safeZoneRadius){
+					maps [y, z] = false;
+				}else{
+					if(Random.Range (0f, 100f) < fillRatio){
+						maps [y, z] = true;
+					}else{
+						maps [y, z] = false;
+					}
+				}
+			}
+		}
+
+		return maps;
+	}
+
+	public List<bool[,]> OptimizeSlices(List<bool[,]> maps){
+		List<bool[,]> optimizedMaps = new List<bool[,]>();
+		optimizedMaps.AddRange(maps);
+
+		for(int y = 1; y < maps.Count - 1; y++){
+			for(int x = 1; x < maps[y].GetLength(0) - 1; x++){
+				for(int z = 1; z < maps[y].GetLength(0) - 1; z++){
+					if(maps[y][x, z]){
+						if(maps[y + (y % 2 == 1?1:0)][x, z] || 
+							maps[y - (y % 2 == 1?0:1)][x + (x % 2 == 1?1:-1), z] || 
+							maps[y + (y % 2 == 1?1:0)][x + (x % 2 == 1?1:-1), z] || 
+							maps[y - (y % 2 == 1?0:1)][x, z + (z % 2 == 1?1:-1)] || 
+							maps[y + (y % 2 == 1?1:0)][x, z + (z % 2 == 1?1:-1)] || 
+							maps[y - (y % 2 == 1?0:1)][x + (x % 2 == 1?1:-1), z + (z % 2 == 1?1:-1)] || 
+							maps[y + (y % 2 == 1?1:0)][x + (x % 2 == 1?1:-1), z + (z % 2 == 1?1:-1)]){
+							optimizedMaps[y][x, z] = false;
+						}
+					}
+				}
+			}
+		}
+		return optimizedMaps;
 	}
 }
