@@ -64,7 +64,7 @@ public struct Generator {
 		*/
 	}
 
-	public List<bool[,]> GenerateStartCubeGrid (float randomAddition, int dimension){
+	public List<bool[,]> GenerateStartCubeGrid (int randomAddition, int dimension){
 		List<bool[,]> maps = new List<bool[,]>();
 
 		for(int x = 0; x < dimension; x++){
@@ -113,7 +113,7 @@ public struct Generator {
 		return maps;
 	}
 
-	public bool[,] SliceNoise(int dimension, float fillRatio, int safeZoneRadius){
+	public bool[,] SliceNoise(int dimension, int fillRatio, int safeZoneRadius){
 		bool[,] maps = new bool[dimension, dimension];
 
 		int center = (int)((float)dimension/2f);
