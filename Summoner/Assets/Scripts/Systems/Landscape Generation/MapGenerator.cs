@@ -42,7 +42,6 @@ public class MapGenerator : MonoBehaviour {
 			GenerateTestCube ();
 		} else {
 			GenerateStartCube ();
-			//GenerateMap ();
 		}
 	}
 
@@ -108,7 +107,6 @@ public class MapGenerator : MonoBehaviour {
 
 	void GenerateTestCube(){
 		List<bool[,]> maps = new List<bool[,]> ();
-		//List<SlicePair> slicePairs = new List<SlicePair>();
 
 		cubeBottomBackLeft = false;
 		cubeBottomForwardLeft = false;
@@ -169,16 +167,6 @@ public class MapGenerator : MonoBehaviour {
 	}
 
 	void GenerateStartCube (){
-		/*
-		map = new bool[dimension, dimension];
-
-		for(int x = 0; x < dimension; x++){
-			for(int z = 0; z < dimension; z++){
-				map[x,z] = true;
-			}
-		}
-		*/
-
 		Generator gen = new Generator();
 		MeshGenerator meshGen = new MeshGenerator();
 
@@ -186,20 +174,8 @@ public class MapGenerator : MonoBehaviour {
 		UpdateCollision();
 	}
 
+	/*
 	void GenerateMap() {
-		/*
-		List<bool[,]> maps = new List<bool[,]> ();
-
-		for(int i = 0; i < height; i++){
-			map = new bool[width, depth];
-			RandomFillMap();
-
-			for (int s = 0; s < 5; s++) {
-				SmoothMap();
-			}
-			maps.Add (map);
-		}
-		*/
 
 		map = new bool[dimension, dimension];
 		RandomFillMap();
@@ -224,14 +200,6 @@ public class MapGenerator : MonoBehaviour {
 		for (int x = 0; x < dimension; x ++) {
 			for (int y = 0; y < dimension; y ++) {
 				map [x, y] = (pseudoRandom.Next (0, 100) < randomFillPercent) ? true : false;
-				/*
-				if (x == 0 || x == width-1 || y == 0 || y == depth -1) {
-					map[x,y] = true;
-				}
-				else {
-					map [x, y] = (pseudoRandom.Next (0, 100) < randomFillPercent) ? true : false;
-				}
-				*/
 			}
 		}
 	}
@@ -267,4 +235,5 @@ public class MapGenerator : MonoBehaviour {
 
 		return wallCount;
 	}
+*/
 }
