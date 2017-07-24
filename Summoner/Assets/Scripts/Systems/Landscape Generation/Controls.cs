@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody),typeof(CapsuleCollider))]
 public class Controls : MonoBehaviour {
 
 	public CharacterStats stats;
