@@ -24,6 +24,7 @@ public class WorldManager : MonoBehaviour {
 	[Range(0,100)]
 	public int randomAdd;
 
+	/*
 	void Awake(){
 		Random.InitState (seed.GetHashCode());
 		generator = new Generator();
@@ -42,7 +43,6 @@ public class WorldManager : MonoBehaviour {
 				}
 			}
 		}
-
-		//chunkManagerPrefab = Resources.Load("ChunkManager") as GameObject;
 	}
+	*/
 }

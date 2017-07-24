@@ -4,23 +4,27 @@ using System.Collections.Generic;
 
 public class MeshGenerator {
 
-	public Chunk chunk;
-	public List<Vector3> vertices;
-	public List<int> triangles;
+	public List<Vector3> vertices = new List<Vector3>();
+	public List<int> triangles = new List<int>();
 
 	[Range(0f,10f)]
 	public float xOffset = 1f;
 
-	public void GenerateMesh(MeshFilter mf, List<bool[,]> maps, float squareSize) {
-		chunk = new Chunk(maps, squareSize);
-
+	public void GenerateMesh(MeshFilter mf, Chunk chunk) {
 		vertices = new List<Vector3>();
 		triangles = new List<int>();
 
 		for(int y = 0; y < chunk.slices.Length; y++){
 			for (int x = 0; x < chunk.slices[y].cubes.GetLength(0); x ++) {
 				for (int z = 0; z < chunk.slices[y].cubes.GetLength(0); z ++) {
-					CreateMeshUsingSwitchCase(chunk.slices[y].cubes[x, z]);
+					CreateMeshUsingSwitchCase(chunk.slices[y].cubes[x, z], 
+						(y + 1 < chunk.slices.Length ? chunk.slices[y + 1].cubes[x, z] : new Cube()),
+						(y - 1 > -1 ? chunk.slices[y - 1].cubes[x, z] : new Cube()),
+						(x - 1 > -1 ? chunk.slices[y].cubes[x - 1, z] : new Cube()),
+						(x + 1 < chunk.slices[y].cubes.GetLength(0) ? chunk.slices[y].cubes[x + 1, z] : new Cube()),
+						(z + 1 < chunk.slices[y].cubes.GetLength(0) ? chunk.slices[y].cubes[x, z + 1] : new Cube()),
+						(z - 1 > -1 ? chunk.slices[y].cubes[x, z - 1] : new Cube())
+					);
 				}
 			}
 		}
@@ -33,65 +37,43 @@ public class MeshGenerator {
 		mesh.vertices = vertices.ToArray();
 		mesh.triangles = triangles.ToArray();
 		mesh.RecalculateNormals();
-
-		Debug.Log(System.DateTime.Now.Second + System.DateTime.Now.Millisecond);
 	}
 
 	private int total;
 
-	void OnDrawGizmos(){
-		if (chunk.slices.Length > 0) {
-			for (int y = 0; y < chunk.slices.Length; y ++) {
-				for (int x = 0; x < chunk.slices[y].cubes.GetLength (0); x ++) {
-					for (int z = 0; z < chunk.slices[y].cubes.GetLength (0); z++) {
-						total = 0;
-						total += DrawCube (chunk.slices[y].cubes [x, z].topSquare.forwardLeft, 1);
-						total += DrawCube (chunk.slices[y].cubes [x, z].topSquare.forwardRight, 2);
-						total += DrawCube (chunk.slices[y].cubes [x, z].topSquare.backwardRight, 4);
-						total += DrawCube (chunk.slices[y].cubes [x, z].topSquare.backwardLeft, 8);
-
-						total += DrawCube (chunk.slices[y].cubes [x, z].bottomSquare.forwardLeft, 16);
-						total += DrawCube (chunk.slices[y].cubes [x, z].bottomSquare.forwardRight, 32);
-						total += DrawCube (chunk.slices[y].cubes [x, z].bottomSquare.backwardRight, 64);
-						total += DrawCube (chunk.slices[y].cubes [x, z].bottomSquare.backwardLeft, 128);
-					}
-				}
-			}
-		}
-	}
-
-	void OnGUI(){
-		GUI.Box (new Rect (10, 10, 100, 30), total.ToString ());
-	}
-
-	int DrawCube(ControlNode node, int index) {
-		Gizmos.color = node.active ? Color.white : Color.black;
-		Gizmos.DrawCube (node.position, Vector3.one * .1f);
-		UnityEditor.Handles.Label (node.position + Vector3.right * xOffset, node.active ? index.ToString () : "0");
-		return node.active ? index : 0;
-	}
-
-	public void CreateMeshUsingSwitchCase(Cube cube){
+	public void CreateMeshUsingSwitchCase(Cube cube, Cube top, Cube bottom, Cube left, Cube right, Cube forward, Cube back){
 		Node[] points;
 		switch (cube.configuration) {
 		case 0:
+			//Debug.LogError("Having a cube of 0 configuration should not be possible!");
 			break;
 		case 1:
 			points = new Node[] {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
-				cube.topSquare.centreLeft,
+				cube.topSquare.centreLeft
 			};
 			AssignVertices (points);
-			CreateCornerMesh (points [0], points [1], points [2], points [3], true);
+
+			if(forward.IsEmpty()){
+				CreateTriangle (points [0], points [1], points [2]);
+			}
+			if(left.IsEmpty()){
+				CreateTriangle (points [0], points [3], points [1]);
+			}
+			if(top.IsEmpty()){
+				CreateTriangle (points [0], points [2], points [3]);
+			}
+
+			CreateTriangle (points [3], points [2], points [1]);
 			break;
 		case 2:
 			points = new Node[] {
 				cube.topSquare.forwardRight,
 				cube.middleForwardRight,
 				cube.topSquare.centreRight,
-				cube.topSquare.centreForward,
+				cube.topSquare.centreForward
 			};
 			AssignVertices (points);
 			CreateCornerMesh (points [0], points [1], points [2], points [3], true);
@@ -120,7 +102,7 @@ public class MeshGenerator {
 				cube.topSquare.backwardRight,
 				cube.middleBackwardRight,
 				cube.topSquare.centreBackward,
-				cube.topSquare.centreRight,
+				cube.topSquare.centreRight
 			};
 			AssignVertices (points);
 			CreateCornerMesh (points [0], points [1], points [2], points [3], true);
@@ -135,7 +117,7 @@ public class MeshGenerator {
 				cube.topSquare.forwardLeft,
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
-				cube.topSquare.centreLeft,
+				cube.topSquare.centreLeft
 			};
 			AssignVertices (points);
 			CreateCornerMesh (points [0], points [1], points [2], points [3], false);
@@ -197,7 +179,7 @@ public class MeshGenerator {
 				cube.topSquare.backwardLeft,
 				cube.middleBackwardLeft,
 				cube.topSquare.centreLeft,
-				cube.topSquare.centreBackward,
+				cube.topSquare.centreBackward
 			};
 			AssignVertices (points);
 			CreateCornerMesh (points [0], points [1], points [2], points [3], true);
@@ -231,7 +213,7 @@ public class MeshGenerator {
 				cube.topSquare.backwardLeft,
 				cube.middleBackwardLeft,
 				cube.topSquare.centreLeft,
-				cube.topSquare.centreBackward,
+				cube.topSquare.centreBackward
 			};
 			AssignVertices (points);
 			CreateCornerMesh (points [0], points [1], points [2], points [3], false);

@@ -70,6 +70,7 @@ public struct Generator {
 		for(int x = 0; x < dimension; x++){
 			maps.Add(SliceFill(dimension));
 		}
+
 		maps = OptimizeSlices(maps);
 
 		maps.Add(SliceNoise(dimension, randomAddition, 5));
