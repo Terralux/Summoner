@@ -8,44 +8,46 @@ public class ChunkManager : MonoBehaviour{
 	private int dimension = 17;
 	private int squareSize = 1;
 
-	bool[,] map;
+	private Chunk myChunk;
 
 	private MeshCollider mc;
 	private MeshFilter mf;
-	private GameObject targetChunk;
+	private GameObject targetObjectChunk;
 
 	public void Init(GameObject neoChunk, int randomFillPercentage, int randomAdditionPercentage, Generator gen, int dimension, int squareSize){
 		this.dimension = dimension;
 		this.squareSize = squareSize;
 
-		if(targetChunk != null){
-			Destroy(targetChunk);
+		if(targetObjectChunk != null){
+			Destroy(targetObjectChunk);
 		}else{
-			targetChunk = neoChunk;
+			targetObjectChunk = neoChunk;
 		}
 
-		mc = targetChunk.GetComponent<MeshCollider> ();
-		mf = targetChunk.GetComponent<MeshFilter> ();
+		mc = targetObjectChunk.GetComponent<MeshCollider> ();
+		mf = targetObjectChunk.GetComponent<MeshFilter> ();
 
 		if (mc == null) {
-			mc = targetChunk.AddComponent<MeshCollider> ();
+			mc = targetObjectChunk.AddComponent<MeshCollider> ();
 		}
 		if (mf == null){
-			mf = targetChunk.AddComponent<MeshFilter> ();
+			mf = targetObjectChunk.AddComponent<MeshFilter> ();
 		}
 
 		GenerateStartCube(gen, randomFillPercentage, randomAdditionPercentage);
 	}
 
-	void UpdateCollision(){
-		mc.sharedMesh = mf.sharedMesh;
-	}
-
 	void GenerateStartCube (Generator gen, int randomFillPercentage, int randomAdditionPercentage){
 		MeshGenerator meshGen = new MeshGenerator();
 
-		meshGen.GenerateMesh (mf, gen.GenerateStartCubeGrid(randomAdditionPercentage, dimension), squareSize);
+		myChunk = new Chunk(gen.GenerateStartCubeGrid(randomAdditionPercentage, dimension), squareSize);
+
+		meshGen.GenerateMesh (mf, myChunk);
 		UpdateCollision();
+	}
+
+	void UpdateCollision(){
+		mc.sharedMesh = mf.sharedMesh;
 	}
 
 	/*

@@ -16,7 +16,7 @@ public class Controls : MonoBehaviour {
 		float h = Input.GetAxis ("Horizontal");
 		float v = Input.GetAxis ("Vertical");
 
-		actions.Movement (new Vector2 (0, v));
+		actions.Movement (new Vector2 (h, v));
 
 		if (Input.GetButtonDown("Jump")) {
 			actions.jump ();

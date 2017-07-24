@@ -95,8 +95,8 @@ public struct Slice {
 		ControlNode [,] controlNodesTop = new ControlNode [nodeCount, nodeCount];
 		ControlNode [,] controlNodesBottom = new ControlNode [nodeCount, nodeCount];
 
-		for (int x = 0; x < nodeCount; x ++) {
-			for (int z = 0; z < nodeCount; z ++) {
+		for (int x = 0; x < nodeCount; x++) {
+			for (int z = 0; z < nodeCount; z++) {
 				Vector3 pos = new Vector3(-mapWidth/2 + x * squareSize + squareSize/2, 0f, -mapDepth/2 + z * squareSize + squareSize/2);
 				controlNodesTop [x, z] = new ControlNode (pos + Vector3.up * (-(float)nodeCount/2 + iteration * squareSize + squareSize/2), top[x, z], squareSize);
 				controlNodesBottom [x, z] = new ControlNode (pos + Vector3.up * (-(float)nodeCount/2 + (iteration - 1f) * squareSize + squareSize/2), bottom[x, z], squareSize);
@@ -105,8 +105,8 @@ public struct Slice {
 
 		cubes = new Cube[nodeCount - 1, nodeCount - 1];
 
-		for (int x = 0; x < nodeCount - 1; x ++) {
-			for (int z = 0; z < nodeCount - 1; z ++) {
+		for (int x = 0; x < nodeCount - 1; x++) {
+			for (int z = 0; z < nodeCount - 1; z++) {
 				cubes[x, z] = new Cube(controlNodesTop[x, z + 1], controlNodesTop[x + 1, z + 1], controlNodesTop[x + 1, z], controlNodesTop[x, z],
 					controlNodesBottom[x, z + 1], controlNodesBottom[x + 1, z + 1], controlNodesBottom[x + 1, z], controlNodesBottom[x, z]);
 			}
@@ -167,6 +167,14 @@ public struct Cube {
 			configuration += 1;
 			controlNodesActive++;
 		}
+	}
+
+	public bool IsEmpty(){
+		if(controlNodesActive < 1){
+			return true;
+		}
+
+		return false;
 	}
 }
 
