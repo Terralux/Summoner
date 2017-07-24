@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody),typeof(CapsuleCollider))]
 public class Controls : MonoBehaviour {
 
 	public CharacterStats stats;
@@ -17,7 +18,7 @@ public class Controls : MonoBehaviour {
 
 		actions.Movement (new Vector2 (h, v));
 
-		if (Input.GetKeyDown (KeyCode.Q)) {
+		if (Input.GetButtonDown("Jump")) {
 			actions.jump ();
 		}
 	}

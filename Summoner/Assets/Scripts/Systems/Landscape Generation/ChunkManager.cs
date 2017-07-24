@@ -5,8 +5,8 @@ using System;
 
 public class ChunkManager : MonoBehaviour{
 
-	private const int dimension = 17;
-	private const int squareSize = 1;
+	private int dimension = 17;
+	private int squareSize = 1;
 
 	bool[,] map;
 
@@ -14,7 +14,10 @@ public class ChunkManager : MonoBehaviour{
 	private MeshFilter mf;
 	private GameObject targetChunk;
 
-	public void Init(GameObject neoChunk, int randomFillPercentage, int randomAdditionPercentage, Generator gen){
+	public void Init(GameObject neoChunk, int randomFillPercentage, int randomAdditionPercentage, Generator gen, int dimension, int squareSize){
+		this.dimension = dimension;
+		this.squareSize = squareSize;
+
 		if(targetChunk != null){
 			Destroy(targetChunk);
 		}else{

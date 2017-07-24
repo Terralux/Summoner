@@ -18,7 +18,12 @@ public class CharacterActions {
 	public void Movement (Vector2 dir){
 		Debug.Log ("movement");
 		if (isGrounded) {
+			float magnitude = dir.magnitude;
+			Vector3 temp = Camera.main.transform.TransformDirection(new Vector3(dir.x, 0, dir.y));
+			dir = new Vector2(temp.x, temp.z).normalized * magnitude;
+
 			rb.velocity = new Vector3 (dir.x * stats.moveSpeed, rb.velocity.y, dir.y * stats.moveSpeed);
+			rb.transform.LookAt(rb.transform.position + new Vector3(dir.x, 0, dir.y));
 		}
 		CheckIfGrounded ();
 	}
