@@ -5,7 +5,7 @@ using UnityEngine;
 public class CharacterActions {
 
 	public bool isGrounded;
-	private Transform camTransform;
+	Vector3 moveDir;
 
 	private Rigidbody rb;
 	private CharacterStats stats;
@@ -15,14 +15,15 @@ public class CharacterActions {
 		this.rb = rb;
 	}
 
-	public void Movement (Vector3 move, Vector2 dir){
+	public void Movement (Vector2 dir){
 		Debug.Log ("movement");
-		move = camTransform.TransformDirection (move);
-
-
 		if (isGrounded) {
+			float magnitude = dir.magnitude;
+			Vector3 temp = Camera.main.transform.TransformDirection(new Vector3(dir.x, 0, dir.y));
+			dir = new Vector2(temp.x, temp.z).normalized * magnitude;
+
 			rb.velocity = new Vector3 (dir.x * stats.moveSpeed, rb.velocity.y, dir.y * stats.moveSpeed);
-			rb.transform.LookAt (rb.transform.position + new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")));
+			rb.transform.LookAt(rb.transform.position + new Vector3(dir.x, 0, dir.y));
 		}
 		CheckIfGrounded ();
 	}
