@@ -55,18 +55,7 @@ public class MeshGenerator {
 				cube.topSquare.centreLeft
 			};
 			AssignVertices (points);
-
-			if(forward.IsEmpty()){
-				CreateTriangle (points [0], points [1], points [2]);
-			}
-			if(left.IsEmpty()){
-				CreateTriangle (points [0], points [3], points [1]);
-			}
-			if(top.IsEmpty()){
-				CreateTriangle (points [0], points [2], points [3]);
-			}
-
-			CreateTriangle (points [3], points [2], points [1]);
+			CreateCornerMesh(points [0], points [1], points [2], points [3], true);
 			break;
 		case 2:
 			points = new Node[] {
@@ -76,18 +65,7 @@ public class MeshGenerator {
 				cube.topSquare.centreForward
 			};
 			AssignVertices (points);
-
-			if(forward.IsEmpty()){
-				CreateTriangle (points [3], points [0], points [1]);
-			}
-			if(right.IsEmpty()){
-				CreateTriangle (points [2], points [0], points [1]);
-			}
-			if(top.IsEmpty()){
-				CreateTriangle (points [3], points [0], points [2]);
-			}
-
-			CreateTriangle (points [3], points [2], points [1]);
+			CreateCornerMesh (points [0], points [1], points [2], points [3], true);
 			break;
 		case 3:
 			points = new Node[] {
@@ -95,28 +73,16 @@ public class MeshGenerator {
 				cube.middleForwardLeft,
 				cube.topSquare.centreForward,
 				cube.topSquare.centreLeft,
-
 				cube.topSquare.forwardRight,
 				cube.middleForwardRight,
 				cube.topSquare.centreRight
 			};
 			AssignVertices (points);
-			if(forward.IsEmpty()){
-				CreateTriangle (points [2], points [0], points [1]);
-				CreateTriangle (points [2], points [5], points [4]);
-				CreateTriangle (points [2], points [1], points [5]);
-			}
-			if(right.IsEmpty()){
-				CreateTriangle (points [4], points [5], points [6]);
-			}
-			if(top.IsEmpty()){
-				CreateTriangle (points [2], points [4], points [6]);
-				CreateTriangle (points [2], points [3], points [0]);
-				CreateTriangle (points [2], points [6], points [3]);
-			}
-			if(left.IsEmpty()){
-				CreateTriangle (points [0], points [3], points [1]);
-			}
+			CreateCornerMesh (points [0], points [1], points [2], points [3], false);
+			CreateCornerMesh (points [4], points [5], points [6], points [2], false);
+
+			CreateTriangle (points [5], points [2], points [1]);
+			CreateTriangle (points [6], points [3], points [2]);
 
 			CreateQuad (points [6], points [1], points [5], points [3]);
 			break;
@@ -128,19 +94,7 @@ public class MeshGenerator {
 				cube.topSquare.centreRight
 			};
 			AssignVertices (points);
-
-			if(back.IsEmpty()){
-				CreateTriangle (points [2], points [0], points [1]);
-			}
-			if(right.IsEmpty()){
-				CreateTriangle (points [0], points [3], points [1]);
-			}
-			if(top.IsEmpty()){
-				CreateTriangle (points [0], points [2], points [3]);
-			}
-
-			CreateTriangle (points [3], points [2], points [1]);
-
+			CreateCornerMesh (points [0], points [1], points [2], points [3], true);
 			break;
 		case 5:
 			points = new Node[] {
@@ -155,24 +109,10 @@ public class MeshGenerator {
 				cube.topSquare.centreLeft
 			};
 			AssignVertices (points);
-			if(back.IsEmpty()){
-				CreateTriangle (points [2], points [0], points [1]);
-			}
-			if(right.IsEmpty()){
-				CreateTriangle (points [0], points [3], points [1]);
-			}
-			if(top.IsEmpty()){
-				CreateTriangle (points [0], points [2], points [3]);
-				CreateTriangle (points [7], points [4], points [6]);
-				CreateQuad (points [3], points [7], points [2], points [6]);
-			}
-			if(forward.IsEmpty()){
-				CreateTriangle (points [6], points [4], points [5]);
-			}
-			if(left.IsEmpty()){
-				CreateTriangle (points [4], points [7], points [5]);
-			}
+			CreateCornerMesh (points [0], points [1], points [2], points [3], false);
+			CreateCornerMesh (points [4], points [5], points [6], points [7], false);
 
+			CreateQuad (points [3], points [7], points [2], points [6]);
 			CreateQuad (points [6], points [1], points [5], points [3]);
 			CreateQuad (points [7], points [1], points [2], points [5]);
 			break;
