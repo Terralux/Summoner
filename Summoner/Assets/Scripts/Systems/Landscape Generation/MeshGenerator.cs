@@ -6077,6 +6077,10 @@ public class MeshGenerator {
 				triangles.Add(b.vertexIndex);
 				triangles.Add(c.vertexIndex);
 			}
+		}else{
+			triangles.Add(a.vertexIndex);
+			triangles.Add(b.vertexIndex);
+			triangles.Add(c.vertexIndex);
 		}
 	}
 
