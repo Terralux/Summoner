@@ -6064,7 +6064,7 @@ public class MeshGenerator {
 			break;
 		default:
 			ExtendedMeshGenerator emg = new ExtendedMeshGenerator();
-			emg.ExtendedMeshGeneration(this, cube);
+			emg.ExtendedMeshGeneration(this, cube, top, bottom, left, right, forward, back);
 			break;
 		}
 	}
