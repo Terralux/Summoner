@@ -7,4 +7,6 @@ public class CharacterStats {
 	public float moveSpeed;
 	public float rotSpeed;
 	public float jumpForce;
+
+	int baseHp = 100;
 }
