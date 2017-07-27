@@ -8,10 +8,10 @@ public class CharacterActions {
 	Vector3 moveDir;
 
 	private Rigidbody rb;
-	private CharacterStats stats;
+	private Player player;
 
 	public CharacterActions (Rigidbody rb, CharacterStats stats){
-		this.stats = stats;
+		player = new Player();
 		this.rb = rb;
 	}
 
@@ -23,15 +23,15 @@ public class CharacterActions {
 
 			dir = new Vector2(temp.x, temp.z).normalized * magnitude;
 
-			rb.velocity = new Vector3 (dir.x * stats.moveSpeed, rb.velocity.y, dir.y * stats.moveSpeed);
+			rb.velocity = new Vector3 (dir.x * player.stats.moveSpeed, rb.velocity.y, dir.y * player.stats.moveSpeed);
 			rb.transform.LookAt(rb.transform.position + new Vector3(dir.x, 0, dir.y));
 		}
 		CheckIfGrounded ();
 	}
 
-	public void jump(){
+	public void Jump(){
 		if (isGrounded) {
-			rb.velocity += Vector3.up * stats.jumpForce;
+			rb.velocity += Vector3.up * player.stats.jumpForce;
 			isGrounded = false;
 		}
 	}
@@ -39,7 +39,7 @@ public class CharacterActions {
 	public void CheckIfGrounded(){
 		RaycastHit hit = new RaycastHit();
 
-		if (Physics.Raycast (rb.position + Vector3.up * 0.1f, Vector3.down, out hit, 3f)) {
+		if (Physics.Raycast (rb.position + Vector3.up * 0.1f, Vector3.down, out hit, 1f)) {
 			isGrounded = true;
 		} else {
 			isGrounded = false;

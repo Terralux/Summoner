@@ -1,0 +1,14 @@
+﻿public enum Elementals{
+	FIRE,
+	ICE,
+	LIGHTNING,
+	WIND,
+	WATER,
+	EARTH,
+	NATURE,
+	DARK,
+	LIGHT,
+	ARCANE,
+	PHYSICAL,
+	NONE
+}
