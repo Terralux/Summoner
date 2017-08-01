@@ -55,18 +55,7 @@ public class MeshGenerator {
 				cube.topSquare.centreLeft
 			};
 			AssignVertices (points);
-
-			if(forward.IsEmpty()){
-				CreateTriangle (points [0], points [1], points [2]);
-			}
-			if(left.IsEmpty()){
-				CreateTriangle (points [0], points [3], points [1]);
-			}
-			if(top.IsEmpty()){
-				CreateTriangle (points [0], points [2], points [3]);
-			}
-
-			CreateTriangle (points [3], points [2], points [1]);
+			CreateCornerMesh(points [0], points [1], points [2], points [3], true);
 			break;
 		case 2:
 			points = new Node[] {
