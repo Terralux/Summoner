@@ -6044,9 +6044,43 @@ public class MeshGenerator {
 		}
 	}
 
-	void CreateTriangle(Node a, Node b, Node c) {
-		triangles.Add(a.vertexIndex);
-		triangles.Add(b.vertexIndex);
-		triangles.Add(c.vertexIndex);
+	void CreateTriangle(Cube top, Cube bottom, Cube left, Cube right, Cube forward, Cube back, Node a, Node b, Node c) {
+		Vector3 U = a.position - b.position;
+		Vector3 V = c.position - b.position;
+
+		Vector3 normalVU = Vector3.Cross(V, U).normalized;
+
+		bool shouldRender = false;
+
+		if((Mathf.Abs(normalVU.x) > 0.95f && (Mathf.Abs(normalVU.y) + Mathf.Abs(normalVU.z) < 0.2f)) || 
+			(Mathf.Abs(normalVU.y) > 0.95f && (Mathf.Abs(normalVU.x) + Mathf.Abs(normalVU.z) < 0.2f)) || 
+			(Mathf.Abs(normalVU.z) > 0.95f && (Mathf.Abs(normalVU.x) + Mathf.Abs(normalVU.y) < 0.2f))){
+
+			if(Mathf.Abs(normalVU.x > normalVU.y + normalVU.z)){
+				if(normalVU.x > 0){
+					shouldRender = right.IsEmpty();
+				}else{
+					shouldRender = left.IsEmpty();
+				}
+			}else if(Mathf.Abs(normalVU.y > normalVU.x + normalVU.z)){
+				if(normalVU.y > 0){
+					shouldRender = top.IsEmpty();
+				}else{
+					shouldRender = bottom.IsEmpty();
+				}
+			}else{
+				if(normalVU.z > 0){
+					shouldRender = forward.IsEmpty();
+				}else{
+					shouldRender = back.IsEmpty();
+				}
+			}
+
+			if(shouldRender){
+				triangles.Add(a.vertexIndex);
+				triangles.Add(b.vertexIndex);
+				triangles.Add(c.vertexIndex);
+			}
+		}
 	}
 }
