@@ -2847,6 +2847,10 @@ public class ExtendedMeshGenerator {
 				mg.triangles.Add(b.vertexIndex);
 				mg.triangles.Add(c.vertexIndex);
 			}
+		}else{
+			mg.triangles.Add(a.vertexIndex);
+			mg.triangles.Add(b.vertexIndex);
+			mg.triangles.Add(c.vertexIndex);
 		}
 	}
 }
