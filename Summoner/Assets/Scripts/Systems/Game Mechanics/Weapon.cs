@@ -10,6 +10,7 @@ public partial class Weapon : Item {
 	protected int experienceToNextLevel = 100;
 	protected int currentLevel = 1;
 	protected int currentUpgradePoints = 0;
+	protected int weaponDamage = 1;
 
 	protected WeaponAttributes attributes;
 
