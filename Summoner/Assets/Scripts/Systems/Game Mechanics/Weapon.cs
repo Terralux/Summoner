@@ -14,8 +14,15 @@ public partial class Weapon : Item {
 
 	protected WeaponAttributes attributes;
 
-	public Weapon(){
+	public void Init(){
 		attributes = new WeaponAttributes();
+	}
+
+	public static Weapon CreateInstance(string name, float damage, int id)
+	{
+		Weapon w = ScriptableObject.CreateInstance<Weapon>();
+		w.Init();
+		return w;
 	}
 
 	public void AddExperience(int gainedExperience){

@@ -5,13 +5,38 @@ using UnityEngine;
 public struct Chunk {
 	public Slice[] slices;
 
+	public bool[,] top;
+	public bool[,] bottom;
+	public bool[,] left;
+	public bool[,] right;
+	public bool[,] forward;
+	public bool[,] back;
+
 	public Chunk(float squareSize) {
 		throw new System.NotImplementedException();
 	}
 
 	public Chunk(List<bool[,]> maps, float squareSize) {
-
+		
 		int nodeCount = maps[0].GetLength(0);
+
+		top = maps[nodeCount - 1];
+		bottom = maps[0];
+
+		left = new bool[nodeCount, nodeCount];
+		right = new bool[nodeCount, nodeCount];
+		forward = new bool[nodeCount, nodeCount];
+		back = new bool[nodeCount, nodeCount];
+
+		for(int x = 0; x < nodeCount; x++){
+			for(int y = 0; y < nodeCount; y++){
+				left[x, y] = maps[y] [0, x];
+				right[x, y] = maps[y] [nodeCount - 1, x];
+
+				forward[x, y] = maps[y] [x, nodeCount - 1];
+				back[x, y] = maps[y] [x, 0];
+			}
+		}
 
 		slices = new Slice[nodeCount];
 
@@ -236,5 +261,45 @@ public class ControlNode : Node {
 		above = new Node(position + Vector3.up * squareSize/2f);
 		right = new Node(position + Vector3.right * squareSize/2f);
 		forward = new Node(position + Vector3.forward * squareSize/2f);
+	}
+}
+
+public class CubeTemplate{
+	public bool[,] top;
+	public bool[,] bottom;
+	public bool[,] left;
+	public bool[,] right;
+	public bool[,] forward;
+	public bool[,] back;
+
+	public CubeTemplate(bool[,] top, bool[,] bottom, bool[,] left, bool[,] right, bool[,] forward, bool[,] back){
+		this.top = SetCubeTemplateSide(top);
+		this.bottom = SetCubeTemplateSide(bottom);
+		this.left = SetCubeTemplateSide(left);
+		this.right = SetCubeTemplateSide(right);
+		this.forward = SetCubeTemplateSide(forward);
+		this.back = SetCubeTemplateSide(back);
+	}
+
+	private bool[,] SetCubeTemplateSide(bool[,] side){
+		if(side == null)
+			return new bool[0,0];
+		if(side.GetLength(0) + side.GetLength(1) > 2){
+			return side;
+		}
+		return new bool[0,0];
+	}
+
+	public bool IsEmpty(){
+		if(top.GetLength(0) + top.GetLength(1) < 2 &&
+			bottom.GetLength(0) + bottom.GetLength(1) < 2 &&
+			left.GetLength(0) + left.GetLength(1) < 2 &&
+			right.GetLength(0) + right.GetLength(1) < 2 &&
+			forward.GetLength(0) + forward.GetLength(1) < 2 &&
+			back.GetLength(0) + back.GetLength(1) < 2){
+			return true;
+		}
+
+		return false;
 	}
 }
