@@ -21,12 +21,12 @@ public class ConvertCornerText : MonoBehaviour {
 			numbers[i] = int.Parse(textArray[i].Substring(textArray[i].IndexOf('[') + 1, textArray[i].IndexOf(']') - (textArray[i].IndexOf('[') + 1)));
 		}
 
-		collectiveString += "CreateTriangle (" + numbers[0] + ", " + numbers[1] + ", " + numbers[2] + ");";
-		collectiveString += "\nCreateTriangle (" + numbers[0] + ", " + numbers[2] + ", " + numbers[3] + ");";
-		collectiveString += "\nCreateTriangle (" + numbers[0] + ", " + numbers[3] + ", " + numbers[1] + ");";
+		collectiveString += "CreateTriangle ( points[" + numbers[0] + "], points[" + numbers[1] + "], points[" + numbers[2] + "]);";
+		collectiveString += "\nCreateTriangle ( points[" + numbers[0] + "], points[" + numbers[2] + "], points[" + numbers[3] + "]);";
+		collectiveString += "\nCreateTriangle ( points[" + numbers[0] + "], points[" + numbers[3] + "], points[" + numbers[1] + "]);";
 
 		if(textArray[textArray.Length - 1].Contains("true")){
-			collectiveString += "\n\nCreateTriangle (" + numbers[3] + ", " + numbers[2] + ", " + numbers[1] + ");";
+			collectiveString += "\n\nCreateTriangle ( points[" + numbers[3] + "], points[" + numbers[2] + "], points[" + numbers[1] + "]);";
 		}
 
 		Debug.Log(collectiveString);
