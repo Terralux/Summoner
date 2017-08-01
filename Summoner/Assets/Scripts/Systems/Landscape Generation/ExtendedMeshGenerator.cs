@@ -2763,17 +2763,34 @@ public class ExtendedMeshGenerator {
 				CreateTriangle (points [4], points [5], points [6]);
 			}
 
+			CreateTriangle (points [4], points [5], points [6]);
+			CreateTriangle (points [4], points [6], points [2]);
+			CreateTriangle (points [4], points [2], points [5]);
+
+			CreateTriangle (points [7], points [8], points [9]);
+			CreateTriangle (points [7], points [9], points [6]);
+			CreateTriangle (points [7], points [6], points [8]);
+
+			CreateTriangle (points [10], points [11], points [3]);
+			CreateTriangle (points [10], points [3], points [9]);
+			CreateTriangle (points [10], points [9], points [11]);
+
+			CreateTriangle (points [12], points [1], points [14]);
+			CreateTriangle (points [12], points [14], points [13]);
+			CreateTriangle (points [12], points [13], points [1]);
+
+			CreateTriangle (points [15], points [5], points [13]);
+			CreateTriangle (points [15], points [13], points [16]);
+			CreateTriangle (points [15], points [16], points [5]);
+
+			CreateTriangle (points [17], points [8], points [16]);
+			CreateTriangle (points [17], points [16], points [18]);
+			CreateTriangle (points [17], points [18], points [8]);
+
+			CreateTriangle (points [19], points [11], points [18]);
+			CreateTriangle (points [19], points [18], points [14]);
+			CreateTriangle (points [19], points [14], points [11]);
 			/*
-			 * CreateTriangle (center, n1, n2);
-				CreateTriangle (center, n2, n3);
-				CreateTriangle (center, n3, n1);
-
-				if (closeCorner) {
-					CreateTriangle (n3, n2, n1);
-				}
-			*/
-
-			//CreateCornerMesh (points [0], points [1], points [2], points [3], false);
 			CreateCornerMesh (points [4], points [5], points [6], points [2], false);
 			CreateCornerMesh (points [7], points [8], points [9], points [6], false);
 			CreateCornerMesh (points [10], points [11], points [3], points [9], false);
@@ -2782,7 +2799,7 @@ public class ExtendedMeshGenerator {
 			CreateCornerMesh (points [15], points [5], points [13], points [16], false);
 			CreateCornerMesh (points [17], points [8], points [16], points [18], false);
 			CreateCornerMesh (points [19], points [11], points [18], points [14], false);
-
+			*/
 			CreateQuad (points [2], points [9], points [6], points [3]);
 			CreateQuad (points [13], points [18], points [14], points [16]);
 
