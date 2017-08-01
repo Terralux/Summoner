@@ -100,7 +100,7 @@ public class TestCubeGenerator : MonoBehaviour {
 		);
 
 		if(neighbouringCubesActive){
-			mg.CreateMeshUsingSwitchCase(
+			mg.CreateMesh(
 				new Cube(
 					new ControlNode(new Vector3(0, 0, 0), tfl, 1),
 					new ControlNode(new Vector3(1, 0, 0), tfr, 1),
@@ -113,7 +113,7 @@ public class TestCubeGenerator : MonoBehaviour {
 				), new Cube(), new Cube(), new Cube(), new Cube(), new Cube(), new Cube()
 			);
 		}else{
-			mg.CreateMeshUsingSwitchCase(
+			mg.CreateMesh(
 				new Cube(
 					new ControlNode(new Vector3(0, 0, 0), tfl, 1),
 					new ControlNode(new Vector3(1, 0, 0), tfr, 1),
