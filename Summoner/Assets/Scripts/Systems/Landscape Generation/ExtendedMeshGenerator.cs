@@ -6,7 +6,7 @@ public class ExtendedMeshGenerator {
 
 	private MeshGenerator mg;
 
-	public void ExtendedMeshGeneration(MeshGenerator newMG, Cube cube){
+	public void ExtendedMeshGeneration(MeshGenerator newMG, Cube cube, Cube top, Cube bottom, Cube left, Cube right, Cube forward, Cube back){
 		mg = newMG;
 		Node[] points;
 		switch (cube.configuration) {
@@ -2748,7 +2748,32 @@ public class ExtendedMeshGenerator {
 				cube.bottomSquare.backwardLeft
 			};
 			AssignVertices (points);
-			CreateCornerMesh (points [0], points [1], points [2], points [3], false);
+
+			if(top.IsEmpty()){
+				CreateTriangle (points [0], points [2], points [3]);
+				CreateTriangle (points [4], points [5], points [2]);
+			}
+			if(forward.IsEmpty()){
+				CreateTriangle (points [0], points [1], points [2]);
+			}
+			if(left.IsEmpty()){
+				CreateTriangle (points [0], points [3], points [1]);
+			}
+			if(right.IsEmpty()){
+				CreateTriangle (points [4], points [5], points [6]);
+			}
+
+			/*
+			 * CreateTriangle (center, n1, n2);
+				CreateTriangle (center, n2, n3);
+				CreateTriangle (center, n3, n1);
+
+				if (closeCorner) {
+					CreateTriangle (n3, n2, n1);
+				}
+			*/
+
+			//CreateCornerMesh (points [0], points [1], points [2], points [3], false);
 			CreateCornerMesh (points [4], points [5], points [6], points [2], false);
 			CreateCornerMesh (points [7], points [8], points [9], points [6], false);
 			CreateCornerMesh (points [10], points [11], points [3], points [9], false);
