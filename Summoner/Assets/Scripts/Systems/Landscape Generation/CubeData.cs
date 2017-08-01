@@ -17,7 +17,9 @@ public struct Chunk {
 	}
 
 	public Chunk(List<bool[,]> maps, float squareSize) {
-		
+		Debug.Log(maps.Count);
+		Debug.Log(maps[0].GetLength(0));
+
 		int nodeCount = maps[0].GetLength(0);
 
 		top = maps[nodeCount - 1];
@@ -40,12 +42,8 @@ public struct Chunk {
 
 		slices = new Slice[nodeCount];
 
-		for(int y = 1; y < nodeCount * 2; y += 2) {
-			if(y > 1){
-				slices [(y - 1)/2] = new Slice(maps[y - 1], maps[y], squareSize, (y - 1)/2);
-			}else{
-				slices [0] = new Slice(maps[y - 1], maps[y], squareSize, y - 1);
-			}
+		for(int y = 0; y < nodeCount; y++) {
+			slices [y] = new Slice (maps[y], maps[y + 1], squareSize, y);
 		}
 
 		for(int y = 1; y < slices.Length - 1; y++){
@@ -63,16 +61,6 @@ public struct Chunk {
 				}
 			}
 		}
-
-		/*
-		for(int i = 1; i < slices.Length - 1; i++){
-			for(int j = 1; j < slices[i].cubes.GetLength(0) - 1; j++){
-				for(int k = 1; k < slices[i].cubes.GetLength(0) - 1; k++){
-					if(slices[i - 1].cubes[j, k])
-				}
-			}
-		}
-		*/
 	}
 }
 
