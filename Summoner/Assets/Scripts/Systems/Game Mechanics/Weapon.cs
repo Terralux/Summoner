@@ -16,11 +16,14 @@ public partial class Weapon : MaterialComponentItem {
 
 	public List<WeaponUpgrade> upgradeReq = new List<WeaponUpgrade>();
 
-	private void Init(){
+	public bool isReadyForUpgrade = false;
+
+	public void Init(){
 		attributes = new WeaponAttributes();
 	}
 
-	public static new Weapon CreateInstance(){
+	public static Weapon CreateInstance()
+	{
 		Weapon w = ScriptableObject.CreateInstance<Weapon>();
 		w.Init();
 		return w;
@@ -40,12 +43,19 @@ public partial class Weapon : MaterialComponentItem {
 		experienceToNextLevel = (int)(experienceToNextLevel * 1.1f);
 	}
 
-	public void Upgrade(ElementalAffinity e){
+	public void AddAffinity(ElementalAffinity e){
 		if (currentUpgradePoints > 0) {
 			attributes.Upgrade (e);
 			currentUpgradePoints--;
+
+			foreach (WeaponUpgrade wUp in upgradeReq) {
+				if (wUp.CheckRequirements (attributes)) {
+					isReadyForUpgrade = true;
+				}
+			}
 		}
 	}
+
 }
 
 public partial class Weapon{
