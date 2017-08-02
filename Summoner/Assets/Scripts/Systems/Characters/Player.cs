@@ -4,23 +4,12 @@ using UnityEngine;
 [System.Serializable]
 public class Player : Entity {
 	public CharacterStats stats;
-	public Inventory inventory;
-
-	private bool ValidateWeaponSlot{
-		get{
-			return equipped != null;
-		}
-		set{
-			hasWeapon = value;
-		}
-	}
-	private bool hasWeapon;
+	public bool hasWeapon;
 
 	public Weapon equipped;
 
 	public Player(){
 		stats = new CharacterStats();
-		inventory = new Inventory ();
 		hasWeapon = equipped != null;
 	}
 

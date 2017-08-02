@@ -12,7 +12,12 @@ public enum Direction {
 }
 
 public struct Generator {
+
+	public float smoothPercentage;
+
 	public List<bool[,]> Generate (Direction dir, bool[,] slice, float randomAddition){
+		smoothPercentage = 0f;
+
 		List<bool[,]> maps = new List<bool[,]> ();
 		maps.Add(slice);
 
@@ -179,6 +184,49 @@ public struct Generator {
 		return optimizedMaps;
 	}
 
+	public List<bool[,]> GenerateRecursiveCellularAutomata(string chunkKey, CubeTemplate template, int smoothIterations, int randomAddition, int dimension, out Accessible access){
+		List<bool[,]> maps = new List<bool[,]>();
+		List<bool[,]> flags = new List<bool[,]>();
+
+		for (int y = 0; y < dimension * 2; y ++) {
+			maps.Add(new bool[dimension, dimension]);
+			flags.Add(new bool[dimension, dimension]);
+		}
+
+		if(!template.IsEmpty()){
+			for(int x = 0; x < maps.Count; x++){
+				for(int y = 0; y < maps.Count; y++){
+					maps[y][0, x] = template.left[x, y];
+					maps[y][maps.Count - 1, x] = template.right[x, y];
+					flags[y][0, x] = true;
+					flags[y][maps.Count - 1, x] = true;
+
+					maps[y][x, maps.Count - 1] = template.forward[x, y];
+					maps[y][x, 0] = template.back[x, y];
+					flags[y][x, maps.Count - 1] = true;
+					flags[y][x, 0] = true;
+
+					maps[0][x, y] = template.bottom[x, y];
+					maps[maps.Count - 1][x, y] = template.top[x, y];
+					flags[0][x, y] = true;
+					flags[maps.Count - 1][x, y] = true;
+				}
+			}
+
+			randomAddition = (int)(randomAddition * 0.5f);
+		}
+
+		maps = RandomFillMap(maps, chunkKey, dimension, randomAddition);
+
+		for(int i = 0; i < smoothIterations; i++){
+			maps = RecursiveSmoothMap(maps, flags, 0, 0, 0, dimension, smoothPercentage);
+		}
+
+		access = CheckAccessibility(maps);
+
+		return maps;
+	}
+
 	public List<bool[,]> GenerateCellularAutomata(string chunkKey, CubeTemplate template, int smoothIterations, int randomAddition, int dimension, out Accessible access){
 
 		List<bool[,]> maps = new List<bool[,]>();
@@ -207,7 +255,7 @@ public struct Generator {
 		maps = RandomFillMap(maps, chunkKey, dimension, randomAddition);
 
 		for(int i = 0; i < smoothIterations; i++){
-			maps = SmoothMap(maps, dimension, 0.58f);
+			maps = SmoothMap(maps, dimension, smoothPercentage);
 		}
 
 		access = CheckAccessibility(maps);
@@ -233,18 +281,73 @@ public struct Generator {
 		return map;
 	}
 
+	List<bool[,]> RecursiveSmoothMap(List<bool[,]> map, List<bool[,]> flags, int x, int y, int z, int dimension, float percentageLimitToFill) {
+		float neighbourWallOnPercentage = GetSurroundingWallCount(map, x, y, z, dimension);
+
+		flags[y] [x, z] = true;
+
+		if (neighbourWallOnPercentage > (percentageLimitToFill)){
+			map[y] [x, z] = true;
+
+			if(x > 0){
+				if(!flags[y] [x - 1, z]){
+					map = RecursiveSmoothMap(map, flags, x - 1, y, z, dimension, percentageLimitToFill);
+				}
+			}
+			if(x < dimension - 1){
+				if(!flags[y] [x + 1, z]){
+					map = RecursiveSmoothMap(map, flags, x + 1, y, z, dimension, percentageLimitToFill);
+				}
+			}
+			if(y > 0){
+				if(!flags[y - 1] [x, z]){
+					map = RecursiveSmoothMap(map, flags, x, y - 1, z, dimension, percentageLimitToFill);
+				}
+			}
+			if(y < dimension - 1){
+				if(!flags[y + 1] [x, z]){
+					map = RecursiveSmoothMap(map, flags, x, y + 1, z, dimension, percentageLimitToFill);
+				}
+			}
+			if(z > 0){
+				if(!flags[y] [x, z - 1]){
+					map = RecursiveSmoothMap(map, flags, x, y, z - 1, dimension, percentageLimitToFill);
+				}
+			}
+			if(z < dimension - 1){
+				if(!flags[y] [x, z + 1]){
+					map = RecursiveSmoothMap(map, flags, x, y, z + 1, dimension, percentageLimitToFill);
+				}
+			}
+
+			for (int x1 = 0; x1 < dimension; x1 ++) {
+				for (int y1 = 0; y1 < dimension; y1 ++) {
+					for (int z1 = 0; z1 < dimension; z1 ++) {
+						if(!flags[y1] [x1, z1] && map[y1] [x1, z1]){
+							map = RecursiveSmoothMap(map, flags, x1, y1, z1, dimension, percentageLimitToFill);
+						}
+					}
+				}
+			}
+		}else{
+			map[y] [x, z] = false;
+		}
+
+		return map;
+	}
+
 	List<bool[,]> SmoothMap(List<bool[,]> map, int dimension, float percentageLimitToFill) {
 		for (int x = 0; x < dimension; x ++) {
 			for (int y = 0; y < dimension; y ++) {
 				for (int z = 0; z < dimension; z ++) {
 
-				float neighbourWallOnPercentage = GetSurroundingWallCount(map, x, y, z, dimension);
+					float neighbourWallOnPercentage = GetSurroundingWallCount(map, x, y, z, dimension);
 
-				if (neighbourWallOnPercentage > percentageLimitToFill)
-					map[y] [x, z] = true;
-				else if (neighbourWallOnPercentage < percentageLimitToFill)
-					map[y] [x, z] = false;
-
+					if (neighbourWallOnPercentage > (percentageLimitToFill)){
+						map[y] [x, z] = true;
+					}else if (neighbourWallOnPercentage < percentageLimitToFill){
+						map[y] [x, z] = false;
+					}
 				}
 			}
 		}

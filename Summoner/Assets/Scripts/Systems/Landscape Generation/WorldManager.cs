@@ -19,13 +19,15 @@ public class WorldManager : MonoBehaviour {
 	public static Hashtable world = new Hashtable();
 
 	[Range(0,100)]
-	public int randomFill;
-	[Range(0,100)]
 	public int randomAdd;
 
 	public PlayerPosition playerPos = new PlayerPosition(0, 0, 0);
 	[Range(1f,10f)]
 	public float playerDistanceLimit = 1f;
+
+	private List<GameObject> go = new List<GameObject>();
+	[Range(0f,1f)]
+	public float smoothPercentage;
 
 	void Awake(){
 		if(instance){
@@ -39,20 +41,33 @@ public class WorldManager : MonoBehaviour {
 
 		GenerateChunk(0, 0, 0);
 	}
+		
+	void Update(){
+		if(Input.GetKeyDown(KeyCode.Return)){
+			world.Clear();
+			foreach(GameObject g in go){
+				Destroy(g);
+			}
+
+			GenerateChunk(0,0,0);
+		}
+	}
 
 	void GenerateChunk(int x, int y, int z){
+		generator.smoothPercentage = smoothPercentage;
+
 		string chunkKey = x + "," + y + "," + z;
 
 		GameObject go = Instantiate(chunkManagerPrefab, new Vector3((dimension-1) * x, (dimension-1) * y, (dimension-1) * z), Quaternion.identity);
 		world[chunkKey] = go.GetComponent<ChunkManager>();
-
+		this.go.Add(go);
 
 		if(x == 0 && y == 0 && z == 0){
 			(world[chunkKey] as ChunkManager).myKey = chunkKey;
-			(world[chunkKey] as ChunkManager).Init(go, randomFill, randomAdd, generator.GenerateCellularAutomata, dimension, squareSize);
+			(world[chunkKey] as ChunkManager).Init(go, randomAdd, generator.GenerateRecursiveCellularAutomata, dimension, squareSize);
 		}else{
 			(world[chunkKey] as ChunkManager).myKey = chunkKey;
-			(world[chunkKey] as ChunkManager).Init(go, randomFill, randomAdd, generator.GenerateCellularAutomata, dimension, squareSize);
+			(world[chunkKey] as ChunkManager).Init(go, randomAdd, generator.GenerateRecursiveCellularAutomata, dimension, squareSize);
 		}
 
 		if(world.ContainsKey(x + "," + (y + 1) + "," + z)){
