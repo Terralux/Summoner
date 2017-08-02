@@ -1,17 +1,18 @@
 ﻿using UnityEngine;
 
-[System.Serializable]
-public class MaterialComponentItem : BaseItem {
+[System.Serializable, CreateAssetMenu(fileName="New Resource", menuName = "Trailblazer/Items/Resource", order=0)]
+public class Resource : BaseItem {
 	public ElementalAffinity myAffinity;
 
-	public static new MaterialComponentItem CreateInstance() {
-		MaterialComponentItem matComp = ScriptableObject.CreateInstance<MaterialComponentItem>();
+	public static new Resource CreateInstance() {
+		Resource matComp = ScriptableObject.CreateInstance<Resource>();
 		matComp.Init();
 		return matComp;
 	}
 
 	private void Init (){
 		myAffinity = new ElementalAffinity(Elementals.NONE, 0);
+		isStackable = true;
 	}
 }
 
@@ -19,6 +20,7 @@ public class MaterialComponentItem : BaseItem {
 public class KeyItem : BaseItem {
 	public static new KeyItem CreateInstance() {
 		KeyItem k = ScriptableObject.CreateInstance<KeyItem>();
+		k.isStackable = false;
 		return k;
 	}
 }
@@ -29,8 +31,12 @@ public class BaseItem : ScriptableObject {
 	public string itemName;
 	public string description;
 
+	[HideInInspector]
+	public bool isStackable;
+
 	public static BaseItem CreateInstance() {
 		BaseItem b = ScriptableObject.CreateInstance<BaseItem>();
+		b.isStackable = false;
 		return b;
 	}
 }
