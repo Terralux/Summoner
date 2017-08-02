@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System;
 
 public class ChunkManager : MonoBehaviour{
-
 	private int dimension = 17;
 	private int squareSize = 1;
 
@@ -14,7 +13,13 @@ public class ChunkManager : MonoBehaviour{
 	private MeshFilter mf;
 	private GameObject targetObjectChunk;
 
-	public void Init(GameObject neoChunk, int randomFillPercentage, int randomAdditionPercentage, Generator gen, int dimension, int squareSize){
+	public Neighbours chunkNeighbours;
+
+	public Accessible hasAccessTo;
+
+	public delegate List<bool[,]> ChunkGenerator(int random, int dimension, out Accessible access);
+
+	public void Init(GameObject neoChunk, int randomFillPercentage, int randomAdditionPercentage, ChunkGenerator gen, int dimension, int squareSize){
 		this.dimension = dimension;
 		this.squareSize = squareSize;
 
@@ -37,10 +42,10 @@ public class ChunkManager : MonoBehaviour{
 		GenerateStartCube(gen, randomFillPercentage, randomAdditionPercentage);
 	}
 
-	void GenerateStartCube (Generator gen, int randomFillPercentage, int randomAdditionPercentage){
+	void GenerateStartCube (ChunkGenerator gen, int randomFillPercentage, int randomAdditionPercentage){
 		MeshGenerator meshGen = new MeshGenerator();
 
-		myChunk = new Chunk(gen.GenerateStartCubeGrid(randomAdditionPercentage, dimension), squareSize);
+		myChunk = new Chunk(gen(randomAdditionPercentage, dimension, out hasAccessTo), squareSize);
 
 		meshGen.GenerateMesh (mf, myChunk);
 		UpdateCollision();
@@ -48,6 +53,35 @@ public class ChunkManager : MonoBehaviour{
 
 	void UpdateCollision(){
 		mc.sharedMesh = mf.sharedMesh;
+	}
+
+	public void AddNeighbour(Direction dir, ChunkManager cm){
+		switch(dir){
+		case Direction.top:
+			chunkNeighbours.top = cm;
+			cm.chunkNeighbours.bottom = this;
+			break;
+		case Direction.bottom:
+			chunkNeighbours.bottom = cm;
+			cm.chunkNeighbours.top = this;
+			break;
+		case Direction.left:
+			chunkNeighbours.left = cm;
+			cm.chunkNeighbours.right = this;
+			break;
+		case Direction.right:
+			chunkNeighbours.right = cm;
+			cm.chunkNeighbours.left = this;
+			break;
+		case Direction.forward:
+			chunkNeighbours.forward = cm;
+			cm.chunkNeighbours.back = this;
+			break;
+		case Direction.back:
+			chunkNeighbours.back = cm;
+			cm.chunkNeighbours.forward = this;
+			break;
+		}
 	}
 
 	/*
@@ -118,4 +152,62 @@ public class ChunkManager : MonoBehaviour{
 		return wallCount;
 	}
 	*/
+}
+
+public struct Accessible{
+	public bool top;
+	public bool bottom;
+	public bool left;
+	public bool right;
+	public bool forward;
+	public bool back;
+
+	public Accessible(bool top, bool bottom, bool left, bool right, bool forward, bool back){
+		this.top = top;
+		this.bottom = bottom;
+		this.left = left;
+		this.right = right;
+		this.forward = forward;
+		this.back = back;
+	}
+}
+
+public struct Neighbours{
+	public ChunkManager top;
+	public ChunkManager bottom;
+	public ChunkManager left;
+	public ChunkManager right;
+	public ChunkManager forward;
+	public ChunkManager back;
+
+	public Neighbours(ChunkManager top, ChunkManager bottom, ChunkManager left, ChunkManager right, ChunkManager forward, ChunkManager back){
+		this.top = top;
+		this.bottom = bottom;
+		this.left = left;
+		this.right = right;
+		this.forward = forward;
+		this.back = back;
+	}
+
+	public void Print(){
+		Debug.Log(top + " " + bottom + " " + left + " " + right + " " + forward + " " + back);
+	}
+}
+
+public struct Connections{
+	public bool top;
+	public bool bottom;
+	public bool left;
+	public bool right;
+	public bool forward;
+	public bool back;
+
+	public Connections(bool top, bool bottom, bool left, bool right, bool forward, bool back){
+		this.top = top;
+		this.bottom = bottom;
+		this.left = left;
+		this.right = right;
+		this.forward = forward;
+		this.back = back;
+	}
 }

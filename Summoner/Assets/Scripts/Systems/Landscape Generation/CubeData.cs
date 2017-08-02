@@ -2,37 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/*
-public struct SlicePair {
-	public bool[,] top;
-	public bool[,] bottom;
-
-	public SlicePair(float ratio){
-		this.top = new bool[2,2];
-		this.bottom = new bool[2,2];
-
-		for(int x = 0; x < 2; x++){
-			for(int y = 0; y < 2; y++){
-				top[x,y] = Random.value * 100f < ratio;
-				bottom[x,y] = Random.value * 100f < ratio;
-			}
-		}
-	}
-
-	public SlicePair(bool[,] top, bool[,] bottom){
-		this.top = new bool[2,2];
-		this.bottom = new bool[2,2];
-
-		for(int x = 0; x < 2; x++){
-			for(int y = 0; y < 2; y++){
-				this.top[x,y] = top[x,y];
-				this.bottom[x,y] = bottom[x,y];
-			}
-		}
-	}
-}
-*/
-
 public struct Chunk {
 	public Slice[] slices;
 
@@ -44,42 +13,41 @@ public struct Chunk {
 
 		int nodeCount = maps[0].GetLength(0);
 
-		/*
-		for(int y = 0; y < maps.Count; y ++) {
-			for (int x = 0; x < nodeCountX; x ++) {
-				for (int z = 0; z < nodeCountZ; z ++) {
-					Vector3 pos = new Vector3(-mapWidth/2 + x * squareSize + squareSize/2, -maps.Count/2 + y * squareSize + squareSize/2, -mapDepth/2 + z * squareSize + squareSize/2);
-
-					if(maps[y][x,z]){
-						if(y - 1 > 0 && y + 1 < maps.Count && x - 1 > 0 && x + 1 < nodeCountX && z - 1 > 0 && z + 1 < nodeCountZ){
-							if(maps[y - 1][x,z] && maps[y + 1][x,z] && maps[y][x - 1,z] && maps[y][x + 1,z] && maps[y][x,z - 1] && maps[y][x,z + 1]){
-								controlNodes[y, x, z] = new ControlNode(pos, false, squareSize);
-							}else{
-								controlNodes[y, x, z] = new ControlNode(pos, true, squareSize);
-							}
-						}else{
-							controlNodes[y, x, z] = new ControlNode(pos, true, squareSize);
-						}
-					}else{
-						controlNodes[y, x, z] = new ControlNode(pos, maps[y][x, z], squareSize);
-					}
-				}
-			}
-		}
-		*/
-
 		slices = new Slice[nodeCount];
-		//slices [0] = new Slice(maps[0], squareSize);
 
 		for(int y = 1; y < nodeCount * 2; y += 2) {
-			//float height = -(float)maps.Count/2 + y * squareSize + squareSize/2;
 			if(y > 1){
 				slices [(y - 1)/2] = new Slice(maps[y - 1], maps[y], squareSize, (y - 1)/2);
 			}else{
 				slices [0] = new Slice(maps[y - 1], maps[y], squareSize, y - 1);
 			}
-			//slices[y] = new Slice(maps [y], squareSize, height, slices [y - 1]);
 		}
+
+		for(int y = 1; y < slices.Length - 1; y++){
+			for(int x = 1; x < slices[y].cubes.GetLength(0) - 1; x++){
+				for(int z = 1; z < slices[y].cubes.GetLength(0) - 1; z++){
+					if(slices[y + 1].cubes[x, z].SideIsActive(Direction.bottom) &&
+						slices[y - 1].cubes[x, z].SideIsActive(Direction.top) &&
+						slices[y].cubes[x + 1, z].SideIsActive(Direction.left) &&
+						slices[y].cubes[x - 1, z].SideIsActive(Direction.right) &&
+						slices[y].cubes[x, z + 1].SideIsActive(Direction.back) &&
+						slices[y].cubes[x, z - 1].SideIsActive(Direction.forward))
+					{
+						slices[y].cubes[x, z].isBurried = true;
+					}				
+				}
+			}
+		}
+
+		/*
+		for(int i = 1; i < slices.Length - 1; i++){
+			for(int j = 1; j < slices[i].cubes.GetLength(0) - 1; j++){
+				for(int k = 1; k < slices[i].cubes.GetLength(0) - 1; k++){
+					if(slices[i - 1].cubes[j, k])
+				}
+			}
+		}
+		*/
 	}
 }
 
@@ -119,6 +87,7 @@ public struct Cube {
 	public Node middleForwardLeft, middleForwardRight, middleBackwardRight, middleBackwardLeft;
 	public int configuration;
 	public int controlNodesActive;
+	public bool isBurried;
 
 	public Cube (ControlNode _topHalfTopLeft, ControlNode _topHalfTopRight, ControlNode _topHalfBottomRight, ControlNode _topHalfBottomLeft,
 		ControlNode _bottomHalfTopLeft, ControlNode _bottomHalfTopRight, ControlNode _bottomHalfBottomRight, ControlNode _bottomHalfBottomLeft) {
@@ -167,13 +136,52 @@ public struct Cube {
 			configuration += 1;
 			controlNodesActive++;
 		}
+
+		this.isBurried = false;
 	}
 
 	public bool IsEmpty(){
 		if(controlNodesActive < 1){
 			return true;
 		}
+		return false;
+	}
 
+	public bool ContainsAndIsActive(Node n1, Node n2, Node n3){
+		//Contains and is active
+		if(n1 as ControlNode != null){
+			if(topSquare.IsControlNodeActive(n1 as ControlNode) || bottomSquare.IsControlNodeActive(n1 as ControlNode)){
+				return true;
+			}
+		}
+		if(n2 as ControlNode != null){
+			if(topSquare.IsControlNodeActive(n2 as ControlNode) || bottomSquare.IsControlNodeActive(n2 as ControlNode)){
+				return true;
+			}
+		}
+		if(n3 as ControlNode != null){
+			if(topSquare.IsControlNodeActive(n3 as ControlNode) || bottomSquare.IsControlNodeActive(n3 as ControlNode)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public bool SideIsActive(Direction dir){
+		switch(dir){
+		case Direction.top:
+			return (topSquare.forwardLeft.active && topSquare.forwardRight.active && topSquare.backwardRight.active && topSquare.backwardLeft.active);
+		case Direction.bottom:
+			return (bottomSquare.forwardLeft.active && bottomSquare.forwardRight.active && bottomSquare.backwardRight.active && bottomSquare.backwardLeft.active);
+		case Direction.right:
+			return (topSquare.forwardRight.active && bottomSquare.forwardRight.active && topSquare.backwardRight.active && bottomSquare.backwardRight.active);
+		case Direction.left:
+			return (topSquare.forwardLeft.active && bottomSquare.forwardLeft.active && topSquare.backwardLeft.active && bottomSquare.backwardLeft.active);
+		case Direction.forward:
+			return (topSquare.forwardLeft.active && topSquare.forwardRight.active && bottomSquare.forwardLeft.active && bottomSquare.forwardRight.active);
+		case Direction.back:
+			return (bottomSquare.backwardRight.active && bottomSquare.backwardLeft.active && topSquare.backwardRight.active && topSquare.backwardLeft.active);
+		}
 		return false;
 	}
 }
@@ -192,6 +200,19 @@ public struct Square {
 		centreRight = backwardRight.forward;
 		centreBackward = backwardLeft.right;
 		centreLeft = backwardLeft.forward;
+	}
+
+	public bool IsControlNodeActive(ControlNode cn){
+		if(forwardLeft.position == cn.position && forwardLeft.active)
+			return true;
+		if(forwardRight.position == cn.position && forwardRight.active)
+			return true;
+		if(backwardRight.position == cn.position && backwardRight.active)
+			return true;
+		if(backwardLeft.position == cn.position && backwardLeft.active)
+			return true;
+
+		return false;
 	}
 }
 

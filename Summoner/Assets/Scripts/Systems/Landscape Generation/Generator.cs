@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum Direction {
-	XPositive,
-	XNegative,
-	YPositive,
-	YNegative,
-	ZPositive,
-	ZNegative
+	top,
+	bottom,
+	right,
+	left,
+	forward,
+	back
 }
 
 public struct Generator {
@@ -45,40 +45,42 @@ public struct Generator {
 
 		maps.RemoveAt(0);
 		return maps;
-		/*
-		switch(dir){
-		case Direction.XPositive:
-			
-			break;
-		case Direction.XNegative:
-			break;
-		case Direction.YPositive:
-			break;
-		case Direction.YNegative:
-			break;
-		case Direction.ZPositive:
-			break;
-		case Direction.ZNegative:
-			break;
-		}
-		*/
 	}
 
-	public List<bool[,]> GenerateStartCubeGrid (int randomAddition, int dimension){
+	public List<bool[,]> GenerateStartSurroundings(int randomAddition, int dimension, out Accessible access){
 		List<bool[,]> maps = new List<bool[,]>();
 
 		for(int x = 0; x < dimension; x++){
 			maps.Add(SliceFill(dimension));
 		}
 
-		maps = OptimizeSlices(maps);
+		maps.Add(SliceNoise(dimension, randomAddition));
 
-		maps.Add(SliceNoise(dimension, randomAddition, 5));
+		while(maps.Count < dimension * 2){
+			maps.Add(SliceBlur(dimension, randomAddition, maps[maps.Count - 1]));
+		}
+
+		access = new Accessible(true, false, true, true, true, true);
+
+		return maps;
+	}
+
+	public List<bool[,]> GenerateStartCubeGrid (int randomAddition, int dimension, out Accessible access){
+		List<bool[,]> maps = new List<bool[,]>();
+
+		for(int x = 0; x < dimension; x++){
+			maps.Add(SliceFill(dimension));
+		}
+
+		//maps = OptimizeSlices(maps);
+
+		maps.Add(SliceNoise(dimension, randomAddition));
 
 		while(maps.Count < dimension * 2){
 			maps.Add(SliceEmpty(dimension));
 		}
 
+		access = new Accessible(true, false, true, true, true, true);
 		return maps;
 	}
 
@@ -133,6 +135,23 @@ public struct Generator {
 			}
 		}
 
+		return maps;
+	}
+
+	public bool[,] SliceBlur(int dimension, int fillRatio, bool[,] previous){
+		bool[,] maps = new bool[dimension, dimension];
+
+		for(int y = 0; y < dimension; y++){
+			for(int z = 0; z < dimension; z++){
+				if(previous[y, z]){
+					if(Random.Range (0f, 100f) < fillRatio){
+						maps [y, z] = true;
+					}else{
+						maps [y, z] = false;
+					}
+				}
+			}
+		}
 		return maps;
 	}
 
