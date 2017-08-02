@@ -47,6 +47,10 @@ public class CharacterActions {
 	
 	}
 
+	public void HealDamage(int hValue) {
+		
+	}
+
 	public void CheckIfGrounded(){
 		RaycastHit hit = new RaycastHit();
 

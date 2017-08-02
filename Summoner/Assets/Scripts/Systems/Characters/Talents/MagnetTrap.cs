@@ -7,8 +7,13 @@ public class MagnetTrap : BaseSkill {
 	public float range;
 	public float force;
 	public float duration;
+	public GameObject magnetTrap;
 
 	public MagnetTrap(string name, float cooldown, int skillIndex, Sprite icon):base(name, cooldown, skillIndex, icon) {
 		
+	}
+
+	public void PlaceTrap(Player player) {
+		player.SpawnSkillPrefab (magnetTrap, range);
 	}
 }
