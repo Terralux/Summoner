@@ -24,14 +24,16 @@ public class MeshGenerator {
 		for(int y = 0; y < chunk.slices.Length; y++){
 			for (int x = 0; x < chunk.slices[y].cubes.GetLength(0); x ++) {
 				for (int z = 0; z < chunk.slices[y].cubes.GetLength(0); z ++) {
-					top = (y + 1 < chunk.slices.Length ? chunk.slices[y + 1].cubes[x, z] : new Cube());
-					bottom = (y - 1 > -1 ? chunk.slices[y - 1].cubes[x, z] : new Cube());
-					left = (x - 1 > -1 ? chunk.slices[y].cubes[x - 1, z] : new Cube());
-					right = (x + 1 < chunk.slices[y].cubes.GetLength(0) ? chunk.slices[y].cubes[x + 1, z] : new Cube());
-					forward = (z + 1 < chunk.slices[y].cubes.GetLength(0) ? chunk.slices[y].cubes[x, z + 1] : new Cube());
-					back = (z - 1 > -1 ? chunk.slices[y].cubes[x, z - 1] : new Cube());
+					if(!chunk.slices[y].cubes[x, z].isBurried){
+						top = (y + 1 < chunk.slices.Length ? chunk.slices[y + 1].cubes[x, z] : new Cube());
+						bottom = (y - 1 > -1 ? chunk.slices[y - 1].cubes[x, z] : new Cube());
+						left = (x - 1 > -1 ? chunk.slices[y].cubes[x - 1, z] : new Cube());
+						right = (x + 1 < chunk.slices[y].cubes.GetLength(0) ? chunk.slices[y].cubes[x + 1, z] : new Cube());
+						forward = (z + 1 < chunk.slices[y].cubes.GetLength(0) ? chunk.slices[y].cubes[x, z + 1] : new Cube());
+						back = (z - 1 > -1 ? chunk.slices[y].cubes[x, z - 1] : new Cube());
 
-					CreateMeshUsingSwitchCase(chunk.slices[y].cubes[x, z]);
+						CreateMeshUsingSwitchCase(chunk.slices[y].cubes[x, z]);
+					}
 				}
 			}
 		}
@@ -39,7 +41,7 @@ public class MeshGenerator {
 		Mesh mesh = new Mesh();
 		mf.mesh = mesh;
 
-		Debug.Log (vertices.Count);
+		//Debug.Log (vertices.Count);
 
 		mesh.vertices = vertices.ToArray();
 		mesh.triangles = triangles.ToArray();
@@ -6011,7 +6013,7 @@ public class MeshGenerator {
 			break;
 		default:
 			ExtendedMeshGenerator emg = new ExtendedMeshGenerator();
-			emg.ExtendedMeshGeneration(this, cube, top, bottom, left, right, forward, back);
+			emg.ExtendedMeshGeneration(this, cube);
 			break;
 		}
 	}
@@ -6040,7 +6042,7 @@ public class MeshGenerator {
 		}
 	}
 
-	void CreateTriangle (Node a, Node b, Node c) {
+	public void CreateTriangle (Node a, Node b, Node c) {
 		Vector3 U = a.position - b.position;
 		Vector3 V = c.position - b.position;
 
@@ -6048,27 +6050,87 @@ public class MeshGenerator {
 
 		bool shouldRender = false;
 
-		if((Mathf.Abs(normalVU.x) > 0.95f && (Mathf.Abs(normalVU.y) + Mathf.Abs(normalVU.z) < 0.2f)) || 
-			(Mathf.Abs(normalVU.y) > 0.95f && (Mathf.Abs(normalVU.x) + Mathf.Abs(normalVU.z) < 0.2f)) || 
-			(Mathf.Abs(normalVU.z) > 0.95f && (Mathf.Abs(normalVU.x) + Mathf.Abs(normalVU.y) < 0.2f))){
+		//Forward top left is not active
+
+		if((Mathf.Abs(normalVU.x) > 0.95f) || (Mathf.Abs(normalVU.y) > 0.95f) || (Mathf.Abs(normalVU.z) > 0.95f)){
 
 			if(Mathf.Abs(normalVU.x) > Mathf.Abs(normalVU.y) + Mathf.Abs(normalVU.z)){
 				if(normalVU.x > 0){
-					shouldRender = right.IsEmpty();
+					if(!right.isBurried){
+						if(right.IsEmpty()){
+							shouldRender = true;
+						}else{
+							if(!right.ContainsAndIsActive(a, b, c)){
+								shouldRender = true;
+							}
+						}
+					}else{
+						shouldRender = true;
+					}
 				}else{
-					shouldRender = left.IsEmpty();
+					if(!left.isBurried){
+						if(left.IsEmpty()){
+							shouldRender = true;
+						}else{
+							if(!left.ContainsAndIsActive(a, b, c)){
+								shouldRender = true;
+							}
+						}
+					}else{
+						shouldRender = true;
+					}
 				}
 			}else if(Mathf.Abs(normalVU.y) > Mathf.Abs(normalVU.x) + Mathf.Abs(normalVU.z)){
 				if(normalVU.y > 0){
-					shouldRender = top.IsEmpty();
+					if(!top.isBurried){
+						if(top.IsEmpty()){
+							shouldRender = true;
+						}else{
+							if(!top.ContainsAndIsActive(a, b, c)){
+								shouldRender = true;
+							}
+						}
+					}else{
+						shouldRender = true;
+					}
 				}else{
-					shouldRender = bottom.IsEmpty();
+					if(!bottom.isBurried){
+						if(bottom.IsEmpty()){
+							shouldRender = true;
+						}else{
+							if(!bottom.ContainsAndIsActive(a, b, c)){
+								shouldRender = true;
+							}
+						}
+					}else{
+						shouldRender = true;
+					}
 				}
 			}else{
 				if(normalVU.z > 0){
-					shouldRender = forward.IsEmpty();
+					if(!forward.isBurried){
+						if(forward.IsEmpty()){
+							shouldRender = true;
+						}else{
+							if(!forward.ContainsAndIsActive(a, b, c)){
+								shouldRender = true;
+							}
+						}
+					}else{
+						shouldRender = true;
+					}
 				}else{
-					shouldRender = back.IsEmpty();
+					if(!back.isBurried){
+						if(back.IsEmpty()){
+							shouldRender = true;
+						}else{
+							if(!back.ContainsAndIsActive(a, b, c)){
+								shouldRender = true;
+							}
+						}
+					}else{
+						shouldRender = true;
+					}
 				}
 			}
 

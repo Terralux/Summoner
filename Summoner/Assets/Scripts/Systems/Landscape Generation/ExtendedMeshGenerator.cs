@@ -6,21 +6,7 @@ public class ExtendedMeshGenerator {
 
 	private MeshGenerator mg;
 
-	private Cube top;
-	private Cube bottom;
-	private Cube left;
-	private Cube right;
-	private Cube forward;
-	private Cube back;
-
-	public void ExtendedMeshGeneration(MeshGenerator newMG, Cube cube, Cube top, Cube bottom, Cube left, Cube right, Cube forward, Cube back){
-		this.top = top;
-		this.bottom = bottom;
-		this.left = left;
-		this.right = right;
-		this.forward = forward;
-		this.back = back;
-
+	public void ExtendedMeshGeneration(MeshGenerator newMG, Cube cube){
 		mg = newMG;
 		Node[] points;
 		switch (cube.configuration) {
@@ -2763,6 +2749,7 @@ public class ExtendedMeshGenerator {
 			};
 			AssignVertices (points);
 
+			CreateCornerMesh (points [0], points [1], points [2], points [3], false);
 			CreateCornerMesh (points [4], points [5], points [6], points [2], false);
 			CreateCornerMesh (points [7], points [8], points [9], points [6], false);
 			CreateCornerMesh (points [10], points [11], points [3], points [9], false);
@@ -2811,46 +2798,6 @@ public class ExtendedMeshGenerator {
 	}
 
 	void CreateTriangle(Node a, Node b, Node c) {
-		Vector3 U = a.position - b.position;
-		Vector3 V = c.position - b.position;
-
-		Vector3 normalVU = Vector3.Cross(V, U).normalized;
-
-		bool shouldRender = false;
-
-		if((Mathf.Abs(normalVU.x) > 0.95f && (Mathf.Abs(normalVU.y) + Mathf.Abs(normalVU.z) < 0.2f)) || 
-			(Mathf.Abs(normalVU.y) > 0.95f && (Mathf.Abs(normalVU.x) + Mathf.Abs(normalVU.z) < 0.2f)) || 
-			(Mathf.Abs(normalVU.z) > 0.95f && (Mathf.Abs(normalVU.x) + Mathf.Abs(normalVU.y) < 0.2f))){
-
-			if(Mathf.Abs(normalVU.x) > Mathf.Abs(normalVU.y) + Mathf.Abs(normalVU.z)){
-				if(normalVU.x > 0){
-					shouldRender = right.IsEmpty();
-				}else{
-					shouldRender = left.IsEmpty();
-				}
-			}else if(Mathf.Abs(normalVU.y) > Mathf.Abs(normalVU.x) + Mathf.Abs(normalVU.z)){
-				if(normalVU.y > 0){
-					shouldRender = top.IsEmpty();
-				}else{
-					shouldRender = bottom.IsEmpty();
-				}
-			}else{
-				if(normalVU.z > 0){
-					shouldRender = forward.IsEmpty();
-				}else{
-					shouldRender = back.IsEmpty();
-				}
-			}
-
-			if(shouldRender){
-				mg.triangles.Add(a.vertexIndex);
-				mg.triangles.Add(b.vertexIndex);
-				mg.triangles.Add(c.vertexIndex);
-			}
-		}else{
-			mg.triangles.Add(a.vertexIndex);
-			mg.triangles.Add(b.vertexIndex);
-			mg.triangles.Add(c.vertexIndex);
-		}
+		mg.CreateTriangle(a,b,c);
 	}
 }
