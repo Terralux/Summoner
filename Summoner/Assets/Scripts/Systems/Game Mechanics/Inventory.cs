@@ -2,15 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Inventory : MonoBehaviour {
+public class Inventory {
 
-	// Use this for initialization
-	void Start () {
-		
+	[Range(0f,40f)]
+	public int capacity;
+	public List<BaseItem> inventory;
+
+	public void AddItem(BaseItem item) {
+		inventory.Add (item);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+	public void RemoveItem(BaseItem item) {
+		inventory.Remove (item);
 	}
+
+	public List<BaseItem> GetInventory() {
+		return inventory;
+	}
+
 }
