@@ -19,11 +19,7 @@ public class Controls : MonoBehaviour {
 		actions.Movement (new Vector2 (h, v));
 
 		if (Input.GetButtonDown("Jump")) {
-			actions.jump ();
+			actions.Jump ();
 		}
-	}
-
-	void OnGUI(){
-		GUI.Box (new Rect (10, 10, 100, 30), actions.isGrounded + "");
 	}
 }

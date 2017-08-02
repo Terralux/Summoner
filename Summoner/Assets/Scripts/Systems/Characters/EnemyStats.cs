@@ -2,19 +2,33 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyStats {
+[System.Serializable]
+public class EnemyStats : CharacterStats {
+	[SerializeField]
+	private float damageModifier;
+	[SerializeField]
+	private int expValue{
+		get;
+	}
 
-	public float moveSpeed;
-	public float jumpForce;
-	public float rotSpeed;
+	public Hashtable elementalAffinities = new Hashtable();
 
-	public int hp;
-	public float baseDmg;
-	public int expValue;
+	public EnemyStats(){
+		foreach(Elementals e in System.Enum.GetValues(typeof(Elementals))){
+			elementalAffinities.Add(e.ToString(), new ElementalAffinity(e, 0));
+		}
+	}
 
-	private ElementalAffinity elemDmg;
+	public int GetDamageValue(){
+		int damage = (int)(damageModifier * (float)baseDamage);
+		return damage;
+	}
 
-	public EnemyStats (ElementalAffinity elemDmg){
-		this.elemDmg = elemDmg;
+	public bool TakeDamage(int damageValue, ElementalAffinity elementalAffinity){
+		if(elementalAffinities.ContainsKey(elementalAffinity.targetElement.ToString())){
+			float affinity = ((float)((ElementalAffinity)elementalAffinities[elementalAffinity.targetElement.ToString()]).value / 256f) - ((float)elementalAffinity.value / 256f);
+			damageValue = (int)(damageValue * affinity);
+		}
+		return AdjustHealth(damageValue);
 	}
 }
