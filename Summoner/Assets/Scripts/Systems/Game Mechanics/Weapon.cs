@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public partial class Weapon : Item {
+public partial class Weapon : MaterialComponentItem {
 	public GameObject weaponPrefab;
 
 	protected int currentExperience = 0;
@@ -14,12 +14,13 @@ public partial class Weapon : Item {
 
 	protected WeaponAttributes attributes;
 
-	public void Init(){
+	public List<WeaponUpgrade> upgradeReq = new List<WeaponUpgrade>();
+
+	private void Init(){
 		attributes = new WeaponAttributes();
 	}
 
-	public static Weapon CreateInstance(string name, float damage, int id)
-	{
+	public static new Weapon CreateInstance(){
 		Weapon w = ScriptableObject.CreateInstance<Weapon>();
 		w.Init();
 		return w;
@@ -37,6 +38,13 @@ public partial class Weapon : Item {
 		currentLevel++;
 		currentUpgradePoints += 3;
 		experienceToNextLevel = (int)(experienceToNextLevel * 1.1f);
+	}
+
+	public void Upgrade(ElementalAffinity e){
+		if (currentUpgradePoints > 0) {
+			attributes.Upgrade (e);
+			currentUpgradePoints--;
+		}
 	}
 }
 
