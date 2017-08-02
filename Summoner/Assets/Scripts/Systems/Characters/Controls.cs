@@ -5,10 +5,11 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody),typeof(CapsuleCollider))]
 public class Controls : MonoBehaviour {
 
-	public Player player;
+	private Player player;
 	private CharacterActions actions;
 
 	void Awake(){
+		player = GetComponent<Player> ();
 		actions = new CharacterActions (GetComponent<Rigidbody> (), player);
 	}
 

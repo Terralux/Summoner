@@ -9,4 +9,8 @@ public class Enemy : Entity {
 	public Enemy(){
 		stats = new EnemyStats();
 	}
+
+	public void SetTaunted(Player p) {
+		// Set enemy taunted and tell who taunted it
+	}
 }
