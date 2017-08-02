@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 
-public struct ElementalAffinity {
+[System.Serializable]
+public class ElementalAffinity {
 	public Elementals targetElement;
 	public int value;
 
