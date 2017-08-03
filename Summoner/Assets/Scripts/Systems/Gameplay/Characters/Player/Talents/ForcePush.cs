@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ForcePush : MonoBehaviour {
+public class ForcePush : BaseSkill {
 
-	// Use this for initialization
-	void Start () {
+	public int force;
+	public float cooldown;
+
+	public ForcePush(string name, float cooldown, int skillIndex, Sprite icon):base(name, cooldown, skillIndex, icon) {
 		
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+	public void ExecuteAction(List<Entity> targets, Vector3 direction) {
+		foreach (Entity e in targets) {
+			Rigidbody rb = e.GetComponent<Rigidbody> ();
+			rb.velocity = direction.normalized * force;
+		}
 	}
 }

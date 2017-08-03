@@ -13,6 +13,6 @@ public class ForcePull : BaseSkill {
 
 	public void ExecuteAction(Vector3 userPos, Entity target) {
 		Rigidbody rb = target.GetComponent<Rigidbody> ();
-		rb.velocity = userPos * force;
+		rb.velocity = userPos.normalized * force;
 	}
 }
