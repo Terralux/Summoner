@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
 
-public class EditorExtension : EditorWindow {
-	
+public class Decoration : Placable {
+
+
 }
