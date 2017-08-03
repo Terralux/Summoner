@@ -4,8 +4,10 @@ using UnityEngine;
 
 [System.Serializable]
 public class EnemyStats : CharacterStats {
+
 	[SerializeField]
 	private float damageModifier;
+
 	[SerializeField]
 	private int expValue{
 		get;

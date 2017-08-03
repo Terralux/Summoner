@@ -178,4 +178,47 @@ public struct Generator {
 		}
 		return optimizedMaps;
 	}
+
+	/*
+	public List<bool[,]> PerlinNoise(){
+		
+	}
+
+	public float Lerp(float a0, float a1, float w) {
+		return (1f - w) * a0 + w * a1;
+	}
+
+	public void DotGridGradient(int ix, int iy, float x, float y){
+		//extern float Gradient[IYMAX][IXMAX][2];
+
+		float dx = x - (float)ix;
+		float dy = y - (float)iy;
+
+		return (dx * Gradient[iy][ix][0] + dy * Gradient[iy][ix][1]);
+	}
+
+	public float Perlin(float x, float y){
+		int x0 = Mathf.Floor(x);
+		int x1 = x0 + 1;
+		int y0 = Mathf.Floor(y);
+		int y1 = y0 + 1;
+
+		float sx = x - (float) x0;
+		float sy = y - (float) y0;
+
+		float n0, n1, ix0, ix1, value;
+
+		n0 = DotGridGradient(x0, y0, x, y);
+		n1 = DotGridGradient(x1, y0, x, y);
+		ix0 = Lerp(n0, n1, sx);
+
+		n0 = DotGridGradient(x0, y1, x, y);
+		n1 = DotGridGradient(x1, y1, x, y);
+		ix1 = Lerp(n0, n1, sx);
+
+		value = Lerp(ix0, ix1, sy);
+
+		return value;
+	}
+	*/
 }

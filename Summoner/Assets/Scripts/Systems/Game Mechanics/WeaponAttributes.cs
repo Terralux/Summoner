@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponAttributes : MonoBehaviour {
+public class WeaponAttributes {
 	public Hashtable elementalAffinities = new Hashtable();
 
 	public WeaponAttributes(){

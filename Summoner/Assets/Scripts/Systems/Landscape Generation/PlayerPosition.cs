@@ -8,7 +8,7 @@ public struct PlayerPosition{
 
 	public Vector3 pos{
 		get{
-			return new Vector3(x,y,z);
+			return new Vector3(x, y, z);
 		}
 	}
 
