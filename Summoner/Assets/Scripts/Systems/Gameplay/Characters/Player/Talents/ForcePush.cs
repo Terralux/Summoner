@@ -5,7 +5,6 @@ using UnityEngine;
 public class ForcePush : BaseSkill {
 
 	public int force;
-	public float cooldown;
 
 	public ForcePush(string name, float cooldown, int skillIndex, Sprite icon):base(name, cooldown, skillIndex, icon) {
 		
