@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -7,9 +8,11 @@ public class Player : Entity {
 	public bool hasWeapon;
 
 	public Weapon equipped;
+	public Inventory inventory;
 
 	public Player(){
 		stats = new CharacterStats();
+		inventory = new Inventory ();
 		hasWeapon = equipped != null;
 	}
 
