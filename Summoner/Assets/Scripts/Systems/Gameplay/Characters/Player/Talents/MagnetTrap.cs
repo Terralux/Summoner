@@ -16,10 +16,5 @@ public class MagnetTrap : BaseSkill {
 	public void PlaceTrap(Player player) {
 		player.SpawnSkillPrefab (magnetTrap, range);
 	}
-
-	public void ExecuteAction(List<Entity> targets, Vector3 targetPos) {
-		foreach (Entity e in targets) {
-			//e.gameObject.AddComponent<Magnet> ();
-		}
-	}
+		
 }
