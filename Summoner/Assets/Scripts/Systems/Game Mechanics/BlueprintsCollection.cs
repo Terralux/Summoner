@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 [CreateAssetMenu(fileName = "New Blueprint Collection", menuName = "Trailblazer/Blueprint Collection", order = 0)]
-public class Blueprints : ScriptableObject {
+public class BlueprintsCollection : ScriptableObject {
 	[SerializeField]
-	public List<BlueprintMats> blueprints;
+	public List<Blueprint> blueprints;
 }
