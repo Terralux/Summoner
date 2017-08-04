@@ -9,7 +9,7 @@ public class MeleeRevive : BaseSkill {
 	public float rWithHealthPercent;
 
 
-	MeleeRevive(string name, float cooldown, int skillIndex, Sprite icon):base(name, cooldown, skillIndex, icon) {
+	public MeleeRevive(string name, float cooldown, int skillIndex, Sprite icon):base(name, cooldown, skillIndex, icon) {
 		
 	}
 
