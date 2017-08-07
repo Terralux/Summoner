@@ -19,8 +19,6 @@ public class ItemContainer : MonoBehaviour
 			p.inventory.AddItem (item, itemQuantity);
 			Destroy (gameObject);
 
-			Debug.Log ("Number of slots used in inventory: " + p.inventory.GetNumberOfItems () );
-			Debug.Log ("Quantity of " + item.name + ": x " + p.inventory.GetQuantityOfItem(item));
 		}
 
 	}

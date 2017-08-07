@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Inventory
@@ -8,13 +9,9 @@ public class Inventory
 	[Range (0f, 40f)]
 	public int maxSlots = 40;
 	private int usedSlots = 0;
-	public int maxStackSize = 100;
-	private Dictionary<BaseItem, int> items;
+	public static int maxStackSize = 100;
 
-	public Inventory ()
-	{
-		items = new Dictionary<BaseItem, int> ();
-	}
+	private List<InventorySlot> items = new List<InventorySlot> ();
 
 	public void AddItem (BaseItem item, int quantity)
 	{
@@ -25,36 +22,76 @@ public class Inventory
 		}
 
 		if (item as Resource == null && item as Decoration == null) {
-			items.Add (item, 1);
-			usedSlots++;
+			items.Add (new InventorySlot (item, 1));
 		} else {
-			if (ExistsInInventory (item)) {
-				HandleQuantityAndStacks (item, quantity);
+			InventorySlot inventorySlot = FindInInventory (item);
+			if (inventorySlot != null) {
+				Debug.Log ("Quantity handle");
+				HandleQuantityAndStacks (inventorySlot, quantity);
 			} else {
-				items.Add (item, quantity);
+				Debug.Log ("New slot handle");
+				items.Add (new InventorySlot (item, quantity));
+			}
+		}
+
+		//items.Sort ();
+		UpdateSlotsUsed ();
+	}
+
+	public void RemoveItem (BaseItem item)
+	{
+		InventorySlot inventorySlot = FindInInventory (item);
+		if ( inventorySlot != null ) {
+			items.Remove (inventorySlot);
+			UpdateSlotsUsed ();
+			items.Sort ();
+		}
+	}
+
+	private void HandleQuantityAndStacks (InventorySlot item, int quantity)
+	{
+		int slots = CalcSlotsUsedByQuantity (item, quantity);
+
+		 if (IsRoomFor (slots)) {
+			item.quantity += quantity;
+		} else {
+			slots = CalcRemainder ();
+			if (slots > 0) {
+				item.quantity += slots * maxStackSize;
+			}
+		} 
+	}
+
+	public void UpdateSlotsUsed ()
+	{
+		usedSlots = 0;
+		foreach (InventorySlot slot in items) {
+			if (slot.item as Resource != null || slot.item as Decoration != null) {
+				usedSlots += slot.GetSlotsFilled ();
+			} else {
 				usedSlots++;
 			}
 		}
 	}
 
-	public void RemoveItem (BaseItem item)
+	public InventorySlot FindInInventory (BaseItem item)
 	{
-		if (ExistsInInventory (item)) {
-			items.Remove (item);
-			usedSlots--;
+		foreach (InventorySlot slot in items) {
+			if (slot.item == item) {
+				return slot;
+			}
 		}
-	}
-
-	private bool ExistsInInventory (BaseItem item)
-	{
-		return items.ContainsKey (item);
+		return null;
 	}
 
 	private void AdjustQuantity (BaseItem item, int value)
 	{
-		if (ExistsInInventory (item)) {
-			items [item] += value;
-			if (items [item] == 0) {
+		InventorySlot inventorySlot = FindInInventory (item);
+
+		if (inventorySlot != null) {
+			inventorySlot.quantity += value;
+
+			if (inventorySlot.quantity <= 0) {
 				RemoveItem (item);
 			}
 		}
@@ -65,49 +102,53 @@ public class Inventory
 		return usedSlots >= maxSlots;
 	}
 
-	private bool IsStackFull (BaseItem item)
+	private int CalcSlotsUsedByQuantity (InventorySlot inventorySlot, int quantity)
 	{
-		return items [item] <= maxStackSize;
+		return ( (quantity + inventorySlot.quantity) / maxStackSize);
 	}
 
-	private int CalcSlotsUsedByQuantity(BaseItem item, int quantity) {
-		return (quantity + items[item]) / maxStackSize;
+	private bool IsRoomFor (int slots)
+	{
+		return ((usedSlots + slots) <= maxSlots);
 	}
 
-	private bool IsRoomFor(int slots) {
-		return ( (usedSlots + slots) < maxSlots);
-	}
-
-	private int CalcRemainder() {
+	private int CalcRemainder ()
+	{
 		return maxSlots - usedSlots;
 	}
 
-
-	private void HandleQuantityAndStacks (BaseItem item, int quantity)
+	public int GetNumberOfItems ()
 	{
-
-		int slots = CalcSlotsUsedByQuantity (item, quantity);
-
-		if (IsRoomFor (slots)) {
-			items [item] += quantity;
-			if (items [item] > maxStackSize) {
-				usedSlots++;
-			}
-		} else {
-			slots = CalcRemainder ();
-			if (slots > 0) {
-				items [item] += slots * maxStackSize;
-				usedSlots += slots;
-			}
-		}
-
-	}
-
-	public int GetNumberOfItems() {
 		return usedSlots;
 	}
 
-	public int GetQuantityOfItem(BaseItem item) {
-		return items [item];
+	public int GetQuantityOfItem (BaseItem item)
+	{
+		return FindInInventory(item).quantity;
+	}
+
+	public void SortItemsByType (BaseItem item)
+	{
+		items.Sort ();
+		foreach (InventorySlot itemSlot in items) {
+			
+		}
+	}
+}
+
+public class InventorySlot
+{
+	public BaseItem item;
+	public int quantity;
+
+	public InventorySlot (BaseItem item, int quantity)
+	{
+		this.item = item;
+		this.quantity = quantity;
+	}
+
+	public int GetSlotsFilled ()
+	{
+		return (quantity / Inventory.maxStackSize) + 1;
 	}
 }
