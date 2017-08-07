@@ -6,16 +6,21 @@ public class ItemContainer : MonoBehaviour
 {
 
 	public BaseItem item;
+	public int itemQuantity;
+
+	void Awake(){
+		GetComponent<SpriteRenderer> ().sprite = item.image;
+	}
 
 	void OnTriggerEnter (Collider other)
 	{
 		Player p = other.GetComponent<Player> ();
 		if (p != null) {
-			p.inventory.AddItem (item, 1);
+			p.inventory.AddItem (item, itemQuantity);
 			Destroy (gameObject);
 
-			Debug.Log ("Number of items in inventory is: " + p.inventory.GetNumberOfItems () );
-			Debug.Log ("Quantity: " + item.name + " x " + p.inventory.GetQuantityOfItem(item));
+			Debug.Log ("Number of slots used in inventory: " + p.inventory.GetNumberOfItems () );
+			Debug.Log ("Quantity of " + item.name + ": x " + p.inventory.GetQuantityOfItem(item));
 		}
 
 	}

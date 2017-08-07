@@ -6,9 +6,9 @@ public class Inventory
 {
 
 	[Range (0f, 40f)]
-	public int maxSlots;
-	private int usedSlots;
-	public int maxQuantity;
+	public int maxSlots = 40;
+	private int usedSlots = 0;
+	public int maxStackSize = 100;
 	private Dictionary<BaseItem, int> items;
 
 	public Inventory ()
@@ -62,35 +62,45 @@ public class Inventory
 
 	private bool IsInventoryFull ()
 	{
-		return usedSlots < maxSlots;
+		return usedSlots >= maxSlots;
 	}
 
 	private bool IsStackFull (BaseItem item)
 	{
-		return items [item] <= maxQuantity;
+		return items [item] <= maxStackSize;
 	}
+
+	private int CalcSlotsUsedByQuantity(BaseItem item, int quantity) {
+		return (quantity + items[item]) / maxStackSize;
+	}
+
+	private bool IsRoomFor(int slots) {
+		return ( (usedSlots + slots) < maxSlots);
+	}
+
+	private int CalcRemainder() {
+		return maxSlots - usedSlots;
+	}
+
 
 	private void HandleQuantityAndStacks (BaseItem item, int quantity)
 	{
-		foreach (BaseItem i in items.Keys) {
-			if (i == item) {
-				if (quantity > 0) {
-					if (items [i] < maxQuantity) {
-						if (quantity + items [i] <= maxQuantity) {
-							items [item] += quantity;
-							quantity = 0;
-						} else {
-							int remainder = (items [i] + quantity) - maxQuantity;
-							items [item] = maxQuantity;
-							quantity = remainder;
-						}
-					}
-				}
+
+		int slots = CalcSlotsUsedByQuantity (item, quantity);
+
+		if (IsRoomFor (slots)) {
+			items [item] += quantity;
+			if (items [item] > maxStackSize) {
+				usedSlots++;
+			}
+		} else {
+			slots = CalcRemainder ();
+			if (slots > 0) {
+				items [item] += slots * maxStackSize;
+				usedSlots += slots;
 			}
 		}
-		if (quantity > 0) {
-			items.Add (item, quantity);
-		}
+
 	}
 
 	public int GetNumberOfItems() {
