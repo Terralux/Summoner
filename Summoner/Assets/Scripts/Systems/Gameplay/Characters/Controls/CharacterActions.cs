@@ -23,7 +23,7 @@ public class CharacterActions {
 
 			dir = new Vector2(temp.x, temp.z).normalized * magnitude;
 
-			rb.velocity = new Vector3 (dir.x * player.stats.moveSpeed, rb.velocity.y, dir.y * player.stats.moveSpeed);
+			rb.velocity = new Vector3 (dir.x * player.stats.moveSpeed, rb.velocity.y * Time.deltaTime, dir.y * player.stats.moveSpeed);
 			rb.transform.LookAt(rb.transform.position + new Vector3(dir.x, 0, dir.y));
 		}
 		CheckIfGrounded ();
