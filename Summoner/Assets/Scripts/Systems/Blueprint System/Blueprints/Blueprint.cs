@@ -8,4 +8,10 @@ public class Blueprint : ScriptableObject{
 	public string blueprintName;
 	public Sprite image;
 	public BlueprintCategories myCategory;
+
+	public Blueprint (string name, Sprite icon, BlueprintCategories category){
+		blueprintName = name;
+		image = icon;
+		myCategory = category;
+	}
 }

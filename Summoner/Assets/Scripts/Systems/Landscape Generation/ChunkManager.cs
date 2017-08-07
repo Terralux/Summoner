@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public class ChunkManager : MonoBehaviour{
+public class ChunkManager : MonoBehaviour {
 	private int dimension = 17;
 	private int squareSize = 1;
 
@@ -94,6 +94,18 @@ public class ChunkManager : MonoBehaviour{
 			chunkNeighbours.back = cm;
 			cm.chunkNeighbours.forward = this;
 			break;
+		}
+	}
+
+	void OnDrawGizmos(){
+		for(int x = 0; x < myChunk.slices.Length - 1; x++){
+			for(int y = 0; y < myChunk.slices.Length - 1; y++){
+				if(myChunk.top[x, y]){
+					Gizmos.DrawSphere(new Vector3(x - (dimension/2), dimension + 2, y - (dimension/2)), 0.3f);
+				}else{
+					Gizmos.DrawWireSphere(new Vector3(x - (dimension/2), dimension + 2, y - (dimension/2)), 0.3f);
+				}
+			}
 		}
 	}
 
