@@ -6,7 +6,7 @@ public class Structure : Placable {
 
 	public GameObject structure; 
 
-	public void update(){
+	public void Update(){
 		if (Input.GetKey (KeyCode.B)) {
 			PlaceStructure ();
 		}
@@ -14,7 +14,7 @@ public class Structure : Placable {
 
 	public void PlaceStructure(){
 		MeshCollider mesh = new MeshCollider();
-		if (mesh.GetComponent<MeshFilter> ().sharedMesh.vertices.Length > 0) {
+		if (mesh.GetComponent<MeshCollider> ().sharedMesh.vertices.Length > 0) {
 			Instantiate (structure, Random.onUnitSphere, Quaternion.identity);
 		}
 	}
