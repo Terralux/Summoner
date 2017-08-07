@@ -19,7 +19,7 @@ public class Controls : MonoBehaviour {
 
 		actions.Movement (new Vector2 (h, v));
 
-		if (Input.GetButtonDown("Jump")) {
+		if (Input.GetButtonDown("A")) {
 			actions.Jump ();
 		}
 	}
