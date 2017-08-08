@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Utility : BaseItem {
-
-
+[System.Serializable, CreateAssetMenu(fileName="New Utility", menuName = "Trailblazer/Items/Utility", order=4)]
+public class Utility : Useables {
+	
 }

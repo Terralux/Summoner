@@ -25,7 +25,7 @@ public class ChunkManager : MonoBehaviour {
 		this.dimension = dimension;
 		this.squareSize = squareSize;
 
-		if(targetObjectChunk != null){
+		if(targetObjectChunk != null && targetObjectChunk != neoChunk){
 			Destroy(targetObjectChunk);
 		}else{
 			targetObjectChunk = neoChunk;

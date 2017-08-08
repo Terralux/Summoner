@@ -279,6 +279,11 @@ public class ControlNode : Node {
 	}
 }
 
+public class LiquidNode {
+	public Vector3 position;
+	public bool isActive;
+}
+
 public class CubeTemplate{
 	public bool[,] top;
 	public bool[,] bottom;

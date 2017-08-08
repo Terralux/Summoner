@@ -77,13 +77,19 @@ public struct Generator {
 			maps.Add(SliceFill(dimension));
 		}
 
-		maps.Add(SliceNoise(dimension, randomAddition));
+		maps.Add(SliceNoise(dimension, randomAddition, 3));
 
 		while(maps.Count < dimension * 2){
 			maps.Add(SliceEmpty(dimension));
 		}
 
+		GenerateWaterTest(maps);
+
 		access = new Accessible(true, false, true, true, true, true);
+		return maps;
+	}
+
+	private List<bool[,]> GenerateWaterTest(List<bool[,]> maps){
 		return maps;
 	}
 
@@ -272,8 +278,6 @@ public struct Generator {
 	}
 
 	List<bool[,]> RandomFillMap(List<bool[,]> map, List<bool[,]> flags, string chunkKey, int dimension, int randomFillPercent) {
-		Debug.Log(chunkKey);
-
 		System.Random pseudoRandom = new System.Random(chunkKey.GetHashCode());
 
 		for (int x = 0; x < dimension; x ++) {

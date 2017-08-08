@@ -5,12 +5,12 @@ using UnityEngine;
 [System.Serializable]
 public class WeaponUpgrade{
 
-	public WeaponAttributes wepAtt;
+	public WeaponAttributes upgradeRequirements;
 	public Weapon weapon;
 
-	public bool requirementsMet = false;
+	private bool requirementsMet = false;
 
 	public bool CheckRequirements(WeaponAttributes wAtt){
-		return (requirementsMet = wepAtt.IsLessThan (wAtt));
+		return (requirementsMet = upgradeRequirements.IsLessThan (wAtt));
 	}
 }
