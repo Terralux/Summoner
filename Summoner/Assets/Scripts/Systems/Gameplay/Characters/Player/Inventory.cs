@@ -127,6 +127,8 @@ public class Inventory
 
 	public void SortItems ()
 	{
+		inventorySorter.SortByType (items);
+		DebugPrintItems (items);
 		//inventorySorter.SortAlphabetically (items);
 	}
 
