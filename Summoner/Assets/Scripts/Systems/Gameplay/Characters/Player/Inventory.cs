@@ -12,6 +12,7 @@ public class Inventory
 	public static int maxStackSize = 100;
 
 	private List<InventorySlot> items = new List<InventorySlot> ();
+	private InventorySorter inventorySorter = new InventorySorter ();
 
 	public void AddItem (BaseItem item, int quantity)
 	{
@@ -26,15 +27,12 @@ public class Inventory
 		} else {
 			InventorySlot inventorySlot = FindInInventory (item);
 			if (inventorySlot != null) {
-				Debug.Log ("Quantity handle");
 				HandleQuantityAndStacks (inventorySlot, quantity);
 			} else {
-				Debug.Log ("New slot handle");
 				items.Add (new InventorySlot (item, quantity));
 			}
 		}
 
-		//items.Sort ();
 		UpdateSlotsUsed ();
 	}
 
@@ -127,11 +125,15 @@ public class Inventory
 		return FindInInventory(item).quantity;
 	}
 
-	public void SortItemsByType (BaseItem item)
+	public void SortItems ()
 	{
-		items.Sort ();
-		foreach (InventorySlot itemSlot in items) {
-			
+		//inventorySorter.SortAlphabetically (items);
+	}
+
+	private void DebugPrintItems(List<InventorySlot> inv) {
+		Debug.Log ("Inventory contains: ");
+		foreach (InventorySlot slot in inv) {
+			Debug.Log (slot.item.name);
 		}
 	}
 }
