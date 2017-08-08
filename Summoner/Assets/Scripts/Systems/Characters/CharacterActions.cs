@@ -15,6 +15,7 @@ public class CharacterActions {
 		this.rb = rb;
 	}
 
+	#region movement
 	public void Movement (Vector2 dir){
 		if (isGrounded) {
 			float magnitude = dir.magnitude;
@@ -27,12 +28,23 @@ public class CharacterActions {
 		}
 		CheckIfGrounded ();
 	}
+	#endregion 
 
+	#region jump
 	public void Jump(){
 		if (isGrounded) {
 			rb.velocity += Vector3.up * player.stats.jumpForce;
 			isGrounded = false;
 		}
+	}
+	#endregion
+
+	public void TakeDamage(){
+			
+	}
+
+	public void DealDamage(){
+	
 	}
 
 	public void CheckIfGrounded(){
