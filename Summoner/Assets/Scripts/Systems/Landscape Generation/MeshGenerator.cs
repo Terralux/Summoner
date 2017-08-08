@@ -6048,8 +6048,6 @@ public class MeshGenerator {
 
 		bool shouldRender = false;
 
-		//Forward top left is not active
-
 		if((Mathf.Abs(normalVU.x) > 0.95f) || (Mathf.Abs(normalVU.y) > 0.95f) || (Mathf.Abs(normalVU.z) > 0.95f)){
 
 			if(Mathf.Abs(normalVU.x) > Mathf.Abs(normalVU.y) + Mathf.Abs(normalVU.z)){
@@ -6058,8 +6056,10 @@ public class MeshGenerator {
 						if(right.IsEmpty()){
 							shouldRender = true;
 						}else{
-							if(!right.ContainsAndIsActive(a, b, c)){
-								shouldRender = true;
+							if(!right.SideIsActive(Direction.left)){
+								if(!right.ContainsAndIsActive(a, b, c)){
+									shouldRender = true;
+								}
 							}
 						}
 					}else{
@@ -6070,8 +6070,10 @@ public class MeshGenerator {
 						if(left.IsEmpty()){
 							shouldRender = true;
 						}else{
-							if(!left.ContainsAndIsActive(a, b, c)){
-								shouldRender = true;
+							if(!left.SideIsActive(Direction.right)){
+								if(!left.ContainsAndIsActive(a, b, c)){
+									shouldRender = true;
+								}
 							}
 						}
 					}else{
@@ -6084,8 +6086,10 @@ public class MeshGenerator {
 						if(top.IsEmpty()){
 							shouldRender = true;
 						}else{
-							if(!top.ContainsAndIsActive(a, b, c)){
-								shouldRender = true;
+							if(!top.SideIsActive(Direction.bottom)){
+								if(!top.ContainsAndIsActive(a, b, c)){
+									shouldRender = true;
+								}
 							}
 						}
 					}else{
@@ -6096,8 +6100,10 @@ public class MeshGenerator {
 						if(bottom.IsEmpty()){
 							shouldRender = true;
 						}else{
-							if(!bottom.ContainsAndIsActive(a, b, c)){
-								shouldRender = true;
+							if(!bottom.SideIsActive(Direction.top)){
+								if(!bottom.ContainsAndIsActive(a, b, c)){
+									shouldRender = true;
+								}
 							}
 						}
 					}else{
@@ -6110,8 +6116,10 @@ public class MeshGenerator {
 						if(forward.IsEmpty()){
 							shouldRender = true;
 						}else{
-							if(!forward.ContainsAndIsActive(a, b, c)){
-								shouldRender = true;
+							if(!forward.SideIsActive(Direction.back)){
+								if(!forward.ContainsAndIsActive(a, b, c)){
+									shouldRender = true;
+								}
 							}
 						}
 					}else{
@@ -6122,8 +6130,10 @@ public class MeshGenerator {
 						if(back.IsEmpty()){
 							shouldRender = true;
 						}else{
-							if(!back.ContainsAndIsActive(a, b, c)){
-								shouldRender = true;
+							if(!back.SideIsActive(Direction.forward)){
+								if(!back.ContainsAndIsActive(a, b, c)){
+									shouldRender = true;
+								}
 							}
 						}
 					}else{
