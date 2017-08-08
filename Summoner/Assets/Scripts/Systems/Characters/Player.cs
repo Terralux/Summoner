@@ -3,10 +3,20 @@
 [System.Serializable]
 public class Player {
 	public CharacterStats stats;
+	private bool ValidateWeaponSlot{
+		get{
+			return equipped != null;
+		}
+		set{
+			hasWeapon = value;
+		}
+	}
+	private bool hasWeapon;
+
 	public Weapon equipped;
 
 	public Player(){
 		stats = new CharacterStats();
-		equipped = Weapon.none;
+		hasWeapon = equipped != null;
 	}
 }
