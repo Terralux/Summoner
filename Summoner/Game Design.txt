@@ -17,7 +17,7 @@ Should the heart of the city be destroyed, it reverts back into its item format 
 
 In order to create other buildings, the player will need to gather resources either from treasure chests, enemy drops or from resource points such as ore deposits or trees
 
-in addition to regular mobs, the game will feature giant enemies to evoke fear, excitement and anticipation in the hearts of the palyers.
+in addition to regular mobs, the game will feature giant enemies to evoke fear, excitement and anticipation in the hearts of the players.
 
 Mainly the game aims to promote the sensation of exploration by rewarding the player with joy of discovery
 

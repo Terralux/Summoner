@@ -31,6 +31,6 @@ public class EnemyStats : CharacterStats {
 			float affinity = ((float)((ElementalAffinity)elementalAffinities[elementalAffinity.targetElement.ToString()]).value / 256f) - ((float)elementalAffinity.value / 256f);
 			damageValue = (int)(damageValue * affinity);
 		}
-		return AdjustHealth(damageValue);
+		return AdjustHealth(-damageValue);
 	}
 }

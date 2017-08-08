@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 
+[System.Serializable]
 public class Player {
 	public CharacterStats stats;
 	public Weapon equipped;
