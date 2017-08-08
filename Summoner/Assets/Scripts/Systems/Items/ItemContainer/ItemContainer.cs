@@ -17,10 +17,9 @@ public class ItemContainer : MonoBehaviour
 		Player p = other.GetComponent<Player> ();
 		if (p != null) {
 			p.inventory.AddItem (item, itemQuantity);
+			p.inventory.SortItems ();
 			Destroy (gameObject);
 
-			Debug.Log ("Number of slots used in inventory: " + p.inventory.GetNumberOfItems () );
-			Debug.Log ("Quantity of " + item.name + ": x " + p.inventory.GetQuantityOfItem(item));
 		}
 
 	}
