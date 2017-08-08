@@ -41,8 +41,6 @@ public class MeshGenerator {
 		Mesh mesh = new Mesh();
 		mf.mesh = mesh;
 
-		//Debug.Log (vertices.Count);
-
 		mesh.vertices = vertices.ToArray();
 		mesh.triangles = triangles.ToArray();
 		mesh.RecalculateNormals();

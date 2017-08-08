@@ -17,7 +17,9 @@ public class ChunkManager : MonoBehaviour{
 
 	public Accessible hasAccessTo;
 
-	public delegate List<bool[,]> ChunkGenerator(int random, int dimension, out Accessible access);
+	public string myKey;
+
+	public delegate List<bool[,]> ChunkGenerator(string chunkKey, CubeTemplate template, int smoothIterations, int random, int dimension, out Accessible access);
 
 	public void Init(GameObject neoChunk, int randomFillPercentage, int randomAdditionPercentage, ChunkGenerator gen, int dimension, int squareSize){
 		this.dimension = dimension;
@@ -45,7 +47,18 @@ public class ChunkManager : MonoBehaviour{
 	void GenerateStartCube (ChunkGenerator gen, int randomFillPercentage, int randomAdditionPercentage){
 		MeshGenerator meshGen = new MeshGenerator();
 
-		myChunk = new Chunk(gen(randomAdditionPercentage, dimension, out hasAccessTo), squareSize);
+		myChunk = new Chunk(
+			gen(myKey, 
+				new CubeTemplate(
+					(chunkNeighbours.top != null ? chunkNeighbours.top.myChunk.bottom : null), 
+					(chunkNeighbours.bottom != null ? chunkNeighbours.bottom.myChunk.top : null), 
+					(chunkNeighbours.left != null ? chunkNeighbours.left.myChunk.right : null), 
+					(chunkNeighbours.right != null ? chunkNeighbours.right.myChunk.left : null), 
+					(chunkNeighbours.forward != null ? chunkNeighbours.forward.myChunk.back : null), 
+					(chunkNeighbours.back != null ? chunkNeighbours.back.myChunk.forward : null)
+				), 2, randomAdditionPercentage, dimension, out hasAccessTo
+			), 
+			squareSize);
 
 		meshGen.GenerateMesh (mf, myChunk);
 		UpdateCollision();
@@ -97,59 +110,6 @@ public class ChunkManager : MonoBehaviour{
 		MeshGenerator meshGen = new MeshGenerator();
 
 		meshGen.GenerateMesh (GetComponent<MeshFilter>(), gen.Generate(Direction.XPositive, map, randomAdditionPercent), 1);
-	}
-
-	void RandomFillMap() {
-		if (useRandomSeed) {
-			seed = System.DateTime.Now.Millisecond.ToString();
-		}
-
-		System.Random pseudoRandom = new System.Random(seed.GetHashCode());
-
-		for (int x = 0; x < dimension; x ++) {
-			for (int y = 0; y < dimension; y ++) {
-				map [x, y] = (pseudoRandom.Next (0, 100) < randomFillPercent) ? true : false;
-
-				if (x == 0 || x == width-1 || y == 0 || y == depth -1) {
-					map[x,y] = true;
-				}
-				else {
-					map [x, y] = (pseudoRandom.Next (0, 100) < randomFillPercent) ? true : false;
-				}
-			}
-		}
-	}
-
-	void SmoothMap() {
-		for (int x = 0; x < dimension; x ++) {
-			for (int y = 0; y < dimension; y ++) {
-				int neighbourWallTiles = GetSurroundingWallCount(x,y);
-
-				if (neighbourWallTiles > 4)
-					map[x,y] = true;
-				else if (neighbourWallTiles < 4)
-					map[x,y] = false;
-
-			}
-		}
-	}
-
-	int GetSurroundingWallCount(int gridX, int gridY) {
-		int wallCount = 0;
-		for (int neighbourX = gridX - 1; neighbourX <= gridX + 1; neighbourX ++) {
-			for (int neighbourY = gridY - 1; neighbourY <= gridY + 1; neighbourY ++) {
-				if (neighbourX >= 0 && neighbourX < dimension && neighbourY >= 0 && neighbourY < dimension) {
-					if (neighbourX != gridX || neighbourY != gridY) {
-						wallCount += map [neighbourX, neighbourY] ? 1 : 0;
-					}
-				}
-				else {
-					wallCount ++;
-				}
-			}
-		}
-
-		return wallCount;
 	}
 	*/
 }

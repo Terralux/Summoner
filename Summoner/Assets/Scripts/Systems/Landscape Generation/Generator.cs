@@ -179,46 +179,106 @@ public struct Generator {
 		return optimizedMaps;
 	}
 
-	/*
-	public List<bool[,]> PerlinNoise(){
-		
+	public List<bool[,]> GenerateCellularAutomata(string chunkKey, CubeTemplate template, int smoothIterations, int randomAddition, int dimension, out Accessible access){
+
+		List<bool[,]> maps = new List<bool[,]>();
+
+		for (int y = 0; y < dimension * 2; y ++) {
+			maps.Add(new bool[dimension, dimension]);
+		}
+
+		if(!template.IsEmpty()){
+			for(int x = 0; x < maps.Count; x++){
+				for(int y = 0; y < maps.Count; y++){
+					maps[y][0, x] = template.left[x, y];
+					maps[y][maps.Count - 1, x] = template.right[x, y];
+
+					maps[y][x, maps.Count - 1] = template.forward[x, y];
+					maps[y][x, 0] = template.back[x, y];
+
+					maps[0][x, y] = template.bottom[x, y];
+					maps[maps.Count - 1][x, y] = template.top[x, y];
+				}
+			}
+
+			randomAddition = (int)(randomAddition * 0.5f);
+		}
+
+		maps = RandomFillMap(maps, chunkKey, dimension, randomAddition);
+
+		for(int i = 0; i < smoothIterations; i++){
+			maps = SmoothMap(maps, dimension, 0.58f);
+		}
+
+		access = CheckAccessibility(maps);
+
+		return maps;
 	}
 
-	public float Lerp(float a0, float a1, float w) {
-		return (1f - w) * a0 + w * a1;
+	List<bool[,]> RandomFillMap(List<bool[,]> map, string chunkKey, int dimension, int randomFillPercent) {
+		Debug.Log(chunkKey);
+
+		System.Random pseudoRandom = new System.Random(chunkKey.GetHashCode());
+
+		for (int x = 0; x < dimension; x ++) {
+			for (int y = 0; y < dimension; y ++) {
+				for (int z = 0; z < dimension; z ++) {
+					if(!map[y] [x, z]){
+						map[y] [x, z] = pseudoRandom.Next (0, 100) < randomFillPercent;
+					}
+				}
+			}
+		}
+
+		return map;
 	}
 
-	public void DotGridGradient(int ix, int iy, float x, float y){
-		//extern float Gradient[IYMAX][IXMAX][2];
+	List<bool[,]> SmoothMap(List<bool[,]> map, int dimension, float percentageLimitToFill) {
+		for (int x = 0; x < dimension; x ++) {
+			for (int y = 0; y < dimension; y ++) {
+				for (int z = 0; z < dimension; z ++) {
 
-		float dx = x - (float)ix;
-		float dy = y - (float)iy;
+				float neighbourWallOnPercentage = GetSurroundingWallCount(map, x, y, z, dimension);
 
-		return (dx * Gradient[iy][ix][0] + dy * Gradient[iy][ix][1]);
+				if (neighbourWallOnPercentage > percentageLimitToFill)
+					map[y] [x, z] = true;
+				else if (neighbourWallOnPercentage < percentageLimitToFill)
+					map[y] [x, z] = false;
+
+				}
+			}
+		}
+		return map;
 	}
 
-	public float Perlin(float x, float y){
-		int x0 = Mathf.Floor(x);
-		int x1 = x0 + 1;
-		int y0 = Mathf.Floor(y);
-		int y1 = y0 + 1;
+	float GetSurroundingWallCount(List<bool[,]> map, int gridX, int gridY, int gridZ, int dimension) {
+		int wallCount = 0;
+		int totalCount = 0;
+		for (int neighbourX = gridX - 1; neighbourX <= gridX + 1; neighbourX ++) {
+			for (int neighbourY = gridY - 1; neighbourY <= gridY + 1; neighbourY ++) {
+				for (int neighbourZ = gridZ - 1; neighbourZ <= gridZ + 1; neighbourZ ++) {
+					totalCount++;
 
-		float sx = x - (float) x0;
-		float sy = y - (float) y0;
+					if (neighbourX >= 0 && neighbourX < dimension && 
+						neighbourY >= 0 && neighbourY < dimension && 
+						neighbourZ >= 0 && neighbourZ < dimension) {
 
-		float n0, n1, ix0, ix1, value;
+						if (neighbourX != gridX || neighbourY != gridY || neighbourZ != gridZ) {
+							wallCount += map [neighbourY] [neighbourX, neighbourZ] ? 1 : 0;
+						}
+					}
+					else {
+						wallCount ++;
+					}
+				}
+			}
+		}
 
-		n0 = DotGridGradient(x0, y0, x, y);
-		n1 = DotGridGradient(x1, y0, x, y);
-		ix0 = Lerp(n0, n1, sx);
-
-		n0 = DotGridGradient(x0, y1, x, y);
-		n1 = DotGridGradient(x1, y1, x, y);
-		ix1 = Lerp(n0, n1, sx);
-
-		value = Lerp(ix0, ix1, sy);
-
-		return value;
+		return (float)wallCount/(float)totalCount;
 	}
-	*/
+
+	private Accessible CheckAccessibility(List<bool[,]> maps){
+		Accessible a = new Accessible(true, true, true, true, true, true);
+		return a;
+	}
 }
