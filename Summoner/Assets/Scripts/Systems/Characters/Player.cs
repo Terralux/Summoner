@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 
 [System.Serializable]
-public class Player {
+public class Player : Entity {
 	public CharacterStats stats;
 	private bool ValidateWeaponSlot{
 		get{
