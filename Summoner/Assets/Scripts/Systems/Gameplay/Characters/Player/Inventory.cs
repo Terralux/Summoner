@@ -39,7 +39,7 @@ public class Inventory
 	public void RemoveItem (BaseItem item)
 	{
 		InventorySlot inventorySlot = FindInInventory (item);
-		if ( inventorySlot != null ) {
+		if (inventorySlot != null) {
 			items.Remove (inventorySlot);
 			UpdateSlotsUsed ();
 			items.Sort ();
@@ -50,7 +50,7 @@ public class Inventory
 	{
 		int slots = CalcSlotsUsedByQuantity (item, quantity);
 
-		 if (IsRoomFor (slots)) {
+		if (IsRoomFor (slots)) {
 			item.quantity += quantity;
 		} else {
 			slots = CalcRemainder ();
@@ -102,7 +102,7 @@ public class Inventory
 
 	private int CalcSlotsUsedByQuantity (InventorySlot inventorySlot, int quantity)
 	{
-		return ( (quantity + inventorySlot.quantity) / maxStackSize);
+		return ((quantity + inventorySlot.quantity) / maxStackSize);
 	}
 
 	private bool IsRoomFor (int slots)
@@ -122,18 +122,31 @@ public class Inventory
 
 	public int GetQuantityOfItem (BaseItem item)
 	{
-		return FindInInventory(item).quantity;
+		return FindInInventory (item).quantity;
 	}
 
-	public void SortItems ()
+	public void SortItemsByStandardOrder ()
 	{
-		//inventorySorter.SortAlphabetically (items);
+		inventorySorter.SortByType (items);
+		DebugPrintItems (items);
 	}
 
-	private void DebugPrintItems(List<InventorySlot> inv) {
+	public void SortItemsBySelectOrder (string type)
+	{
+		inventorySorter.SortByType (items, type, false);
+		DebugPrintItems (items);
+	}
+
+	private void DebugPrintItems (List<InventorySlot> inv)
+	{
 		Debug.Log ("Inventory contains: ");
 		foreach (InventorySlot slot in inv) {
-			Debug.Log (slot.item.name);
+			if (slot.item.GetType () == typeof(Structure) || slot.item.GetType () == typeof(Decoration)
+			    || slot.item.GetType () == typeof(Utility) || slot.item.GetType () == typeof(Vehicle)) {
+				Debug.Log (slot.item.GetType ().BaseType.FullName);
+			} else {
+				Debug.Log (slot.item.GetType ().FullName);
+			}
 		}
 	}
 }
