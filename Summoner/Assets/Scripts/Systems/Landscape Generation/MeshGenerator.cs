@@ -6,6 +6,7 @@ public class MeshGenerator {
 
 	public List<Vector3> vertices = new List<Vector3>();
 	public List<int> triangles = new List<int>();
+	public List<Vector2> uvs = new List<Vector2>();
 
 	private Cube top;
 	private Cube bottom;
@@ -20,6 +21,7 @@ public class MeshGenerator {
 	public void GenerateMesh(MeshFilter mf, Chunk chunk) {
 		vertices = new List<Vector3>();
 		triangles = new List<int>();
+		uvs = new List<Vector2> ();
 
 		for(int y = 0; y < chunk.slices.Length; y++){
 			for (int x = 0; x < chunk.slices[y].cubes.GetLength(0); x ++) {
@@ -43,6 +45,7 @@ public class MeshGenerator {
 
 		mesh.vertices = vertices.ToArray();
 		mesh.triangles = triangles.ToArray();
+		mesh.SetUVs (0, uvs);
 		mesh.RecalculateNormals();
 	}
 
@@ -6029,6 +6032,10 @@ public class MeshGenerator {
 		if (closeCorner) {
 			CreateTriangle (n3, n2, n1);
 		}
+	}
+
+	public void AssignUVs(){
+		
 	}
 
 	void AssignVertices(Node[] points) {

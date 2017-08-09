@@ -47,7 +47,7 @@ public class AddStructure : MonoBehaviour {
 		structure.GetComponent<MeshRenderer> ().material.color = isAccepted ? accept : decline;
 	}
 
-	public void OnTriggerEnter(Collider Terrain){
+	public void OnTriggerEnter(Collider Terrain){ 
 		/*if (!Terrain) {
 			structure.GetComponent<Renderer>().material = mats [2];
 		} else {
