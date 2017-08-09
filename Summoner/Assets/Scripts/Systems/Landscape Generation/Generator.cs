@@ -90,6 +90,15 @@ public struct Generator {
 	}
 
 	private List<bool[,]> GenerateWaterTest(List<bool[,]> maps){
+		for(int y = maps.Count - 1; y >= 0; y--){
+			for(int x = 0; x < maps[y].GetLength(0); x++){
+				for(int z = 0; z < maps[y].GetLength(0); z++){
+					if(!maps [y] [x, z] && maps[y - 1] [x, z]){
+						
+					}
+				}
+			}
+		}
 		return maps;
 	}
 
