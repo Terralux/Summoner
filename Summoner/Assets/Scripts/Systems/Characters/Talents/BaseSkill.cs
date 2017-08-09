@@ -18,8 +18,4 @@ public class BaseSkill {
 		this.icon = icon;
 	}
 
-	public void ExecuteAction(Player user, List<Object> targets) {
-		
-	}
-
 }
