@@ -14,6 +14,7 @@ public class ItemContainer : MonoBehaviour{
 		Player p = other.GetComponent<Player> ();
 		if (p != null) {
 			p.inventory.AddItem (item, itemQuantity);
+			p.inventory.SortItemsByStandardOrder ();
 			Destroy (gameObject);
 		}
 	}
