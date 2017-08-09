@@ -5,9 +5,8 @@ using UnityEngine;
 public class InventorySorter
 {
 
-	// Types: Placable, Utility, Weapon, Resource
+	// Types: Placable, Useable, Weapon, Resource
 	// IMPORTANT: If class names change for items, refactoring here is necessary!
-	// TODO: Implement sorting of weapons into: melee & ranged respectively
 
 	private string orderByType;
 
@@ -19,7 +18,8 @@ public class InventorySorter
 		inventory.Sort (
 			delegate(InventorySlot i1, InventorySlot i2) {
 
-				if ( (IsUsableOrPlacable (i1) && IsUsableOrPlacable (i2)) || SlotIsWeapon(i1) && SlotIsWeapon(i2)) {
+				if ( (IsUsableOrPlacable (i1) && IsUsableOrPlacable (i2)) || (SlotIsWeapon(i1) && SlotIsWeapon(i2)) ||
+					 (IsUsableOrPlacable(i1) && SlotIsWeapon(i2)) || (SlotIsWeapon(i1) && IsUsableOrPlacable(i2)) ) {
 					// Compare parent class names for both
 					return i1.item.GetType ().BaseType.FullName.CompareTo (i2.item.GetType ().BaseType.FullName);
 				} else if (IsUsableOrPlacable (i1) || SlotIsWeapon(i1)) {
