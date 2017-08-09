@@ -14,11 +14,13 @@ public partial class Weapon : Item {
 
 	protected WeaponAttributes attributes;
 
+	public List<WeaponUpgrade> upgradeReq = new List<WeaponUpgrade>();
+
 	public void Init(){
 		attributes = new WeaponAttributes();
 	}
 
-	public static Weapon CreateInstance(string name, float damage, int id)
+	public static Weapon CreateInstance()
 	{
 		Weapon w = ScriptableObject.CreateInstance<Weapon>();
 		w.Init();
@@ -37,6 +39,13 @@ public partial class Weapon : Item {
 		currentLevel++;
 		currentUpgradePoints += 3;
 		experienceToNextLevel = (int)(experienceToNextLevel * 1.1f);
+	}
+
+	public void Upgrade(ElementalAffinity e){
+		if (currentUpgradePoints > 0) {
+			attributes.Upgrade (e);
+			currentUpgradePoints--;
+		}
 	}
 }
 
