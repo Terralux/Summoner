@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public partial class Weapon : Item {
+public partial class Weapon : MaterialComponentItem {
 	public GameObject weaponPrefab;
 
 	protected int currentExperience = 0;
@@ -16,12 +16,11 @@ public partial class Weapon : Item {
 
 	public List<WeaponUpgrade> upgradeReq = new List<WeaponUpgrade>();
 
-	public void Init(){
+	private void Init(){
 		attributes = new WeaponAttributes();
 	}
 
-	public static Weapon CreateInstance()
-	{
+	public static new Weapon CreateInstance(){
 		Weapon w = ScriptableObject.CreateInstance<Weapon>();
 		w.Init();
 		return w;
