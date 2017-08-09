@@ -128,13 +128,11 @@ public class Inventory
 	public void SortItemsByStandardOrder ()
 	{
 		inventorySorter.SortByType (items);
-		DebugPrintItems (items);
 	}
 
 	public void SortItemsBySelectOrder (string type)
 	{
 		inventorySorter.SortByType (items, type, false);
-		DebugPrintItems (items);
 	}
 
 	private void DebugPrintItems (List<InventorySlot> inv)
@@ -143,9 +141,9 @@ public class Inventory
 		foreach (InventorySlot slot in inv) {
 			if (slot.item.GetType () == typeof(Structure) || slot.item.GetType () == typeof(Decoration)
 			    || slot.item.GetType () == typeof(Utility) || slot.item.GetType () == typeof(Vehicle)) {
-				Debug.Log (slot.item.GetType ().BaseType.FullName);
+				Debug.Log (slot.item.itemName);
 			} else {
-				Debug.Log (slot.item.GetType ().FullName);
+				Debug.Log (slot.item.itemName);
 			}
 		}
 	}

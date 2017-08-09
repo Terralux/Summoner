@@ -7,6 +7,7 @@ public class InventorySorter
 
 	// Types: Placable, Utility, Weapon, Resource
 	// IMPORTANT: If class names change for items, refactoring here is necessary!
+	// TODO: Implement sorting of weapons into: melee & ranged respectively
 
 	private string orderByType;
 
@@ -33,6 +34,8 @@ public class InventorySorter
 				}
 			}	
 		); 
+
+		inventory = SortSubTypes (inventory);
 
 
 		if (useStandardSort) {
@@ -63,10 +66,29 @@ public class InventorySorter
 	private List<InventorySlot> SortItemsBySelectOrder (List<InventorySlot> inventory, string type = "Placable")
 	{
 		orderByType = type;
-		List<InventorySlot> resourcesToMove = inventory.FindAll (IsSelectType);
+		List<InventorySlot> slotsToMove = inventory.FindAll (IsSelectType);
 		inventory.RemoveAll (IsSelectType);
-		inventory.AddRange (resourcesToMove);
+		inventory.AddRange (slotsToMove);
 		return inventory;
+	}
+
+	private List<InventorySlot> SortSubTypes(List<InventorySlot> inventory) {
+		List<InventorySlot> slotsToMove = inventory.FindAll (SlotIsUsable);
+		slotsToMove.Sort (
+			delegate(InventorySlot i1, InventorySlot i2) {
+				return i1.item.GetType().FullName.CompareTo(i2.item.GetType().FullName);
+			}
+		);
+		int i = inventory.FindIndex (SlotIsUsable);
+		inventory.RemoveAll (SlotIsUsable);
+		if (i >= 0) {
+			inventory.InsertRange (i, slotsToMove);
+		}
+		return inventory;
+	}
+
+	private bool SlotIsUsable(InventorySlot slot) {
+		return slot.item.GetType ().BaseType == typeof(Useables);
 	}
 
 	private bool IsSelectType (InventorySlot slot)
