@@ -43,7 +43,11 @@ public struct Chunk {
 		slices = new Slice[nodeCount];
 
 		for(int y = 0; y < nodeCount; y++) {
-			slices [y] = new Slice (maps[y], maps[y + 1], squareSize, y);
+			if(y != 0){
+				slices [y] = new Slice (slices[y - 1], maps[y + 1], squareSize, y);
+			}else{
+				slices [y] = new Slice (maps[y], maps[y + 1], squareSize, y);
+			}
 		}
 
 		for(int y = 1; y < slices.Length - 1; y++){
@@ -90,6 +94,31 @@ public struct Slice {
 			for (int z = 0; z < nodeCount - 1; z++) {
 				cubes[x, z] = new Cube(controlNodesTop[x, z + 1], controlNodesTop[x + 1, z + 1], controlNodesTop[x + 1, z], controlNodesTop[x, z],
 					controlNodesBottom[x, z + 1], controlNodesBottom[x + 1, z + 1], controlNodesBottom[x + 1, z], controlNodesBottom[x, z]);
+			}
+		}
+	}
+
+	public Slice(Slice previousSlice, bool[,] top, float squareSize, int iteration){
+		int nodeCount = top.GetLength(0);
+
+		float mapWidth = nodeCount * squareSize;
+		float mapDepth = nodeCount * squareSize;
+
+		ControlNode [,] controlNodesTop = new ControlNode [nodeCount, nodeCount];
+
+		for (int x = 0; x < nodeCount; x++) {
+			for (int z = 0; z < nodeCount; z++) {
+				Vector3 pos = new Vector3(-mapWidth/2 + x * squareSize + squareSize/2, 0f, -mapDepth/2 + z * squareSize + squareSize/2);
+				controlNodesTop [x, z] = new ControlNode (pos + Vector3.up * (-(float)nodeCount/2 + iteration * squareSize + squareSize/2), top[x, z], squareSize);
+			}
+		}
+
+		cubes = new Cube[nodeCount - 1, nodeCount - 1];
+
+		for (int x = 0; x < nodeCount - 1; x++) {
+			for (int z = 0; z < nodeCount - 1; z++) {
+				cubes[x, z] = new Cube(controlNodesTop[x, z + 1], controlNodesTop[x + 1, z + 1], controlNodesTop[x + 1, z], controlNodesTop[x, z],
+					previousSlice.cubes[x, z].topSquare.forwardLeft, previousSlice.cubes[x, z].topSquare.forwardRight, previousSlice.cubes[x, z].topSquare.backwardRight, previousSlice.cubes[x, z].topSquare.backwardLeft);
 			}
 		}
 	}
