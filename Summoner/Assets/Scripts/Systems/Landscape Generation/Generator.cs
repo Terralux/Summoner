@@ -79,26 +79,19 @@ public struct Generator {
 
 		maps.Add(SliceNoise(dimension, randomAddition, 3));
 
+		GenerateWaterTest(maps);
+
 		while(maps.Count < dimension * 2){
 			maps.Add(SliceEmpty(dimension));
 		}
 
-		GenerateWaterTest(maps);
 
 		access = new Accessible(true, false, true, true, true, true);
 		return maps;
 	}
 
 	private List<bool[,]> GenerateWaterTest(List<bool[,]> maps){
-		for(int y = maps.Count - 1; y >= 0; y--){
-			for(int x = 0; x < maps[y].GetLength(0); x++){
-				for(int z = 0; z < maps[y].GetLength(0); z++){
-					if(!maps [y] [x, z] && maps[y - 1] [x, z]){
-						
-					}
-				}
-			}
-		}
+		//maps[maps.Count - 1][maps[0].GetLength(0) / 2, maps[0].GetLength(0) / 2];
 		return maps;
 	}
 

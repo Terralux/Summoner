@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[System.Serializable, CreateAssetMenu(fileName="New Weapon", menuName = "Trailblazer/Items/Weapon", order=2)]
 public partial class Weapon : BaseItem {
 	public GameObject weaponPrefab;
 
@@ -45,7 +44,6 @@ public partial class Weapon : BaseItem {
 			}
 		}
 	}
-
 }
 
 public partial class Weapon{
