@@ -135,10 +135,10 @@ public class Inventory
 		inventorySorter.SortByType (items, type, false);
 	}
 
-	private void DebugPrintItems (List<InventorySlot> inv)
+	private void DebugPrintItems ()
 	{
 		Debug.Log ("Inventory contains: ");
-		foreach (InventorySlot slot in inv) {
+		foreach (InventorySlot slot in items) {
 			if (slot.item.GetType () == typeof(Structure) || slot.item.GetType () == typeof(Decoration)
 			    || slot.item.GetType () == typeof(Utility) || slot.item.GetType () == typeof(Vehicle)) {
 				Debug.Log (slot.item.itemName);
