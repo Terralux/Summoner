@@ -21,7 +21,7 @@ public class ChunkManager : MonoBehaviour{
 
 	public delegate List<bool[,]> ChunkGenerator(string chunkKey, CubeTemplate template, int smoothIterations, int random, int dimension, out Accessible access);
 
-	public void Init(GameObject neoChunk, int randomFillPercentage, int randomAdditionPercentage, ChunkGenerator gen, int dimension, int squareSize){
+	public void Init(GameObject neoChunk, int randomAdditionPercentage, ChunkGenerator gen, int dimension, int squareSize){
 		this.dimension = dimension;
 		this.squareSize = squareSize;
 
@@ -41,10 +41,10 @@ public class ChunkManager : MonoBehaviour{
 			mf = targetObjectChunk.AddComponent<MeshFilter> ();
 		}
 
-		GenerateStartCube(gen, randomFillPercentage, randomAdditionPercentage);
+		GenerateStartCube(gen, randomAdditionPercentage);
 	}
 
-	void GenerateStartCube (ChunkGenerator gen, int randomFillPercentage, int randomAdditionPercentage){
+	void GenerateStartCube (ChunkGenerator gen, int randomAdditionPercentage){
 		MeshGenerator meshGen = new MeshGenerator();
 
 		myChunk = new Chunk(
@@ -56,7 +56,7 @@ public class ChunkManager : MonoBehaviour{
 					(chunkNeighbours.right != null ? chunkNeighbours.right.myChunk.left : null), 
 					(chunkNeighbours.forward != null ? chunkNeighbours.forward.myChunk.back : null), 
 					(chunkNeighbours.back != null ? chunkNeighbours.back.myChunk.forward : null)
-				), 2, randomAdditionPercentage, dimension, out hasAccessTo
+				), 10, randomAdditionPercentage, dimension, out hasAccessTo
 			), 
 			squareSize);
 
