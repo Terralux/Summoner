@@ -21,7 +21,7 @@ public class MeshGenerator {
 	public void GenerateMesh(MeshFilter mf, Chunk chunk) {
 		vertices = new List<Vector3>();
 		triangles = new List<int>();
-		uvs = new List<Vector2> ();
+		uvs = new List<Vector2>();
 
 		for(int y = 0; y < chunk.slices.Length; y++){
 			for (int x = 0; x < chunk.slices[y].cubes.GetLength(0); x ++) {
@@ -45,7 +45,7 @@ public class MeshGenerator {
 
 		mesh.vertices = vertices.ToArray();
 		mesh.triangles = triangles.ToArray();
-		mesh.SetUVs (0, uvs);
+		mesh.SetUVs(0, uvs);
 		mesh.RecalculateNormals();
 	}
 
@@ -6034,7 +6034,7 @@ public class MeshGenerator {
 		}
 	}
 
-	public void AssignUVs(){
+	private void AssignUVs(){
 		
 	}
 
@@ -6150,11 +6150,21 @@ public class MeshGenerator {
 			}
 
 			if(shouldRender){
+				/*
+				vertices.Add(a.position);
+				vertices.Add(b.position);
+				vertices.Add(c.position);
+				*/
 				triangles.Add(a.vertexIndex);
 				triangles.Add(b.vertexIndex);
 				triangles.Add(c.vertexIndex);
 			}
 		}else{
+			/*
+			vertices.Add(a.position);
+			vertices.Add(b.position);
+			vertices.Add(c.position);
+*/
 			triangles.Add(a.vertexIndex);
 			triangles.Add(b.vertexIndex);
 			triangles.Add(c.vertexIndex);
