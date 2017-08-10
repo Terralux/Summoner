@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-[CreateAssetMenu(menuName="Trailblazer/Items/Weapon", fileName="New Weapon", order = 0)]
-public partial class Weapon : MaterialComponentItem {
+[System.Serializable, CreateAssetMenu(fileName="New Weapon", menuName = "Trailblazer/Items/Weapon", order=2)]
+public partial class Weapon : BaseItem {
 	public GameObject weaponPrefab;
 
 	protected int currentExperience = 0;
@@ -20,12 +20,10 @@ public partial class Weapon : MaterialComponentItem {
 	public bool isReadyForUpgrade = false;
 
 	public void Init(){
-		itemName = "New Weapon";
-		description = "Is Missing";
 		attributes = new WeaponAttributes();
 	}
 
-	public static new Weapon CreateInstance()
+	public static Weapon CreateInstance()
 	{
 		Weapon w = ScriptableObject.CreateInstance<Weapon>();
 		w.Init();
