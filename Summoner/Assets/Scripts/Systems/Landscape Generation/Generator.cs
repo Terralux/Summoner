@@ -79,22 +79,13 @@ public struct Generator {
 
 		maps.Add(SliceNoise(dimension, randomAddition, 3));
 
-		GenerateWaterTest(maps);
-
 		while(maps.Count < dimension * 2){
 			maps.Add(SliceEmpty(dimension));
 		}
-
-
+		
 		access = new Accessible(true, false, true, true, true, true);
 		return maps;
 	}
-
-	private List<bool[,]> GenerateWaterTest(List<bool[,]> maps){
-		//maps[maps.Count - 1][maps[0].GetLength(0) / 2, maps[0].GetLength(0) / 2];
-		return maps;
-	}
-
 	public bool[,] SliceFill(int dimension){
 		bool[,] maps = new bool[dimension, dimension];
 
