@@ -5,9 +5,8 @@ using UnityEngine;
 public class InventorySorter
 {
 
-	// Types: Placable, Utility, Weapon, Resource
+	// Types: Placable, Useable, Weapon, Resource
 	// IMPORTANT: If class names change for items, refactoring here is necessary!
-	// TODO: Implement sorting of weapons into: melee & ranged respectively
 
 	private string orderByType;
 
@@ -19,13 +18,14 @@ public class InventorySorter
 		inventory.Sort (
 			delegate(InventorySlot i1, InventorySlot i2) {
 
-				if (IsUsableOrPlacable (i1) && IsUsableOrPlacable (i2)) {
+				if ( (IsUsableOrPlacable (i1) && IsUsableOrPlacable (i2)) || (SlotIsWeapon(i1) && SlotIsWeapon(i2)) ||
+					 (IsUsableOrPlacable(i1) && SlotIsWeapon(i2)) || (SlotIsWeapon(i1) && IsUsableOrPlacable(i2)) ) {
 					// Compare parent class names for both
 					return i1.item.GetType ().BaseType.FullName.CompareTo (i2.item.GetType ().BaseType.FullName);
-				} else if (IsUsableOrPlacable (i1)) {
+				} else if (IsUsableOrPlacable (i1) || SlotIsWeapon(i1)) {
 					// Compare parent class name of i1 with current class name of i2
 					return i1.item.GetType ().BaseType.FullName.CompareTo (i2.item.GetType ().FullName);
-				} else if (IsUsableOrPlacable (i2)) {
+				} else if (IsUsableOrPlacable (i2) || SlotIsWeapon(i2)) {
 					// Compare current class name of i1 with parent class name of i2
 					return i1.item.GetType ().FullName.CompareTo (i2.item.GetType ().BaseType.FullName);
 				} else {
@@ -73,21 +73,44 @@ public class InventorySorter
 	}
 
 	private List<InventorySlot> SortSubTypes(List<InventorySlot> inventory) {
-		List<InventorySlot> slotsToMove = inventory.FindAll (SlotIsUsable);
-		slotsToMove.Sort (
+
+		// Swap positions of all weapons found in melee -> range order
+		List<InventorySlot> weaponsToMove = inventory.FindAll (SlotIsWeapon);
+		weaponsToMove.Sort (
+			delegate(InventorySlot i1, InventorySlot i2) {
+				return i1.item.GetType ().FullName.CompareTo (i2.item.GetType ().FullName);
+			});
+		// Find position to insert new sorted list of our weapons
+		int j = inventory.FindIndex (SlotIsWeapon);
+		// Remove all weapons from inventory
+		inventory.RemoveAll (SlotIsWeapon);
+		//Insert sorted weapons into inventory at position where old list was
+		if (j >= 0) {
+			inventory.InsertRange (j, weaponsToMove);
+		}
+
+		List<InventorySlot> useablesToMove = inventory.FindAll (SlotIsUseable);
+		useablesToMove.Sort (
 			delegate(InventorySlot i1, InventorySlot i2) {
 				return i1.item.GetType().FullName.CompareTo(i2.item.GetType().FullName);
 			}
 		);
-		int i = inventory.FindIndex (SlotIsUsable);
-		inventory.RemoveAll (SlotIsUsable);
+
+		int i = inventory.FindIndex (SlotIsUseable);
+		inventory.RemoveAll (SlotIsUseable);
+
 		if (i >= 0) {
-			inventory.InsertRange (i, slotsToMove);
+			inventory.InsertRange (i, useablesToMove);
 		}
+
 		return inventory;
 	}
 
-	private bool SlotIsUsable(InventorySlot slot) {
+	private bool SlotIsWeapon(InventorySlot slot) {
+		return slot.item.GetType ().BaseType == typeof(Weapon);
+	}
+
+	private bool SlotIsUseable(InventorySlot slot) {
 		return slot.item.GetType ().BaseType == typeof(Useables);
 	}
 
