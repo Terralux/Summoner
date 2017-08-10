@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[CreateAssetMenu(menuName="Trailblazer/Items/Weapon", fileName="New Weapon", order = 0)]
 public partial class Weapon : MaterialComponentItem {
 	public GameObject weaponPrefab;
 
@@ -19,10 +20,12 @@ public partial class Weapon : MaterialComponentItem {
 	public bool isReadyForUpgrade = false;
 
 	public void Init(){
+		itemName = "New Weapon";
+		description = "Is Missing";
 		attributes = new WeaponAttributes();
 	}
 
-	public static Weapon CreateInstance()
+	public static new Weapon CreateInstance()
 	{
 		Weapon w = ScriptableObject.CreateInstance<Weapon>();
 		w.Init();
