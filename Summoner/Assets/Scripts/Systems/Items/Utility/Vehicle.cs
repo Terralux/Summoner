@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable, CreateAssetMenu(fileName="New Vehicle", menuName = "Trailblazer/Items/Vehicle", order=3)]
+[System.Serializable, CreateAssetMenu(fileName="New Vehicle", menuName = "Trailblazer/Items/Vehicle", order=4)]
 public class Vehicle : Useables {
 
 }
