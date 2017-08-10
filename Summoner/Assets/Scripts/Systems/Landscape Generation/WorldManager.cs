@@ -22,7 +22,7 @@ public class WorldManager : MonoBehaviour {
 	public int randomAdd;
 
 	public PlayerPosition playerPos = new PlayerPosition(0, 0, 0);
-	[Range(1f,10f)]
+	[Range(0f,10f)]
 	public float playerDistanceLimit = 1f;
 
 	private List<GameObject> go = new List<GameObject>();
@@ -62,14 +62,6 @@ public class WorldManager : MonoBehaviour {
 		world[chunkKey] = go.GetComponent<ChunkManager>();
 		this.go.Add(go);
 
-		if(x == 0 && y == 0 && z == 0){
-			(world[chunkKey] as ChunkManager).myKey = chunkKey;
-			(world[chunkKey] as ChunkManager).Init(go, randomAdd, generator.GenerateRecursiveCellularAutomata, dimension, squareSize);
-		}else{
-			(world[chunkKey] as ChunkManager).myKey = chunkKey;
-			(world[chunkKey] as ChunkManager).Init(go, randomAdd, generator.GenerateRecursiveCellularAutomata, dimension, squareSize);
-		}
-
 		if(world.ContainsKey(x + "," + (y + 1) + "," + z)){
 			(world[chunkKey] as ChunkManager).AddNeighbour(Direction.top, world[x + "," + (y + 1) + "," + z] as ChunkManager);
 		}
@@ -87,6 +79,14 @@ public class WorldManager : MonoBehaviour {
 		}
 		if(world.ContainsKey(x + "," + y + "," + (z - 1))){
 			(world[chunkKey] as ChunkManager).AddNeighbour(Direction.back, world[x + "," + y + "," + (z - 1)] as ChunkManager);
+		}
+
+		if(x == 0 && y == 0 && z == 0){
+			(world[chunkKey] as ChunkManager).myKey = chunkKey;
+			(world[chunkKey] as ChunkManager).Init(go, randomAdd, generator.GenerateStartCubeGrid, dimension, squareSize);
+		}else{
+			(world[chunkKey] as ChunkManager).myKey = chunkKey;
+			(world[chunkKey] as ChunkManager).Init(go, randomAdd, generator.GenerateRecursiveCellularAutomata, dimension, squareSize);
 		}
 
 		if(Vector3.Distance(playerPos.pos, new Vector3(x,y,z)) < playerDistanceLimit){

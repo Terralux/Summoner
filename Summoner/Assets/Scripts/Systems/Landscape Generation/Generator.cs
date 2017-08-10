@@ -70,14 +70,12 @@ public struct Generator {
 		return maps;
 	}
 
-	public List<bool[,]> GenerateStartCubeGrid (int randomAddition, int dimension, out Accessible access){
+	public List<bool[,]> GenerateStartCubeGrid (string key, CubeTemplate template, int smoothIterations, int randomAddition, int dimension, out Accessible access){
 		List<bool[,]> maps = new List<bool[,]>();
 
-		for(int x = 0; x < dimension; x++){
+		for(int x = 0; x < (dimension / 2); x++){
 			maps.Add(SliceFill(dimension));
 		}
-
-		//maps = OptimizeSlices(maps);
 
 		maps.Add(SliceNoise(dimension, randomAddition));
 
@@ -194,29 +192,39 @@ public struct Generator {
 		}
 
 		if(!template.IsEmpty()){
-			for(int x = 0; x < maps.Count; x++){
-				for(int y = 0; y < maps.Count; y++){
-					maps[y][0, x] = template.left[x, y];
-					maps[y][maps.Count - 1, x] = template.right[x, y];
-					flags[y][0, x] = true;
-					flags[y][maps.Count - 1, x] = true;
+			for(int x = 0; x < dimension; x++){
+				for(int y = 0; y < dimension; y++){
+					if(template.left.GetLength(0) > 1){
+						maps[y][0, x] = template.left[x, y];
+						flags[y][0, x] = true;
+					}
+					if(template.right.GetLength(0) > 1){
+						maps[y][dimension - 1, x] = template.right[x, y];
+						flags[y][dimension - 1, x] = true;
+					}
 
-					maps[y][x, maps.Count - 1] = template.forward[x, y];
-					maps[y][x, 0] = template.back[x, y];
-					flags[y][x, maps.Count - 1] = true;
-					flags[y][x, 0] = true;
+					if(template.forward.GetLength(0) > 1){
+						maps[y][x, dimension - 1] = template.forward[x, y];
+						flags[y][x, dimension - 1] = true;
+					}
+					if(template.back.GetLength(0) > 1){
+						maps[y][x, 0] = template.back[x, y];
+						flags[y][x, 0] = true;
+					}
 
-					maps[0][x, y] = template.bottom[x, y];
-					maps[maps.Count - 1][x, y] = template.top[x, y];
-					flags[0][x, y] = true;
-					flags[maps.Count - 1][x, y] = true;
+					if(template.bottom.GetLength(0) > 1){
+						maps[0][x, y] = template.bottom[x, y];
+						flags[0][x, y] = true;
+					}
+					if(template.top.GetLength(0) > 1){
+						maps[dimension - 1][x, y] = template.top[x, y];
+						flags[dimension - 1][x, y] = true;
+					}
 				}
 			}
-
-			randomAddition = (int)(randomAddition * 0.5f);
 		}
 
-		maps = RandomFillMap(maps, chunkKey, dimension, randomAddition);
+		maps = RandomFillMap(maps, flags, chunkKey, dimension, randomAddition);
 
 		for(int i = 0; i < smoothIterations; i++){
 			maps = RecursiveSmoothMap(maps, flags, 0, 0, 0, dimension, smoothPercentage);
@@ -252,7 +260,7 @@ public struct Generator {
 			randomAddition = (int)(randomAddition * 0.5f);
 		}
 
-		maps = RandomFillMap(maps, chunkKey, dimension, randomAddition);
+		//maps = RandomFillMap(maps, chunkKey, dimension, randomAddition);
 
 		for(int i = 0; i < smoothIterations; i++){
 			maps = SmoothMap(maps, dimension, smoothPercentage);
@@ -263,7 +271,7 @@ public struct Generator {
 		return maps;
 	}
 
-	List<bool[,]> RandomFillMap(List<bool[,]> map, string chunkKey, int dimension, int randomFillPercent) {
+	List<bool[,]> RandomFillMap(List<bool[,]> map, List<bool[,]> flags, string chunkKey, int dimension, int randomFillPercent) {
 		Debug.Log(chunkKey);
 
 		System.Random pseudoRandom = new System.Random(chunkKey.GetHashCode());
@@ -271,8 +279,10 @@ public struct Generator {
 		for (int x = 0; x < dimension; x ++) {
 			for (int y = 0; y < dimension; y ++) {
 				for (int z = 0; z < dimension; z ++) {
-					if(!map[y] [x, z]){
-						map[y] [x, z] = pseudoRandom.Next (0, 100) < randomFillPercent;
+					if(!flags[y] [x, z]){
+						if(!map[y] [x, z]){
+							map[y] [x, z] = pseudoRandom.Next (0, 100) < randomFillPercent;
+						}
 					}
 				}
 			}
