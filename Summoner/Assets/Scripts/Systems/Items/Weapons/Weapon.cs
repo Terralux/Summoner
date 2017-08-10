@@ -13,22 +13,11 @@ public partial class Weapon : BaseItem {
 	protected int currentUpgradePoints = 0;
 	protected int weaponDamage = 1;
 
-	protected WeaponAttributes attributes;
+	protected WeaponAttributes attributes = new WeaponAttributes();
 
 	public List<WeaponUpgrade> upgradeReq = new List<WeaponUpgrade>();
 
 	public bool isReadyForUpgrade = false;
-
-	public void Init(){
-		attributes = new WeaponAttributes();
-	}
-
-	public static Weapon CreateInstance()
-	{
-		Weapon w = ScriptableObject.CreateInstance<Weapon>();
-		w.Init();
-		return w;
-	}
 
 	public void AddExperience(int gainedExperience){
 		currentExperience += gainedExperience;

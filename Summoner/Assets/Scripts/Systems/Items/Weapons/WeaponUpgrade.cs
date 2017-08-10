@@ -8,7 +8,7 @@ public class WeaponUpgrade{
 	public WeaponAttributes wepAtt;
 	public Weapon weapon;
 
-	bool requirementsMet = false;
+	public bool requirementsMet = false;
 
 	public bool CheckRequirements(WeaponAttributes wAtt){
 		return (requirementsMet = wepAtt.IsLessThan (wAtt));

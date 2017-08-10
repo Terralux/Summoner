@@ -28,6 +28,7 @@ public class BlueprintCombinationEditor : EditorWindow {
 
 	void OnGUI(){
 		if(inventionCollection == null){
+			GUILayout.Label("Your invention collection is missing, contact a programmer!");
 			return;
 		}
 
@@ -39,7 +40,11 @@ public class BlueprintCombinationEditor : EditorWindow {
 			GUILayout.BeginVertical();
 
 			foreach(Invention i in inventionCollection.inventions){
-				GUILayout.Button(i.result.itemName);
+				if(i.result != null){
+					GUILayout.Button(i.result.itemName);
+				}else{
+					inventionCollection.inventions.Remove(i);
+				}
 			}
 			
 			GUILayout.EndVertical();
