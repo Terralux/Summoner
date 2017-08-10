@@ -69,15 +69,31 @@ public class LiquidGenerator {
 
 	//Method for creating a lake:
 	//When potential for a liquid source is evaaluated and confirmed, Fill out the surrounding available area
-	//with liquidsources, to form a lake
-	/*public Vector3 GenerateLake(Chunk chunk){
-		for(int y = 1; y < chunk.slices.GetLength(0) - 2; y++){
-			for(int x = 1; x < chunk.slices.GetLength(0) - 2; x++){
-				for(int z = 1; z < chunk.slices.GetLength(0) - 2; z++){
-					if(chunk.slices[y].cubes[x, z].topSquare.forwardLeft.isLiquidSource = true){
-						if(!chunk.slices[y].cubes[x + 1,z].topSquare.forwardLeft.active){
-							GenerateLiquidSource(chunk);
-						}
+	//with liquid, to form a lake
+	/*public Vector3 GenerateLake(Chunk chunk, Slice slice){
+		for (int x = 0; x < Chunk.slices.Length - 1; x++) {
+			for (int y = 0; y < Chunk.slices.Length - 1; y++) {
+				for (int z = 0; z < Chunk.slices.Length - 1; z++) {
+					if (Chunk.slices [y].cubes [x, z].topSquare.forwardLeft.isLiquidSource) {
+						if(slice.cubes.GetLength(0) - 2 > x){
+							if (!slice.cubes [x + 1, z].topSquare.forwardLeft.active) {
+								//liquid
+							}  
+							if (x > 0) {
+								if (!slice.cubes [x - 1, z].topSquare.forwardLeft.active) {
+									//liquid
+								}
+							}
+							if (z < slice.cubes.GetLength (0) - 2) {
+								if (!slice.cubes [x, z + 1].topSquare.forwardLeft.active) {
+									//liquid
+								}
+							}
+							if (z > 0) {
+								if (!slice.cubes [x, z - 1].topSquare.forwardLeft.active) {
+									//liquid
+								}
+							}
 					}
 				}
 			}
