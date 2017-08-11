@@ -5,6 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class Player : Entity {
 	public CharacterStats stats;
+	public TalentTree talentTree;
 	public bool hasWeapon;
 
 	public Weapon equipped;
@@ -13,6 +14,7 @@ public class Player : Entity {
 	public Player(){
 		stats = new CharacterStats();
 		inventory = new Inventory ();
+		talentTree = new TalentTree ();
 		hasWeapon = equipped != null;
 	}
 

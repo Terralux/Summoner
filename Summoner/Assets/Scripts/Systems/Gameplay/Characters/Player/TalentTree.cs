@@ -12,10 +12,11 @@ public class TalentTree  {
 	public TalentTree() {
 		tree = new Dictionary<BaseSkill, bool> ();
 		talentPoints = 0;
+		InitTalentTree ();
 	}
 
-	public void InitTalentTree(List<BaseSkill> talents) {
-		foreach (BaseSkill t in talents) {
+	public void InitTalentTree() {
+		foreach (BaseSkill t in listOfTalents) {
 			tree.Add (t, false);
 		}
 	}
@@ -54,7 +55,7 @@ public class TalentTree  {
 		}
 		// Empty the tree, initiliaze a new one and refund all points accumulated in temp
 		tree.Clear();
-		InitTalentTree (listOfTalents);
+		InitTalentTree ();
 		AdjustTalentPoints (temp);
 	}
 
