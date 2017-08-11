@@ -16,7 +16,7 @@ public class CharacterActions {
 	}
 
 	#region movement
-	public void Movement (Vector2 dir){
+	public void Movement (Vector2 dir, float LT){
 		if (isGrounded) {
 			float magnitude = dir.magnitude;
 			Vector3 temp = Camera.main.transform.TransformDirection(new Vector3(dir.x, 0, dir.y));
@@ -24,7 +24,13 @@ public class CharacterActions {
 			dir = new Vector2(temp.x, temp.z).normalized * magnitude;
 
 			rb.velocity = new Vector3 (dir.x * player.stats.moveSpeed, rb.velocity.y * Time.deltaTime, dir.y * player.stats.moveSpeed);
-			rb.transform.LookAt(rb.transform.position + new Vector3(dir.x, 0, dir.y));
+
+			if(LT > 0.2f){
+				Vector3 lookDir = Camera.main.transform.forward;
+				rb.transform.LookAt(rb.transform.position + new Vector3(lookDir.x, 0, lookDir.z));
+			}else{
+				rb.transform.LookAt(rb.transform.position + new Vector3(dir.x, 0, dir.y));
+			}
 		}
 		CheckIfGrounded ();
 	}
@@ -38,18 +44,6 @@ public class CharacterActions {
 		}
 	}
 	#endregion
-
-	public void TakeDamage(int damage){
-			
-	}
-
-	public void DealDamage(){
-	
-	}
-
-	public void HealDamage(int hValue) {
-		
-	}
 
 	public void CheckIfGrounded(){
 		RaycastHit hit = new RaycastHit();
