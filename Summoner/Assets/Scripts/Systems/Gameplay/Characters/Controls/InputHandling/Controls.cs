@@ -2,27 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody),typeof(CapsuleCollider))]
+[RequireComponent(typeof(Rigidbody), typeof(CapsuleCollider), typeof(Player))]
 public class Controls : MonoBehaviour {
 
-	private Player player;
 	private CharacterActions actions;
 
 	void Awake(){
-		player = GetComponent<Player> ();
-		actions = new CharacterActions (GetComponent<Rigidbody> (), player);
+		actions = new CharacterActions (GetComponent<Rigidbody> (), 
+			GetComponent<Player> (), 
+			GetComponentInChildren<Animator>()
+		);
 	}
 
 	/*
 	 * Left stick to move character
 	 * right stick to move camera
 	 * A to jump
+	 * Y to use item
 	 * Right Trigger to attack
 	 * Left Trigger to look in camera direction
 	 * 
 	 * Bumpers Left and Right to shuffle across Item Bar
 	 * 
 	 * Holding a directional button changes the regular attack to use of the selected skill
+	 * 
+	 * 
 	*/
 
 	void Update () {
@@ -46,6 +50,11 @@ public class Controls : MonoBehaviour {
 		}
 		if(Input.GetButtonDown("RB")){
 			//Move right on Item menu
+		}
+
+		if(Input.GetButtonDown("Y")){
+			//Use selected Item
+			actions.Interact();
 		}
 
 		if(DH > 0.1f || DH < -0.1f || DV > 0.1f || DV < -0.1f){

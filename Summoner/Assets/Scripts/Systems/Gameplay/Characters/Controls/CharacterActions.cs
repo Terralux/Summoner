@@ -9,10 +9,12 @@ public class CharacterActions {
 
 	private Rigidbody rb;
 	private Player player;
+	private Animator anim;
 
-	public CharacterActions (Rigidbody rb, Player player){
+	public CharacterActions (Rigidbody rb, Player player, Animator anim){
 		this.player = player;
 		this.rb = rb;
+		this.anim = anim;
 	}
 
 	#region movement
@@ -23,7 +25,7 @@ public class CharacterActions {
 
 			dir = new Vector2(temp.x, temp.z).normalized * magnitude;
 
-			rb.velocity = new Vector3 (dir.x * player.stats.moveSpeed, rb.velocity.y * Time.deltaTime, dir.y * player.stats.moveSpeed);
+			//rb.velocity = new Vector3 (dir.x * player.stats.moveSpeed, rb.velocity.y * Time.deltaTime, dir.y * player.stats.moveSpeed);
 
 			if(LT > 0.2f){
 				Vector3 lookDir = Camera.main.transform.forward;
@@ -32,6 +34,14 @@ public class CharacterActions {
 				rb.transform.LookAt(rb.transform.position + new Vector3(dir.x, 0, dir.y));
 			}
 		}
+
+		if(dir.magnitude > 1){
+			dir = dir.normalized;
+		}
+
+		anim.SetFloat ("Speed", dir.magnitude);
+		anim.SetBool ("isFalling", !isGrounded);
+
 		CheckIfGrounded ();
 	}
 	#endregion 
@@ -39,7 +49,8 @@ public class CharacterActions {
 	#region jump
 	public void Jump(){
 		if (isGrounded) {
-			rb.velocity += Vector3.up * player.stats.jumpForce;
+			//rb.velocity += Vector3.up * player.stats.jumpForce;
+			anim.SetBool ("Jump", true);
 			isGrounded = false;
 		}
 	}
@@ -53,5 +64,9 @@ public class CharacterActions {
 		} else {
 			isGrounded = false;
 		}
+	}
+
+	public void Interact(){
+		anim.SetTrigger("Interact");
 	}
 }
