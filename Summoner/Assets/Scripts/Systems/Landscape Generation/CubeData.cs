@@ -19,8 +19,6 @@ public struct Chunk {
 	}
 
 	public Chunk(List<bool[,]> maps, float squareSize) {
-		liquidSourceNodes = new List<ControlNode>();
-
 		int nodeCount = maps[0].GetLength(0);
 
 		top = maps[nodeCount - 1];
@@ -49,6 +47,13 @@ public struct Chunk {
 			}else{
 				slices [y] = new Slice (maps[y], maps[y + 1], squareSize, y);
 			}
+		}
+
+		liquidSourceNodes = new List<ControlNode>();
+		Vector3 liquidSourcePosition = LiquidGenerator.GenerateLiquidSource(this);
+
+		if(liquidSourcePosition.magnitude > 0.1f){
+			Debug.Log("Liquid potential A-OKAY!");
 		}
 
 		for(int y = 1; y < slices.Length - 1; y++){

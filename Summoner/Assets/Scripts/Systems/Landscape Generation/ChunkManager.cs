@@ -100,10 +100,11 @@ public class ChunkManager : MonoBehaviour {
 	void OnDrawGizmos(){
 		for(int x = 0; x < myChunk.slices.Length - 1; x++){
 			for(int y = 0; y < myChunk.slices.Length - 1; y++){
-				if(myChunk.top[x, y]){
-					Gizmos.DrawSphere(new Vector3(x - (dimension/2), dimension + 2, y - (dimension/2)), 0.3f);
-				}else{
-					Gizmos.DrawWireSphere(new Vector3(x - (dimension/2), dimension + 2, y - (dimension/2)), 0.3f);
+				for(int z = 0; z < myChunk.slices.Length - 1; z++){
+					if(myChunk.slices[y].cubes[x, z].topSquare.forwardLeft.isLiquidSource){
+						Gizmos.color = Color.blue;
+						Gizmos.DrawSphere(myChunk.slices[y].cubes[x, z].topSquare.forwardLeft.position + targetObjectChunk.transform.position, 0.2f);
+					}
 				}
 			}
 		}
