@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PassiveState : State{
+public class Idling : PassiveState {
 
+	void Update(){
+		 
+	}
 }
