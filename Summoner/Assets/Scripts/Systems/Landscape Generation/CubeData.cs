@@ -17,8 +17,6 @@ public struct Chunk {
 	}
 
 	public Chunk(List<bool[,]> maps, float squareSize) {
-		Debug.Log(maps.Count);
-		Debug.Log(maps[0].GetLength(0));
 
 		int nodeCount = maps[0].GetLength(0);
 
