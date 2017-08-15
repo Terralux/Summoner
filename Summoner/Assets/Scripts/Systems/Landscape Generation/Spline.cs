@@ -10,6 +10,14 @@ public class Spline : MonoBehaviour {
 	public float width;
 	[Range(0.1f, 3)]
 	public float height;
+	[Range(3, 20)]
+	public int divisions;
+
+	public Vector3[] points = new Vector3[4];
+	//first point is starting position
+	//second point is curvature from starting position
+	//third point is curvature from second point
+	//fourth is estimated goal
 
 	void Update(){
 		if(Input.GetMouseButtonDown(0)){
@@ -17,15 +25,17 @@ public class Spline : MonoBehaviour {
 		}
 	}
 
+	void OnDrawGizmos(){
+		for(int i = 0; i < points.Length; i++){
+			Gizmos.DrawSphere(points[i], 0.2f);
+		}
+	}
+
 	void GenerateCurve () {
-		bc = new BezierCurve(new Vector3[]{
-			new Vector3(0,0,0), 
-			new Vector3(10,5,0), 
-			new Vector3(20,15,0), 
-			new Vector3(35,20,0)
-		});
+		bc = new BezierCurve(points);
 
 		ExtrudeShape es = new ExtrudeShape();
+
 		//Vertices for extrusion shape
 		es.verts = new Vector2[]{
 			new Vector2(-2,0),
@@ -48,11 +58,15 @@ public class Spline : MonoBehaviour {
 			0,
 			0
 		};
+
+		bc.Extrude(GetComponent<MeshFilter>().sharedMesh, es, bc.GeneratePath((float)divisions).ToArray());
+		/*
 		bc.Extrude(GetComponent<MeshFilter>().sharedMesh, es, new OrientedPoint[]{
 			new OrientedPoint(new Vector3(0,0,0),Quaternion.identity, 0),
 			new OrientedPoint(new Vector3(0,5,10),Quaternion.identity, 1),
 			new OrientedPoint(new Vector3(0,15,20),Quaternion.identity, 2),
 			new OrientedPoint(new Vector3(0,20,25),Quaternion.identity, 3)
 		});
+		*/
 	}
 }

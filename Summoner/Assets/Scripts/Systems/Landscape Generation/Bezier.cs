@@ -189,16 +189,18 @@ public class BezierCurve
 		return mesh;
 	}
 
-	public IEnumerable<OrientedPoint> GeneratePath(float subDivisions)
+	public List<OrientedPoint> GeneratePath(float subDivisions)
 	{
 		float step = 1.0f / subDivisions;
 
-		for (float f = 0; f < 1; f+= step)
-		{
-			yield return GetOrientedPoint(f);
+		List<OrientedPoint> points = new List<OrientedPoint>();
+
+		for (float f = 0; f < 1; f += step){
+			points.Add(GetOrientedPoint(f));
 		}
 
-		yield return GetOrientedPoint(1);
+		points.Add(GetOrientedPoint(1));
+		return points;
 	}
 
 	public void Extrude(Mesh mesh, ExtrudeShape shape, OrientedPoint[] path)
