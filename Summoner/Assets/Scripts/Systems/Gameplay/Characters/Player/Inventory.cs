@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 [System.Serializable]
-public class Inventory : MonoBehaviour {
+public class Inventory {
 
 	[Range (0f, 40f)]
 	public int maxSlots = 40;
