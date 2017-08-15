@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemContainer : MonoBehaviour
-{
-
+public class ItemContainer : MonoBehaviour{
 	public BaseItem item;
 	public int itemQuantity;
 
@@ -12,15 +10,12 @@ public class ItemContainer : MonoBehaviour
 		GetComponent<SpriteRenderer> ().sprite = item.image;
 	}
 
-	void OnTriggerEnter (Collider other)
-	{
+	void OnTriggerEnter (Collider other){
 		Player p = other.GetComponent<Player> ();
 		if (p != null) {
 			p.inventory.AddItem (item, itemQuantity);
 			p.inventory.SortItems ();
 			Destroy (gameObject);
-
 		}
-
 	}
 }
