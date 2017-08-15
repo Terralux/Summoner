@@ -272,8 +272,6 @@ public struct Generator {
 	}
 
 	List<bool[,]> RandomFillMap(List<bool[,]> map, List<bool[,]> flags, string chunkKey, int dimension, int randomFillPercent) {
-		Debug.Log(chunkKey);
-
 		System.Random pseudoRandom = new System.Random(chunkKey.GetHashCode());
 
 		for (int x = 0; x < dimension; x ++) {
