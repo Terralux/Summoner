@@ -8,11 +8,11 @@ public class CharacterActions {
 	Vector3 moveDir;
 
 	private Rigidbody rb;
-	private Player player;
+	//private Player player;
 	private Animator anim;
 
 	public CharacterActions (Rigidbody rb, Player player, Animator anim){
-		this.player = player;
+		//this.player = player;
 		this.rb = rb;
 		this.anim = anim;
 	}
@@ -40,7 +40,7 @@ public class CharacterActions {
 		}
 
 		anim.SetFloat ("Speed", dir.magnitude);
-		anim.SetBool ("isFalling", !isGrounded);
+		anim.SetTrigger ("IsFalling");
 
 		CheckIfGrounded ();
 	}

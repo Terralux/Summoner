@@ -13,4 +13,8 @@ public class WeaponUpgrade{
 	public bool CheckRequirements(WeaponAttributes wAtt){
 		return (requirementsMet = upgradeRequirements.IsLessThan (wAtt));
 	}
+
+	public bool IsReadyForUpgrade(){
+		return requirementsMet;
+	}
 }

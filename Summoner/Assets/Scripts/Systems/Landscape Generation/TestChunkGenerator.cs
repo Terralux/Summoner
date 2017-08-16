@@ -22,13 +22,13 @@ public class TestChunkGenerator : MonoBehaviour {
 		gen = new Generator();
 		gen.smoothPercentage = smoothPercentage;
 		myChunk.myKey = "0,0,0";
-		myChunk.Init(gameObject, random, gen.GenerateStartCubeGrid, 17, 1);
+		myChunk.Init(gameObject, random, 1);
 	}
 
 	void Update(){
 		if(Input.GetMouseButtonDown(0)){
 			gen.smoothPercentage = smoothPercentage;
-			myChunk.Init(gameObject, random, gen.GenerateStartCubeGrid, 17, 1);
+			myChunk.Init(gameObject, random, 1);
 		}
 	}
 }
