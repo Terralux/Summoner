@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OffensiveState : State {
+public abstract class DefensiveState : State {
+
+	//public override void Action ();
 
 }

@@ -1,16 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class State : MonoBehaviour {
+public abstract class State : MonoBehaviour {
 
-	public EnemyStats stats;
-	public Rigidbody rb;
-	public Animator anim;
-	public List<State> states;
+	//public EnemyStats stats;
+	protected Rigidbody rb;
+	protected Animator anim;
+	protected NavMeshAgent agent;
+	//public List<State> states;
 
-	void Awake(){
-		rb = GetComponent<Rigidbody>();
-		anim = GetComponent<Animator>();
-	}
+	public delegate void StateEnd(State someState);
+	public StateEnd endOfState;
+
+	public abstract void Action ();
+
+	public abstract void Init (Animator anim, Rigidbody rb, NavMeshAgent agent);
 }
+
