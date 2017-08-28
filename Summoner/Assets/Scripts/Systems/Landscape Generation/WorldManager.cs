@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class WorldManager : MonoBehaviour {
 
-	[Tooltip("The dimensions of the chunk!")]
-	public int dimension = 17;
+	public static int dimension = 17;
 	public int squareSize = 1;
 
 	public static WorldManager instance;
@@ -94,11 +93,7 @@ public class WorldManager : MonoBehaviour {
 		}
 
 		(world[chunkKey] as ChunkManager).myKey = chunkKey;
-		if(x == 0 && y == 0 && z == 0){
-			(world[chunkKey] as ChunkManager).Init(go, randomAdd, generator.GenerateStartCubeGrid, dimension, squareSize);
-		}else{
-			(world[chunkKey] as ChunkManager).Init(go, randomAdd, generator.GenerateRecursiveCellularAutomata, dimension, squareSize);
-		}
+		(world[chunkKey] as ChunkManager).Init(go, randomAdd, squareSize);
 
 		if(Vector3.Distance(playerPos.pos, new Vector3(x, y, z)) < playerDistanceLimit){
 			if(!world.ContainsKey(y1)){

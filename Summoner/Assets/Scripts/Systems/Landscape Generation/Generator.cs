@@ -15,6 +15,21 @@ public struct Generator {
 
 	public float smoothPercentage;
 
+	public static List<bool[,]> GenerateChunk(string key, CubeTemplate template, Neighbours chunkNeighbours, out Accessible accessibility){
+		if(template.IsEmpty()){
+			return GenerateFlatChunk(WorldManager.dimension / 2, out accessibility);
+		}
+
+		accessibility = new Accessible(true,true,true,true,true,true);
+
+		GetChunkType(key, chunkNeighbours);
+		return new List<bool[,]>();
+	}
+
+	public static ChunkType GetChunkType (string key, Neighbours chunkNeighbours){
+		return new Flat();
+	}
+
 	public List<bool[,]> Generate (Direction dir, bool[,] slice, float randomAddition){
 		smoothPercentage = 0f;
 
@@ -52,17 +67,17 @@ public struct Generator {
 		return maps;
 	}
 
-	public List<bool[,]> GenerateStartSurroundings(int randomAddition, int dimension, out Accessible access){
+	public List<bool[,]> GenerateStartSurroundings(int randomAddition, out Accessible access){
 		List<bool[,]> maps = new List<bool[,]>();
 
-		for(int x = 0; x < dimension; x++){
-			maps.Add(SliceFill(dimension));
+		for(int x = 0; x < WorldManager.dimension; x++){
+			maps.Add(SliceFill());
 		}
 
-		maps.Add(SliceNoise(dimension, randomAddition));
+		maps.Add(SliceNoise(randomAddition));
 
-		while(maps.Count < dimension * 2){
-			maps.Add(SliceBlur(dimension, randomAddition, maps[maps.Count - 1]));
+		while(maps.Count < WorldManager.dimension * 2){
+			maps.Add(SliceBlur(randomAddition, maps[maps.Count - 1]));
 		}
 
 		access = new Accessible(true, false, true, true, true, true);
@@ -70,27 +85,26 @@ public struct Generator {
 		return maps;
 	}
 
-	public List<bool[,]> GenerateStartCubeGrid (string key, CubeTemplate template, int smoothIterations, int randomAddition, int dimension, out Accessible access){
+	public static List<bool[,]> GenerateFlatChunk (int heightSteps, out Accessible access){
 		List<bool[,]> maps = new List<bool[,]>();
 
-		for(int x = 0; x < (dimension / 2); x++){
-			maps.Add(SliceFill(dimension));
+		for(int x = 0; x < heightSteps; x++){
+			maps.Add(SliceFill());
 		}
 
-		maps.Add(SliceNoise(dimension, randomAddition, 3));
-
-		while(maps.Count < dimension * 2){
-			maps.Add(SliceEmpty(dimension));
+		while(maps.Count < WorldManager.dimension * 2){
+			maps.Add(SliceEmpty());
 		}
 		
 		access = new Accessible(true, false, true, true, true, true);
 		return maps;
 	}
-	public bool[,] SliceFill(int dimension){
-		bool[,] maps = new bool[dimension, dimension];
 
-		for(int y = 0; y < dimension; y++){
-			for(int z = 0; z < dimension; z++){
+	public static bool[,] SliceFill(){
+		bool[,] maps = new bool[WorldManager.dimension, WorldManager.dimension];
+
+		for(int y = 0; y < WorldManager.dimension; y++){
+			for(int z = 0; z < WorldManager.dimension; z++){
 				maps [y, z] = true;
 			}
 		}
@@ -98,15 +112,15 @@ public struct Generator {
 		return maps;
 	}
 
-	public bool[,] SliceEmpty(int dimension){
-		return new bool[dimension, dimension];
+	public static bool[,] SliceEmpty(){
+		return new bool[WorldManager.dimension, WorldManager.dimension];
 	}
 
-	public bool[,] SliceNoise(int dimension, float fillRatio){
-		bool[,] maps = new bool[dimension, dimension];
+	public bool[,] SliceNoise(float fillRatio){
+		bool[,] maps = new bool[WorldManager.dimension, WorldManager.dimension];
 
-		for(int y = 0; y < dimension; y++){
-			for(int z = 0; z < dimension; z++){
+		for(int y = 0; y < WorldManager.dimension; y++){
+			for(int z = 0; z < WorldManager.dimension; z++){
 				if(Random.Range (0f, 100f) < fillRatio){
 					maps [y, z] = true;
 				}else{
@@ -118,13 +132,13 @@ public struct Generator {
 		return maps;
 	}
 
-	public bool[,] SliceNoise(int dimension, int fillRatio, int safeZoneRadius){
-		bool[,] maps = new bool[dimension, dimension];
+	public bool[,] SliceNoise(int fillRatio, int safeZoneRadius){
+		bool[,] maps = new bool[WorldManager.dimension, WorldManager.dimension];
 
-		int center = (int)((float)dimension/2f);
+		int center = (int)((float)WorldManager.dimension/2f);
 
-		for(int y = 0; y < dimension; y++){
-			for(int z = 0; z < dimension; z++){
+		for(int y = 0; y < WorldManager.dimension; y++){
+			for(int z = 0; z < WorldManager.dimension; z++){
 				if(z < center + safeZoneRadius && z > center - safeZoneRadius && y < center + safeZoneRadius && y > center - safeZoneRadius){
 					maps [y, z] = false;
 				}else{
@@ -140,11 +154,11 @@ public struct Generator {
 		return maps;
 	}
 
-	public bool[,] SliceBlur(int dimension, int fillRatio, bool[,] previous){
-		bool[,] maps = new bool[dimension, dimension];
+	public bool[,] SliceBlur(int fillRatio, bool[,] previous){
+		bool[,] maps = new bool[WorldManager.dimension, WorldManager.dimension];
 
-		for(int y = 0; y < dimension; y++){
-			for(int z = 0; z < dimension; z++){
+		for(int y = 0; y < WorldManager.dimension; y++){
+			for(int z = 0; z < WorldManager.dimension; z++){
 				if(previous[y, z]){
 					if(Random.Range (0f, 100f) < fillRatio){
 						maps [y, z] = true;
@@ -181,30 +195,30 @@ public struct Generator {
 		return optimizedMaps;
 	}
 
-	public List<bool[,]> GenerateRecursiveCellularAutomata(string chunkKey, CubeTemplate template, int smoothIterations, int randomAddition, int dimension, out Accessible access){
+	public List<bool[,]> GenerateRecursiveCellularAutomata(string chunkKey, CubeTemplate template, int smoothIterations, int randomAddition, out Accessible access){
 		List<bool[,]> maps = new List<bool[,]>();
 		List<bool[,]> flags = new List<bool[,]>();
 
-		for (int y = 0; y < dimension * 2; y ++) {
-			maps.Add(new bool[dimension, dimension]);
-			flags.Add(new bool[dimension, dimension]);
+		for (int y = 0; y < WorldManager.dimension * 2; y ++) {
+			maps.Add(new bool[WorldManager.dimension, WorldManager.dimension]);
+			flags.Add(new bool[WorldManager.dimension, WorldManager.dimension]);
 		}
 
 		if(!template.IsEmpty()){
-			for(int x = 0; x < dimension; x++){
-				for(int y = 0; y < dimension; y++){
+			for(int x = 0; x < WorldManager.dimension; x++){
+				for(int y = 0; y < WorldManager.dimension; y++){
 					if(template.left.GetLength(0) > 1){
 						maps[y][0, x] = template.left[x, y];
 						flags[y][0, x] = true;
 					}
 					if(template.right.GetLength(0) > 1){
-						maps[y][dimension - 1, x] = template.right[x, y];
-						flags[y][dimension - 1, x] = true;
+						maps[y][WorldManager.dimension - 1, x] = template.right[x, y];
+						flags[y][WorldManager.dimension - 1, x] = true;
 					}
 
 					if(template.forward.GetLength(0) > 1){
-						maps[y][x, dimension - 1] = template.forward[x, y];
-						flags[y][x, dimension - 1] = true;
+						maps[y][x, WorldManager.dimension - 1] = template.forward[x, y];
+						flags[y][x, WorldManager.dimension - 1] = true;
 					}
 					if(template.back.GetLength(0) > 1){
 						maps[y][x, 0] = template.back[x, y];
@@ -216,17 +230,17 @@ public struct Generator {
 						flags[0][x, y] = true;
 					}
 					if(template.top.GetLength(0) > 1){
-						maps[dimension - 1][x, y] = template.top[x, y];
-						flags[dimension - 1][x, y] = true;
+						maps[WorldManager.dimension - 1][x, y] = template.top[x, y];
+						flags[WorldManager.dimension - 1][x, y] = true;
 					}
 				}
 			}
 		}
 
-		maps = RandomFillMap(maps, flags, chunkKey, dimension, randomAddition);
+		maps = RandomFillMap(maps, flags, chunkKey, randomAddition);
 
 		for(int i = 0; i < smoothIterations; i++){
-			maps = RecursiveSmoothMap(maps, flags, 0, 0, 0, dimension, smoothPercentage);
+			maps = RecursiveSmoothMap(maps, flags, 0, 0, 0, smoothPercentage);
 		}
 
 		access = CheckAccessibility(maps);
@@ -234,12 +248,12 @@ public struct Generator {
 		return maps;
 	}
 
-	public List<bool[,]> GenerateCellularAutomata(string chunkKey, CubeTemplate template, int smoothIterations, int randomAddition, int dimension, out Accessible access){
+	public List<bool[,]> GenerateCellularAutomata(string chunkKey, CubeTemplate template, int smoothIterations, int randomAddition, out Accessible access){
 
 		List<bool[,]> maps = new List<bool[,]>();
 
-		for (int y = 0; y < dimension * 2; y ++) {
-			maps.Add(new bool[dimension, dimension]);
+		for (int y = 0; y < WorldManager.dimension * 2; y ++) {
+			maps.Add(new bool[WorldManager.dimension, WorldManager.dimension]);
 		}
 
 		if(!template.IsEmpty()){
@@ -259,10 +273,10 @@ public struct Generator {
 			randomAddition = (int)(randomAddition * 0.5f);
 		}
 
-		//maps = RandomFillMap(maps, chunkKey, dimension, randomAddition);
+		//maps = RandomFillMap(maps, chunkKey, WorldManager.dimension, randomAddition);
 
 		for(int i = 0; i < smoothIterations; i++){
-			maps = SmoothMap(maps, dimension, smoothPercentage);
+			maps = SmoothMap(maps, smoothPercentage);
 		}
 
 		access = CheckAccessibility(maps);
@@ -270,12 +284,12 @@ public struct Generator {
 		return maps;
 	}
 
-	List<bool[,]> RandomFillMap(List<bool[,]> map, List<bool[,]> flags, string chunkKey, int dimension, int randomFillPercent) {
+	List<bool[,]> RandomFillMap(List<bool[,]> map, List<bool[,]> flags, string chunkKey, int randomFillPercent) {
 		System.Random pseudoRandom = new System.Random(chunkKey.GetHashCode());
 
-		for (int x = 0; x < dimension; x ++) {
-			for (int y = 0; y < dimension; y ++) {
-				for (int z = 0; z < dimension; z ++) {
+		for (int x = 0; x < WorldManager.dimension; x ++) {
+			for (int y = 0; y < WorldManager.dimension; y ++) {
+				for (int z = 0; z < WorldManager.dimension; z ++) {
 					if(!flags[y] [x, z]){
 						if(!map[y] [x, z]){
 							map[y] [x, z] = pseudoRandom.Next (0, 100) < randomFillPercent;
@@ -288,8 +302,8 @@ public struct Generator {
 		return map;
 	}
 
-	List<bool[,]> RecursiveSmoothMap(List<bool[,]> map, List<bool[,]> flags, int x, int y, int z, int dimension, float percentageLimitToFill) {
-		float neighbourWallOnPercentage = GetSurroundingWallCount(map, x, y, z, dimension);
+	List<bool[,]> RecursiveSmoothMap(List<bool[,]> map, List<bool[,]> flags, int x, int y, int z, float percentageLimitToFill) {
+		float neighbourWallOnPercentage = GetSurroundingWallCount(map, x, y, z);
 
 		flags[y] [x, z] = true;
 
@@ -298,40 +312,40 @@ public struct Generator {
 
 			if(x > 0){
 				if(!flags[y] [x - 1, z]){
-					map = RecursiveSmoothMap(map, flags, x - 1, y, z, dimension, percentageLimitToFill);
+					map = RecursiveSmoothMap(map, flags, x - 1, y, z, percentageLimitToFill);
 				}
 			}
-			if(x < dimension - 1){
+			if(x < WorldManager.dimension - 1){
 				if(!flags[y] [x + 1, z]){
-					map = RecursiveSmoothMap(map, flags, x + 1, y, z, dimension, percentageLimitToFill);
+					map = RecursiveSmoothMap(map, flags, x + 1, y, z, percentageLimitToFill);
 				}
 			}
 			if(y > 0){
 				if(!flags[y - 1] [x, z]){
-					map = RecursiveSmoothMap(map, flags, x, y - 1, z, dimension, percentageLimitToFill);
+					map = RecursiveSmoothMap(map, flags, x, y - 1, z, percentageLimitToFill);
 				}
 			}
-			if(y < dimension - 1){
+			if(y < WorldManager.dimension - 1){
 				if(!flags[y + 1] [x, z]){
-					map = RecursiveSmoothMap(map, flags, x, y + 1, z, dimension, percentageLimitToFill);
+					map = RecursiveSmoothMap(map, flags, x, y + 1, z, percentageLimitToFill);
 				}
 			}
 			if(z > 0){
 				if(!flags[y] [x, z - 1]){
-					map = RecursiveSmoothMap(map, flags, x, y, z - 1, dimension, percentageLimitToFill);
+					map = RecursiveSmoothMap(map, flags, x, y, z - 1, percentageLimitToFill);
 				}
 			}
-			if(z < dimension - 1){
+			if(z < WorldManager.dimension - 1){
 				if(!flags[y] [x, z + 1]){
-					map = RecursiveSmoothMap(map, flags, x, y, z + 1, dimension, percentageLimitToFill);
+					map = RecursiveSmoothMap(map, flags, x, y, z + 1, percentageLimitToFill);
 				}
 			}
 
-			for (int x1 = 0; x1 < dimension; x1 ++) {
-				for (int y1 = 0; y1 < dimension; y1 ++) {
-					for (int z1 = 0; z1 < dimension; z1 ++) {
+			for (int x1 = 0; x1 < WorldManager.dimension; x1 ++) {
+				for (int y1 = 0; y1 < WorldManager.dimension; y1 ++) {
+					for (int z1 = 0; z1 < WorldManager.dimension; z1 ++) {
 						if(!flags[y1] [x1, z1] && map[y1] [x1, z1]){
-							map = RecursiveSmoothMap(map, flags, x1, y1, z1, dimension, percentageLimitToFill);
+							map = RecursiveSmoothMap(map, flags, x1, y1, z1, percentageLimitToFill);
 						}
 					}
 				}
@@ -343,12 +357,12 @@ public struct Generator {
 		return map;
 	}
 
-	List<bool[,]> SmoothMap(List<bool[,]> map, int dimension, float percentageLimitToFill) {
-		for (int x = 0; x < dimension; x ++) {
-			for (int y = 0; y < dimension; y ++) {
-				for (int z = 0; z < dimension; z ++) {
+	List<bool[,]> SmoothMap(List<bool[,]> map, float percentageLimitToFill) {
+		for (int x = 0; x < WorldManager.dimension; x ++) {
+			for (int y = 0; y < WorldManager.dimension; y ++) {
+				for (int z = 0; z < WorldManager.dimension; z ++) {
 
-					float neighbourWallOnPercentage = GetSurroundingWallCount(map, x, y, z, dimension);
+					float neighbourWallOnPercentage = GetSurroundingWallCount(map, x, y, z);
 
 					if (neighbourWallOnPercentage > (percentageLimitToFill)){
 						map[y] [x, z] = true;
@@ -361,7 +375,7 @@ public struct Generator {
 		return map;
 	}
 
-	float GetSurroundingWallCount(List<bool[,]> map, int gridX, int gridY, int gridZ, int dimension) {
+	float GetSurroundingWallCount(List<bool[,]> map, int gridX, int gridY, int gridZ) {
 		int wallCount = 0;
 		int totalCount = 0;
 		for (int neighbourX = gridX - 1; neighbourX <= gridX + 1; neighbourX ++) {
@@ -369,9 +383,9 @@ public struct Generator {
 				for (int neighbourZ = gridZ - 1; neighbourZ <= gridZ + 1; neighbourZ ++) {
 					totalCount++;
 
-					if (neighbourX >= 0 && neighbourX < dimension && 
-						neighbourY >= 0 && neighbourY < dimension && 
-						neighbourZ >= 0 && neighbourZ < dimension) {
+					if (neighbourX >= 0 && neighbourX < WorldManager.dimension && 
+						neighbourY >= 0 && neighbourY < WorldManager.dimension && 
+						neighbourZ >= 0 && neighbourZ < WorldManager.dimension) {
 
 						if (neighbourX != gridX || neighbourY != gridY || neighbourZ != gridZ) {
 							wallCount += map [neighbourY] [neighbourX, neighbourZ] ? 1 : 0;

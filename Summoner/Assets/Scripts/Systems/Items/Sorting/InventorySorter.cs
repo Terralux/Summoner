@@ -37,7 +37,6 @@ public class InventorySorter
 
 		inventory = SortSubTypes (inventory);
 
-
 		if (useStandardSort) {
 			return SortItemsByStandardOrder (inventory);
 		} else {
