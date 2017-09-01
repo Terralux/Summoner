@@ -10,8 +10,6 @@ public class TestChunkGenerator : MonoBehaviour {
 	public int random;
 	public string seed;
 
-	private Generator gen;
-
 	[Range(0f,1f)]
 	public float smoothPercentage;
 
@@ -19,15 +17,14 @@ public class TestChunkGenerator : MonoBehaviour {
 		Random.InitState (seed.GetHashCode());
 
 		myChunk = gameObject.AddComponent<ChunkManager>();
-		gen = new Generator();
-		gen.smoothPercentage = smoothPercentage;
+		Generator.smoothPercentage = smoothPercentage;
 		myChunk.myKey = "0,0,0";
 		myChunk.Init(gameObject, random, 1);
 	}
 
 	void Update(){
 		if(Input.GetMouseButtonDown(0)){
-			gen.smoothPercentage = smoothPercentage;
+			Generator.smoothPercentage = smoothPercentage;
 			myChunk.Init(gameObject, random, 1);
 		}
 	}

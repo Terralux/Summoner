@@ -8,7 +8,6 @@ public class WorldManager : MonoBehaviour {
 	public int squareSize = 1;
 
 	public static WorldManager instance;
-	public static Generator generator;
 
 	public GameObject chunkManagerPrefab;
 
@@ -41,7 +40,6 @@ public class WorldManager : MonoBehaviour {
 		}
 
 		Random.InitState (seed.GetHashCode());
-		generator = new Generator();
 
 		GenerateChunk(0, 0, 0);
 	}
@@ -58,7 +56,7 @@ public class WorldManager : MonoBehaviour {
 	}
 
 	void GenerateChunk(int x, int y, int z){
-		generator.smoothPercentage = smoothPercentage;
+		Generator.smoothPercentage = smoothPercentage;
 
 		// string operations are consuming
 		string chunkKey = x + "," + y + "," + z;

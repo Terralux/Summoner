@@ -13,17 +13,21 @@ public enum Direction {
 
 public struct Generator {
 
-	public float smoothPercentage;
+	public static float smoothPercentage;
 
 	public static List<bool[,]> GenerateChunk(string key, CubeTemplate template, Neighbours chunkNeighbours, out Accessible accessibility){
+		List<bool[,]> map;
+
 		if(template.IsEmpty()){
 			return GenerateFlatChunk(WorldManager.dimension / 2, out accessibility);
+		}else{
+			map = GenerateRecursiveCellularAutomata(key,template,1,50,out accessibility);
 		}
 
 		accessibility = new Accessible(true,true,true,true,true,true);
 
 		GetChunkType(key, chunkNeighbours);
-		return new List<bool[,]>();
+		return map;
 	}
 
 	public static ChunkType GetChunkType (string key, Neighbours chunkNeighbours){
@@ -195,7 +199,7 @@ public struct Generator {
 		return optimizedMaps;
 	}
 
-	public List<bool[,]> GenerateRecursiveCellularAutomata(string chunkKey, CubeTemplate template, int smoothIterations, int randomAddition, out Accessible access){
+	public static List<bool[,]> GenerateRecursiveCellularAutomata(string chunkKey, CubeTemplate template, int smoothIterations, int randomAddition, out Accessible access){
 		List<bool[,]> maps = new List<bool[,]>();
 		List<bool[,]> flags = new List<bool[,]>();
 
@@ -284,7 +288,7 @@ public struct Generator {
 		return maps;
 	}
 
-	List<bool[,]> RandomFillMap(List<bool[,]> map, List<bool[,]> flags, string chunkKey, int randomFillPercent) {
+	static List<bool[,]> RandomFillMap(List<bool[,]> map, List<bool[,]> flags, string chunkKey, int randomFillPercent) {
 		System.Random pseudoRandom = new System.Random(chunkKey.GetHashCode());
 
 		for (int x = 0; x < WorldManager.dimension; x ++) {
@@ -302,7 +306,7 @@ public struct Generator {
 		return map;
 	}
 
-	List<bool[,]> RecursiveSmoothMap(List<bool[,]> map, List<bool[,]> flags, int x, int y, int z, float percentageLimitToFill) {
+	static List<bool[,]> RecursiveSmoothMap(List<bool[,]> map, List<bool[,]> flags, int x, int y, int z, float percentageLimitToFill) {
 		float neighbourWallOnPercentage = GetSurroundingWallCount(map, x, y, z);
 
 		flags[y] [x, z] = true;
@@ -375,7 +379,7 @@ public struct Generator {
 		return map;
 	}
 
-	float GetSurroundingWallCount(List<bool[,]> map, int gridX, int gridY, int gridZ) {
+	static float GetSurroundingWallCount(List<bool[,]> map, int gridX, int gridY, int gridZ) {
 		int wallCount = 0;
 		int totalCount = 0;
 		for (int neighbourX = gridX - 1; neighbourX <= gridX + 1; neighbourX ++) {
@@ -401,7 +405,7 @@ public struct Generator {
 		return (float)wallCount/(float)totalCount;
 	}
 
-	private Accessible CheckAccessibility(List<bool[,]> maps){
+	private static Accessible CheckAccessibility(List<bool[,]> maps){
 		Accessible a = new Accessible(true, true, true, true, true, true);
 		return a;
 	}
