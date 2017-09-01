@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class Inventory
-{
+[System.Serializable]
+public class Inventory {
 
 	[Range (0f, 40f)]
 	public int maxSlots = 40;
 	private int usedSlots = 0;
 	public static int maxStackSize = 100;
 
-	private List<InventorySlot> items = new List<InventorySlot> ();
+	public List<InventorySlot> items = new List<InventorySlot> ();
 	private InventorySorter inventorySorter = new InventorySorter ();
 
 	public void AddItem (BaseItem item, int quantity)

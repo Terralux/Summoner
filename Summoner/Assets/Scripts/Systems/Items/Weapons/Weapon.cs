@@ -12,7 +12,7 @@ public partial class Weapon : BaseItem {
 	protected int currentUpgradePoints = 0;
 	protected int weaponDamage = 1;
 
-	protected WeaponAttributes attributes = new WeaponAttributes();
+	public WeaponAttributes attributes = new WeaponAttributes();
 
 	public List<WeaponUpgrade> upgradeReq = new List<WeaponUpgrade>();
 
