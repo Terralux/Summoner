@@ -14,20 +14,81 @@ public enum Direction {
 public struct Generator {
 
 	public static float smoothPercentage;
+	public static string seed;
 
-	public static List<bool[,]> GenerateChunk(string key, CubeTemplate template, Neighbours chunkNeighbours, out Accessible accessibility){
+	public static List<bool[,]> GenerateChunk(string key, CubeTemplate template, Neighbours chunkNeighbours){
 		List<bool[,]> map;
 
-		if(template.IsEmpty()){
-			return GenerateFlatChunk(WorldManager.dimension / 2, out accessibility);
-		}else{
-			map = GenerateRecursiveCellularAutomata(key,template,1,50,out accessibility);
-		}
+		map = GenerateChunkFromTexture (key, template);
 
-		accessibility = new Accessible(true,true,true,true,true,true);
+		/*
+		if(template.IsEmpty()){
+			return GenerateFlatChunk(WorldManager.dimension / 2);
+		}else{
+			map = GenerateChunkFromTexture (key, template);
+			//map = GenerateRecursiveCellularAutomata (key, template, 1, TestChunkGenerator.randomStatic);
+		}
+		*/
 
 		GetChunkType(key, chunkNeighbours);
 		return map;
+	}
+
+	public static List<bool[,]> GenerateChunkFromTexture(string chunkKey, CubeTemplate template){
+		List<bool[,]> maps = new List<bool[,]>();
+		List<bool[,]> flags = new List<bool[,]>();
+
+		for (int y = 0; y < WorldManager.dimension * 2; y ++) {
+			maps.Add(new bool[WorldManager.dimension, WorldManager.dimension]);
+			flags.Add(new bool[WorldManager.dimension, WorldManager.dimension]);
+		}
+
+		if(!template.IsEmpty()){
+			for(int x = 0; x < WorldManager.dimension; x++){
+				for(int y = 0; y < WorldManager.dimension; y++){
+					if(template.left.GetLength(0) > 1){
+						maps[y][0, x] = template.left[x, y];
+						flags[y][0, x] = true;
+					}
+					if(template.right.GetLength(0) > 1){
+						maps[y][WorldManager.dimension - 1, x] = template.right[x, y];
+						flags[y][WorldManager.dimension - 1, x] = true;
+					}
+
+					if(template.forward.GetLength(0) > 1){
+						maps[y][x, WorldManager.dimension - 1] = template.forward[x, y];
+						flags[y][x, WorldManager.dimension - 1] = true;
+					}
+					if(template.back.GetLength(0) > 1){
+						maps[y][x, 0] = template.back[x, y];
+						flags[y][x, 0] = true;
+					}
+
+					if(template.bottom.GetLength(0) > 1){
+						maps[0][x, y] = template.bottom[x, y];
+						flags[0][x, y] = true;
+					}
+					if(template.top.GetLength(0) > 1){
+						maps[WorldManager.dimension - 1][x, y] = template.top[x, y];
+						flags[WorldManager.dimension - 1][x, y] = true;
+					}
+				}
+			}
+		}
+
+		string[] numbers = chunkKey.Split (',');
+
+		Vector3 position = new Vector3 (int.Parse(numbers[0]), int.Parse(numbers[1]), int.Parse(numbers[2]));
+
+		for (int y = 0; y < maps.Count - 1; y++) {
+			for (int x = 0; x < maps [y].GetLength (0) - 1; x++) {
+				for (int z = 0; z < maps [y].GetLength (0) - 1; z++) {
+					maps [y] [x, z] = HeightMapManager.GetActiveState (x + ((int)position.x * WorldManager.dimension), y + ((int)position.y * WorldManager.dimension), z + ((int)position.z * WorldManager.dimension));
+				}
+			}
+		}
+
+		return maps;
 	}
 
 	public static ChunkType GetChunkType (string key, Neighbours chunkNeighbours){
@@ -71,7 +132,7 @@ public struct Generator {
 		return maps;
 	}
 
-	public List<bool[,]> GenerateStartSurroundings(int randomAddition, out Accessible access){
+	public List<bool[,]> GenerateStartSurroundings(int randomAddition){
 		List<bool[,]> maps = new List<bool[,]>();
 
 		for(int x = 0; x < WorldManager.dimension; x++){
@@ -84,12 +145,10 @@ public struct Generator {
 			maps.Add(SliceBlur(randomAddition, maps[maps.Count - 1]));
 		}
 
-		access = new Accessible(true, false, true, true, true, true);
-
 		return maps;
 	}
 
-	public static List<bool[,]> GenerateFlatChunk (int heightSteps, out Accessible access){
+	public static List<bool[,]> GenerateFlatChunk (int heightSteps){
 		List<bool[,]> maps = new List<bool[,]>();
 
 		for(int x = 0; x < heightSteps; x++){
@@ -99,8 +158,7 @@ public struct Generator {
 		while(maps.Count < WorldManager.dimension * 2){
 			maps.Add(SliceEmpty());
 		}
-		
-		access = new Accessible(true, false, true, true, true, true);
+
 		return maps;
 	}
 
@@ -199,7 +257,7 @@ public struct Generator {
 		return optimizedMaps;
 	}
 
-	public static List<bool[,]> GenerateRecursiveCellularAutomata(string chunkKey, CubeTemplate template, int smoothIterations, int randomAddition, out Accessible access){
+	public static List<bool[,]> GenerateRecursiveCellularAutomata(string chunkKey, CubeTemplate template, int smoothIterations, int randomAddition){
 		List<bool[,]> maps = new List<bool[,]>();
 		List<bool[,]> flags = new List<bool[,]>();
 
@@ -243,16 +301,14 @@ public struct Generator {
 
 		maps = RandomFillMap(maps, flags, chunkKey, randomAddition);
 
-		for(int i = 0; i < smoothIterations; i++){
+		for(int i = 0; i < 1; i++){
 			maps = RecursiveSmoothMap(maps, flags, 0, 0, 0, smoothPercentage);
 		}
-
-		access = CheckAccessibility(maps);
 
 		return maps;
 	}
 
-	public List<bool[,]> GenerateCellularAutomata(string chunkKey, CubeTemplate template, int smoothIterations, int randomAddition, out Accessible access){
+	public List<bool[,]> GenerateCellularAutomata(string chunkKey, CubeTemplate template, int smoothIterations, int randomAddition){
 
 		List<bool[,]> maps = new List<bool[,]>();
 
@@ -283,13 +339,11 @@ public struct Generator {
 			maps = SmoothMap(maps, smoothPercentage);
 		}
 
-		access = CheckAccessibility(maps);
-
 		return maps;
 	}
 
 	static List<bool[,]> RandomFillMap(List<bool[,]> map, List<bool[,]> flags, string chunkKey, int randomFillPercent) {
-		System.Random pseudoRandom = new System.Random(chunkKey.GetHashCode());
+		System.Random pseudoRandom = new System.Random(chunkKey.GetHashCode() + seed.GetHashCode());
 
 		for (int x = 0; x < WorldManager.dimension; x ++) {
 			for (int y = 0; y < WorldManager.dimension; y ++) {
@@ -381,7 +435,42 @@ public struct Generator {
 
 	static float GetSurroundingWallCount(List<bool[,]> map, int gridX, int gridY, int gridZ) {
 		int wallCount = 0;
-		int totalCount = 0;
+		int totalCount = 6;
+
+		if (gridZ + 1 < WorldManager.dimension) {
+			wallCount += map [gridY] [gridX, gridZ + 1] ? 1 : 0;
+		} else {
+			wallCount++;
+		}
+		if (gridZ - 1 >= 0) {
+			wallCount += map [gridY] [gridX, gridZ - 1] ? 1 : 0;
+		} else {
+			wallCount++;
+		}
+
+		if (gridX + 1 < WorldManager.dimension) {
+			wallCount += map [gridY] [gridX + 1, gridZ] ? 1 : 0;
+		} else {
+			wallCount++;
+		}
+		if (gridX - 1 >= 0) {
+			wallCount += map [gridY] [gridX - 1, gridZ] ? 1 : 0;
+		} else {
+			wallCount++;
+		}
+
+		if (gridY + 1 < WorldManager.dimension) {
+			wallCount += map [gridY + 1] [gridX, gridZ] ? 1 : 0;
+		} else {
+			wallCount++;
+		}
+		if (gridY - 1 >= 0) {
+			wallCount += map [gridY - 1] [gridX, gridZ] ? 1 : 0;
+		} else {
+			wallCount++;
+		}
+
+		/*
 		for (int neighbourX = gridX - 1; neighbourX <= gridX + 1; neighbourX ++) {
 			for (int neighbourY = gridY - 1; neighbourY <= gridY + 1; neighbourY ++) {
 				for (int neighbourZ = gridZ - 1; neighbourZ <= gridZ + 1; neighbourZ ++) {
@@ -394,19 +483,17 @@ public struct Generator {
 						if (neighbourX != gridX || neighbourY != gridY || neighbourZ != gridZ) {
 							wallCount += map [neighbourY] [neighbourX, neighbourZ] ? 1 : 0;
 						}
-					}
-					else {
+					} else {
+						//This encourages walls
 						wallCount ++;
 					}
 				}
 			}
 		}
+		*/
+
+		//Debug.Log (wallCount + " : " + totalCount);
 
 		return (float)wallCount/(float)totalCount;
-	}
-
-	private static Accessible CheckAccessibility(List<bool[,]> maps){
-		Accessible a = new Accessible(true, true, true, true, true, true);
-		return a;
 	}
 }
