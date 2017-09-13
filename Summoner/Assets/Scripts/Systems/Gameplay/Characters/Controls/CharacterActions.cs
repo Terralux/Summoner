@@ -2,36 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterActions {
+public class BaseCharacterMovement {
 
-	public bool isGrounded;
-	Vector3 moveDir;
+	private bool isGrounded;
+	private Vector3 moveDir;
 
 	private Rigidbody rb;
-	//private Player player;
 	private Animator anim;
 
-	public CharacterActions (Rigidbody rb, Player player, Animator anim){
-		//this.player = player;
+	private bool hasLockedViewToCamera = false;
+
+	public BaseCharacterMovement (Rigidbody rb, Player player, Animator anim){
 		this.rb = rb;
 		this.anim = anim;
 	}
 
+	public void AdjustMovementBehavior(bool lockViewToCamera){
+		hasLockedViewToCamera = lockViewToCamera;
+	}
+
 	#region movement
-	public void Movement (Vector2 dir, float LT){
+	public void Movement (Vector2 dir){
 		if (isGrounded) {
 			float magnitude = dir.magnitude;
-			Vector3 temp = Camera.main.transform.TransformDirection(new Vector3(dir.x, 0, dir.y));
+			Vector3 temp = Camera.main.transform.TransformDirection (new Vector3 (dir.x, 0, dir.y));
 
-			dir = new Vector2(temp.x, temp.z).normalized * magnitude;
+			dir = new Vector2 (temp.x, temp.z).normalized * magnitude;
 
-			//rb.velocity = new Vector3 (dir.x * player.stats.moveSpeed, rb.velocity.y * Time.deltaTime, dir.y * player.stats.moveSpeed);
-
-			if(LT > 0.2f){
+			if (hasLockedViewToCamera) {
 				Vector3 lookDir = Camera.main.transform.forward;
-				rb.transform.LookAt(rb.transform.position + new Vector3(lookDir.x, 0, lookDir.z));
-			}else{
-				rb.transform.LookAt(rb.transform.position + new Vector3(dir.x, 0, dir.y));
+				rb.transform.LookAt (rb.transform.position + new Vector3 (lookDir.x, 0, lookDir.z));
+			} else {
+				rb.transform.LookAt (rb.transform.position + new Vector3 (dir.x, 0, dir.y));
 			}
 		}
 
@@ -41,15 +43,12 @@ public class CharacterActions {
 
 		anim.SetFloat ("Speed", dir.magnitude);
 		anim.SetTrigger ("IsFalling");
-
-		CheckIfGrounded ();
 	}
-	#endregion 
+	#endregion
 
 	#region jump
 	public void Jump(){
 		if (isGrounded) {
-			//rb.velocity += Vector3.up * player.stats.jumpForce;
 			anim.SetBool ("Jump", true);
 			isGrounded = false;
 		}
@@ -64,9 +63,5 @@ public class CharacterActions {
 		} else {
 			isGrounded = false;
 		}
-	}
-
-	public void Interact(){
-		anim.SetTrigger("Interact");
 	}
 }

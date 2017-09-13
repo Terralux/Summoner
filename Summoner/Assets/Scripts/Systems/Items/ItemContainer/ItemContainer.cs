@@ -13,7 +13,8 @@ public class ItemContainer : MonoBehaviour{
 	void OnTriggerEnter (Collider other){
 		Player p = other.GetComponent<Player> ();
 		if (p != null) {
-			p.inventory.AddItem (item, itemQuantity);
+			ActiveItemHotbarHandler.AddItem (item);
+			//p.inventory.AddItem (item, itemQuantity);
 			Destroy (gameObject);
 		}
 	}
