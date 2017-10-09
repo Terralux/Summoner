@@ -11,25 +11,27 @@ public class Inventory {
 	private int usedSlots = 0;
 	public static int maxStackSize = 100;
 
-	public List<InventorySlot> items = new List<InventorySlot> ();
+	public static List<InventorySlot> inventorySlots = new List<InventorySlot> ();
 	private InventorySorter inventorySorter = new InventorySorter ();
+
+	public delegate void OnInventoryChanged();
+	public OnInventoryChanged changeOccurred;
 
 	public void AddItem (BaseItem item, int quantity)
 	{
-
 		if (IsInventoryFull ()) {
 			Debug.LogWarning ("Inventory is full");
 			return;
 		}
 
 		if (item as Resource == null && item as Decoration == null) {
-			items.Add (new InventorySlot (item, 1));
+			inventorySlots.Add (new InventorySlot (item, 1));
 		} else {
 			InventorySlot inventorySlot = FindInInventory (item);
 			if (inventorySlot != null) {
 				HandleQuantityAndStacks (inventorySlot, quantity);
 			} else {
-				items.Add (new InventorySlot (item, quantity));
+				inventorySlots.Add (new InventorySlot (item, quantity));
 			}
 		}
 
@@ -40,9 +42,9 @@ public class Inventory {
 	{
 		InventorySlot inventorySlot = FindInInventory (item);
 		if (inventorySlot != null) {
-			items.Remove (inventorySlot);
+			inventorySlots.Remove (inventorySlot);
 			UpdateSlotsUsed ();
-			items.Sort ();
+			inventorySlots.Sort ();
 		}
 	}
 
@@ -63,18 +65,22 @@ public class Inventory {
 	public void UpdateSlotsUsed ()
 	{
 		usedSlots = 0;
-		foreach (InventorySlot slot in items) {
+		foreach (InventorySlot slot in inventorySlots) {
 			if (slot.item as Resource != null || slot.item as Decoration != null) {
 				usedSlots += slot.GetSlotsFilled ();
 			} else {
 				usedSlots++;
 			}
 		}
+
+		if (changeOccurred != null) {
+			changeOccurred ();
+		}
 	}
 
 	public InventorySlot FindInInventory (BaseItem item)
 	{
-		foreach (InventorySlot slot in items) {
+		foreach (InventorySlot slot in inventorySlots) {
 			if (slot.item == item) {
 				return slot;
 			}
@@ -92,6 +98,10 @@ public class Inventory {
 			if (inventorySlot.quantity <= 0) {
 				RemoveItem (item);
 			}
+		}
+
+		if (changeOccurred != null) {
+			changeOccurred ();
 		}
 	}
 
@@ -127,23 +137,32 @@ public class Inventory {
 
 	public void SortItemsByStandardOrder ()
 	{
-		inventorySorter.SortByType (items);
+		inventorySorter.SortByType (inventorySlots);
 	}
 
 	public void SortItemsBySelectOrder (string type)
 	{
-		inventorySorter.SortByType (items, type, false);
+		inventorySorter.SortByType (inventorySlots, type, false);
 	}
 
 	private void DebugPrintItems ()
 	{
 		Debug.Log ("Inventory contains: ");
-		foreach (InventorySlot slot in items) {
+		foreach (InventorySlot slot in inventorySlots) {
 			if (slot.item.GetType () == typeof(Structure) || slot.item.GetType () == typeof(Decoration)
 			    || slot.item.GetType () == typeof(Utility) || slot.item.GetType () == typeof(Vehicle)) {
 				Debug.Log (slot.item.itemName);
 			} else {
 				Debug.Log (slot.item.itemName);
+			}
+		}
+	}
+
+	public static void RemoveInventorySlot(InventorySlot slot){
+		for (int i = 0; i < inventorySlots.Count; i++) {
+			if (inventorySlots[i] == slot) {
+				inventorySlots.RemoveAt (i);
+				return;
 			}
 		}
 	}
@@ -163,5 +182,9 @@ public class InventorySlot
 	public int GetSlotsFilled ()
 	{
 		return (quantity / Inventory.maxStackSize) + 1;
+	}
+
+	public void Remove(){
+		Inventory.RemoveInventorySlot (this);
 	}
 }

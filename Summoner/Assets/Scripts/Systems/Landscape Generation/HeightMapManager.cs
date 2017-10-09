@@ -40,7 +40,7 @@ public class HeightMapManager : MonoBehaviour {
 	}
 
 	public static bool GetActiveState(int x, int y, int z){
-		return heightMapValues [Mathf.Abs((x + xStatic)) % width, Mathf.Abs((z + zStatic)) % height] > y;
+		return heightMapValues [Mathf.Abs ((x + xStatic)) % width, Mathf.Abs ((z + zStatic)) % height] > y;
 	}
 
 	public static List<List<HeightPairings>> GetHeightPairings(){

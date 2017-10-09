@@ -29,9 +29,6 @@ public class PlayerController : MonoBehaviour {
 
 	private static PlayerState currentState = PlayerState.FREE_FORM;
 
-	private bool playerCanMove = true;
-	private bool playerCanPerformActions = true;
-
 	void Awake(){
 		if (instance != null) {
 			Destroy (this);
@@ -61,6 +58,8 @@ public class PlayerController : MonoBehaviour {
 	*/
 
 	void Update () {
+		CheckForMenuOpen ();
+
 		float LT = Input.GetAxis ("LT");
 
 		switch (currentState) {
@@ -69,20 +68,28 @@ public class PlayerController : MonoBehaviour {
 			actions.AdjustMovementBehavior (LT > 0.2f);
 
 			CheckMovement ();
-			CheckMenuNavigation ();
+			CheckHotbarNavigation ();
 			CheckAttack ();
 			break;
 		case PlayerState.CAN_MOVE:
 			actions.AdjustMovementBehavior (LT > 0.2f);
 
 			CheckMovement ();
-			CheckMenuNavigation ();
+			CheckHotbarNavigation ();
 			break;
 		case PlayerState.STUNNED:
-			CheckMenuNavigation ();
+			CheckHotbarNavigation ();
 			break;
 		case PlayerState.DEAD:
 			break;
+		}
+	}
+
+	void CheckForMenuOpen(){
+		if (Input.GetButtonDown ("Start")) {
+			//Open Menu
+			PauseMenu.instance.Show ();
+			this.enabled = false;
 		}
 	}
 
@@ -114,7 +121,7 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	void CheckMenuNavigation(){
+	void CheckHotbarNavigation() {
 		float RT = Input.GetAxis ("RT");
 
 		if(Input.GetButtonDown("LB")){

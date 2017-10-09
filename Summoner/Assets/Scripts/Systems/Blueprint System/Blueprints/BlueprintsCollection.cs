@@ -16,6 +16,9 @@ public class BlueprintsCollection : ScriptableObject {
 
 	public bool AddNewBlueprint(Blueprint neo){
 		if(IsValidBlueprint(neo)){
+			//ScriptableObject.CreateInstance<Blueprint> ();
+			UnityEditor.AssetDatabase.CreateAsset (neo, "Assets/ScriptableObjects/Blueprints/" + neo.blueprintName + ".asset");
+
 			blueprints.Add(neo);
 			return true;
 		}

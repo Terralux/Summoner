@@ -15,11 +15,37 @@ public class PauseMenu : BaseMenu {
 		Hide();
 	}
 
+	void Update(){
+		if(Input.GetButtonDown("Start")){
+			instance.Hide ();
+
+			foreach (Transform t in GetComponentsInChildren<Transform>()) {
+				
+			}
+		}
+	}
+
 	public override void Show(){
 		instance.gameObject.SetActive(true);
 	}
 
 	public override void Hide(){
 		instance.gameObject.SetActive(false);
+	}
+
+	public void ShowCharacterTab(){
+		
+	}
+
+	public void ShowInventoryTab(){
+		InventoryMenu.instance.Show ();
+	}
+
+	public void ShowOptionsTab(){
+		
+	}
+		
+	public void ExitGameSession(){
+		Application.Quit ();
 	}
 }

@@ -12,10 +12,10 @@ public class PlaceableObjectHandler : MonoBehaviour {
 	private GameObject placableInstance;
 	private float fraction;
 
-	private PlayerController pc;
+	//private PlayerController pc;
 
 	public void Init(Placable neoObject, PlayerController pc){
-		this.pc = pc;
+		//this.pc = pc;
 		myPlacable = neoObject;
 		placableInstance = Instantiate (myPlacable.prefab, transform.position + transform.forward * offsetZ + Vector3.up * 0.05f, Quaternion.identity);
 	}
