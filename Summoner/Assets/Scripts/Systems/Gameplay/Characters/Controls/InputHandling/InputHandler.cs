@@ -5,22 +5,21 @@ using UnityEngine;
 public class InputHandler : MonoBehaviour {
 	
 	#region Bumpers
-	private static InputEventDigital LB;
-	private static InputEventDigital RB;
+	public static InputEventDigital LB;
+	public static InputEventDigital RB;
 	#endregion
 
 	#region ActionButtons
-	private static InputEventDigital X;
-	private static InputEventDigital Y;
-	private static InputEventDigital A;
-	private static InputEventDigital B;
+	public static InputEventDigital X;
+	public static InputEventDigital Y;
+	public static InputEventDigital A;
+	public static InputEventDigital B;
 	#endregion
 
 	#region CenterButtons
-	private static InputEventDigital Start;
-	private static InputEventDigital Back;
+	public static InputEventDigital Start;
+	public static InputEventDigital Back;
 	#endregion
-
 
 	#region Triggers
 	public static InputEventAnalog LeftTrigger;
@@ -59,7 +58,7 @@ public class InputHandler : MonoBehaviour {
 		VerticalDPad = new InputEventAnalog ("DPadVertical");
 	}
 
-	void Update () {
+	void Update (){
 		LeftTrigger.Update ();
 		RightTrigger.Update ();
 

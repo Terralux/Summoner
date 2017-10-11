@@ -12,12 +12,6 @@ public class Player : Entity {
 	public Inventory inventory;
 	private List<Blueprint> collectedBlueprints = new List<Blueprint>();
 
-	void Start () {
-		if (InventoryMenu.instance != null) {
-			InventoryMenu.playerInventory = inventory;
-		}
-	}
-
 	public void SpawnSkillPrefab(GameObject prefab, float offset) {
 		Instantiate (prefab, transform.position + (transform.forward * offset), Quaternion.LookRotation(transform.forward, Vector3.up));
 	}
