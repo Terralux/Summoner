@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TalentTree
-{
+public class TalentTree{
 
 	public int talentPoints;
 	public List<BaseSkill> listOfTalents = new List<BaseSkill> ();

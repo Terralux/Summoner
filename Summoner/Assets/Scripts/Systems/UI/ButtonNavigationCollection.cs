@@ -47,7 +47,9 @@ public class ButtonNavigationCollection : MonoBehaviour {
 		}
 	}
 
-	void OnEnabled(){
+	void OnEnable(){
+		Debug.Log (InputHandler.VerticalLeftStick);
+		Debug.Log (InputHandler.VerticalLeftStick.becameActive);
 		UpdateButtonsEnabled ();
 		if (isHorizontal) {
 			InputHandler.HorizontalLeftStick.becameActive += Move;
@@ -56,7 +58,7 @@ public class ButtonNavigationCollection : MonoBehaviour {
 		}
 	}
 
-	void OnDisabled(){
+	void OnDisable(){
 		if (isHorizontal) {
 			InputHandler.HorizontalLeftStick.becameActive -= Move;
 		} else {

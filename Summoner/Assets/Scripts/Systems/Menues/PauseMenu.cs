@@ -12,6 +12,9 @@ public class PauseMenu : BaseMenu {
 		}else{
 			Destroy(this);
 		}
+		InventoryMenu.instance = GetComponentInChildren<InventoryMenu> ();
+		InventoryMenu.instance.SetInventory ();
+		InventoryMenu.instance.Hide ();
 		Hide();
 	}
 

@@ -4,6 +4,9 @@ using UnityEngine;
 
 [System.Serializable]
 public class Player : Entity {
+
+	public static Player instance;
+
 	public CharacterStats stats;
 	public TalentTree talentTree;
 	public bool hasWeapon;
@@ -12,9 +15,11 @@ public class Player : Entity {
 	public Inventory inventory;
 	private List<Blueprint> collectedBlueprints = new List<Blueprint>();
 
-	void Start () {
-		if (InventoryMenu.instance != null) {
-			InventoryMenu.playerInventory = inventory;
+	void Awake(){
+		if (instance != null) {
+			Destroy (this);
+		} else {
+			instance = this;
 		}
 	}
 
