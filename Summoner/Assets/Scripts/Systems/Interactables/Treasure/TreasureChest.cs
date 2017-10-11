@@ -14,8 +14,11 @@ public class TreasureChest : BaseTreasure {
 		if (!hasBeenUsed) {
 			Player.instance.inventory.AddItem (item, quantity);
 			hasBeenUsed = true;
-			quantity > 1 ? Debug.Log (item.itemName + " x " + quantity + " was added to inventory.") : Debug.Log (item.itemName
-			+ " was added to inventory");
+			if(quantity > 1) {  
+				Debug.Log (item.itemName + " x " + quantity + " was added to inventory."); 
+			} else {
+				Debug.Log (item.itemName + " was added to inventory");	
+			}
 		}
 	}
 

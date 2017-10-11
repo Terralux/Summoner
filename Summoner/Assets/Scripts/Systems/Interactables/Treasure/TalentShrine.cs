@@ -9,7 +9,6 @@ public class TalentShrine : BaseTreasure {
 	public override void OnInteract ()
 	{
 		if (!hasBeenUsed) {
-			Player.instance.inventory.AddItem (item, quantity);
 			hasBeenUsed = true;
 			Player.instance.talentTree.AdjustTalentPoints (1);
 			Debug.Log ("Skill point was added");
