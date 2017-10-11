@@ -15,7 +15,7 @@ public class CharacterStats {
 	private int curHP = 100;
 
 	/// <summary>
-	/// Adjusts the health.
+	/// Adjusts the health Adds amount to current Health
 	/// </summary>
 	/// <returns><c>true</c>, if health reached 0, <c>false</c> otherwise.</returns>
 	/// <param name="amount">Amount.</param>

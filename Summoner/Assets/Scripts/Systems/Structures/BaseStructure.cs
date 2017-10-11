@@ -2,25 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class BaseStructure : MonoBehaviour {
-
+public abstract class BaseStructure : Interactive {
 	public bool isPowered;
-	public float interactRadius;
 
-	public abstract void OnInteract();
+	public int durability;
+	protected int currentDurability;
+}
 
-	void OnTriggerEnter(Collider col) {
-		if (col.CompareTag ("Player")) {
-			Debug.Log ("Press X to interact with me!");
-		}
+public abstract class InteractiveStructure : BaseStructure {
+
+}
+
+public abstract class AutomaticStructure : BaseStructure {
+	protected bool isActive = false;
+
+	public override void OnInteract(){
+		isActive = !isActive;
 	}
 
-	void OnTriggerStay(Collider col) {
-		if (col.CompareTag ("Player")) {
-			// ! Test Input : Input goes in the actual controller instead !
-			if (Input.GetKeyDown (KeyCode.X)) {
-				OnInteract ();
-			}
-		}
-	}
+	public abstract void Update();
 }
