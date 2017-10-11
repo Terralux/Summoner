@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class Invention {
+[CreateAssetMenu(fileName = "New Invention", menuName = "Trailblazer/Blueprint/Invention", order = 3)]
+public class Invention : ScriptableObject {
 	public Blueprint Material1;
 	public Blueprint Material2;
 	public Blueprint Material3;

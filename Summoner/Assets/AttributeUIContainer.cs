@@ -14,7 +14,7 @@ public class AttributeUIContainer : MonoBehaviour {
 		UpdateGraphics ();
 	}
 
-	public void UpdateGraphics(){
+	public void UpdateGraphics () {
 		attImage.text = myEA.targetElement.ToString ();
 		attValue.text = myEA.value.ToString ();
 	}

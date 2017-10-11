@@ -14,8 +14,6 @@ public class ChunkManager : MonoBehaviour {
 
 	public Neighbours chunkNeighbours;
 
-	public Accessible hasAccessTo;
-
 	public string myKey;
 
 	public void Init(GameObject neoChunk, int randomAdditionPercentage, int squareSize){
@@ -52,7 +50,7 @@ public class ChunkManager : MonoBehaviour {
 					(chunkNeighbours.right != null ? chunkNeighbours.right.myChunk.left : null), 
 					(chunkNeighbours.forward != null ? chunkNeighbours.forward.myChunk.back : null), 
 					(chunkNeighbours.back != null ? chunkNeighbours.back.myChunk.forward : null)
-				), chunkNeighbours, out hasAccessTo
+				), chunkNeighbours
 			), 
 			squareSize);
 
@@ -93,13 +91,18 @@ public class ChunkManager : MonoBehaviour {
 		}
 	}
 
-	void OnDrawGizmos(){
-		for(int x = 0; x < myChunk.slices.Length - 1; x++){
-			for(int y = 0; y < myChunk.slices.Length - 1; y++){
-				for(int z = 0; z < myChunk.slices.Length - 1; z++){
-					if(myChunk.slices[y].cubes[x, z].topSquare.forwardLeft.isLiquidSource){
-						Gizmos.color = Color.blue;
-						Gizmos.DrawSphere(myChunk.slices[y].cubes[x, z].topSquare.forwardLeft.position + targetObjectChunk.transform.position, 0.2f);
+	void OnDrawGizmosSelected(){
+		if (myChunk.slices == null)
+			return;
+		
+		if(myChunk.slices.Length > 0){
+			for (int x = 0; x < myChunk.slices.Length - 1; x++) {
+				for (int y = 0; y < myChunk.slices.Length - 1; y++) {
+					for (int z = 0; z < myChunk.slices.Length - 1; z++) {
+						if (myChunk.slices [y].cubes [x, z].topSquare.forwardLeft.isLiquidSource) {
+							Gizmos.color = Color.blue;
+							Gizmos.DrawSphere (myChunk.slices [y].cubes [x, z].topSquare.forwardLeft.position + targetObjectChunk.transform.position, 0.2f);
+						}
 					}
 				}
 			}
@@ -121,24 +124,6 @@ public class ChunkManager : MonoBehaviour {
 		meshGen.GenerateMesh (GetComponent<MeshFilter>(), gen.Generate(Direction.XPositive, map, randomAdditionPercent), 1);
 	}
 	*/
-}
-
-public struct Accessible{
-	public bool top;
-	public bool bottom;
-	public bool left;
-	public bool right;
-	public bool forward;
-	public bool back;
-
-	public Accessible(bool top, bool bottom, bool left, bool right, bool forward, bool back){
-		this.top = top;
-		this.bottom = bottom;
-		this.left = left;
-		this.right = right;
-		this.forward = forward;
-		this.back = back;
-	}
 }
 
 public struct Neighbours{

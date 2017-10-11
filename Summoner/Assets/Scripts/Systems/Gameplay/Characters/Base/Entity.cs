@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Entity : MonoBehaviour {
-
-
-
 	public void SetPoisoned() {
 		
 	}
@@ -21,6 +18,4 @@ public class Entity : MonoBehaviour {
 	public void SetStunned(float stunDuration) {
 		
 	}
-
 }
-

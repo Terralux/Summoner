@@ -30,9 +30,30 @@ public class BlueprintCombinationEditor : EditorWindow {
 	static void Init(){
 		BlueprintCombinationEditor window = (BlueprintCombinationEditor)EditorWindow.GetWindow(typeof(BlueprintCombinationEditor));
 		blueprintCollection = (BlueprintsCollection) AssetDatabase.LoadAssetAtPath("Assets/ScriptableObjects/BlueprintCollection.asset", typeof(BlueprintsCollection));
+
+		foreach (string s in AssetDatabase.FindAssets ("t:Blueprint")){
+			Blueprint b = AssetDatabase.LoadAssetAtPath<Blueprint> (s);
+
+			if (!blueprintCollection.blueprints.Contains (b)) {
+				blueprintCollection.blueprints.Add (b);
+			}
+		}
+
 		inventionCollection = (InventionCollection) AssetDatabase.LoadAssetAtPath("Assets/ScriptableObjects/BlueprintCombinations.asset", typeof(InventionCollection));
+
+		foreach (string s in AssetDatabase.FindAssets ("t:Invention")){
+			Invention b = AssetDatabase.LoadAssetAtPath<Invention> (s);
+
+			if (!inventionCollection.inventions.Contains (b)) {
+				inventionCollection.inventions.Add (b);
+			}
+		}
+
 		window.currentlySelected = null;
 		window.currentlySelectedBlueprint = null;
+
+
+
 		window.Show();
 	}
 

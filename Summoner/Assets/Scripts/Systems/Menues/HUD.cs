@@ -11,7 +11,6 @@ public class HUD : BaseMenu{
 		}else{
 			Destroy(this);
 		}
-		Hide();
 	}
 
 	public override void Show(){

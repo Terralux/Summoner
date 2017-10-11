@@ -10,24 +10,42 @@ public class TestChunkGenerator : MonoBehaviour {
 	public int random;
 	public string seed;
 
-	private Generator gen;
-
 	[Range(0f,1f)]
 	public float smoothPercentage;
 
-	void Awake () {
-		Random.InitState (seed.GetHashCode());
+	public static int randomStatic;
 
+	[Range(0,16)]
+	public int xMin;
+	[Range(0,16)]
+	public int xMid;
+	[Range(0,16)]
+	public int xMax;
+
+	[Range(0,16)]
+	public int zMin;
+	[Range(0,16)]
+	public int zMid;
+	[Range(0,16)]
+	public int zMax;
+
+	public bool TurnOnHiddenNodes = false;
+
+	void Awake () {
 		myChunk = gameObject.AddComponent<ChunkManager>();
-		gen = new Generator();
-		gen.smoothPercentage = smoothPercentage;
+		Generator.smoothPercentage = smoothPercentage;
+		Generator.seed = seed;
+		randomStatic = random;
 		myChunk.myKey = "0,0,0";
 		myChunk.Init(gameObject, random, 1);
 	}
 
 	void Update(){
 		if(Input.GetMouseButtonDown(0)){
-			gen.smoothPercentage = smoothPercentage;
+			Generator.smoothPercentage = smoothPercentage;
+			Generator.seed = seed;
+			randomStatic = random;
+
 			myChunk.Init(gameObject, random, 1);
 		}
 	}
