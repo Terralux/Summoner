@@ -42,6 +42,13 @@ public class PlayerController : MonoBehaviour {
 		);
 	}
 
+	void Start(){
+		InputHandler.Start.becameActive += TriggerPauseMenu;
+		InputHandler.LeftTrigger.getValue += actions.AdjustMovementBehavior;
+		InputHandler.LeftStick.getValue += actions.Movement;
+		InputHandler.A.becameActive += Jump;
+	}
+
 	/*
 	 * Left stick to move character
 	 * right stick to move camera
@@ -58,22 +65,13 @@ public class PlayerController : MonoBehaviour {
 	*/
 
 	void Update () {
-		CheckForMenuOpen ();
-
-		float LT = Input.GetAxis ("LT");
-
 		switch (currentState) {
 		case PlayerState.FREE_FORM:
-
-			actions.AdjustMovementBehavior (LT > 0.2f);
-
 			CheckMovement ();
 			CheckHotbarNavigation ();
 			CheckAttack ();
 			break;
 		case PlayerState.CAN_MOVE:
-			actions.AdjustMovementBehavior (LT > 0.2f);
-
 			CheckMovement ();
 			CheckHotbarNavigation ();
 			break;
@@ -85,8 +83,12 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	void CheckForMenuOpen(){
-		if (Input.GetButtonDown ("Start")) {
+	public void TriggerPauseMenu(){
+		if (PauseMenu.instance.isActiveAndEnabled) {
+			//Close Menu
+			PauseMenu.instance.Hide ();
+			this.enabled = true;
+		}else{
 			//Open Menu
 			PauseMenu.instance.Show ();
 			this.enabled = false;
@@ -101,23 +103,14 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void CheckMovement(){
-		float h = Input.GetAxis ("Horizontal");
-		float v = Input.GetAxis ("Vertical");
-
-		actions.Movement (new Vector2 (h, v));
-
-		CheckForJump ();
-
 		CheckForDodge ();
 	}
 
-	void CheckForJump(){
-		if (Input.GetButtonDown("A")) {
-			if (placeObjectHandler != null) {
-				placeObjectHandler.PlaceObject ();
-			} else {
-				actions.Jump ();
-			}
+	public void Jump(){
+		if (placeObjectHandler != null) {
+			placeObjectHandler.PlaceObject ();
+		} else {
+			actions.Jump ();
 		}
 	}
 

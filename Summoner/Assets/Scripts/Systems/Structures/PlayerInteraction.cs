@@ -10,13 +10,23 @@ public class PlayerInteraction : MonoBehaviour {
 
 	int index = 0;
 
+	void Awake(){
+		InputHandler.Y.becameActive += Interact;
+	}
+
 	void OnTriggerEnter(Collider col){
 		Interactive i = col.GetComponent<Interactive> ();
 		if (i != null) {
 			if (i as AutomaticStructure != null) {
 				i.OnInteract ();
 			}
+
 			interactables.Add (col.GetComponent<Interactive> ());
+
+			if (interactables.Count == 1) {
+				InputHandler.A.becameActive -= PlayerController.instance.Jump;
+				InputHandler.A.becameActive += Interact;
+			}
 		}
 	}
 
@@ -26,7 +36,13 @@ public class PlayerInteraction : MonoBehaviour {
 			if (i as AutomaticStructure != null) {
 				i.OnInteract ();
 			}
+
 			interactables.Remove (col.GetComponent<Interactive> ());
+
+			if (interactables.Count == 0) {
+				InputHandler.A.becameActive -= Interact;
+				InputHandler.A.becameActive += PlayerController.instance.Jump;
+			}
 		}
 	}
 
@@ -51,6 +67,12 @@ public class PlayerInteraction : MonoBehaviour {
 	}
 
 	public void Interact(){
-		interactables [index].OnInteract ();
+		if (interactables.Count > 0) {
+			interactables [index].OnInteract ();
+		}
+	}
+
+	void OnGUI(){
+		GUI.Box (new Rect (10, 10, 100, 30), (interactables.Count > 0 ? "Can interact" : "No interaction"));
 	}
 }

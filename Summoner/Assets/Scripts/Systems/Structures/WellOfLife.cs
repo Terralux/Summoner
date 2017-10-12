@@ -4,16 +4,23 @@ using UnityEngine;
 
 public class WellOfLife : AutomaticStructure {
 
-	public CitySetup citySetup;
+	public static WellOfLife instance;
+
+	public static CitySetup citySetup;
 	public float radius;
 
 	void Awake () {
-		citySetup = new CitySetup(transform.position, radius);
+		if (instance != null) {
+			Destroy (instance);
+		} else {
+			instance = this;
+			citySetup = new CitySetup (transform.position, radius);
+		}
 	}
 
 	#region implemented abstract members of AutomaticStructure
 
-	public override void Update (){
+	protected override void Update (){
 		if (isActive) {
 			Player.instance.stats.AdjustHealth (1);
 		}

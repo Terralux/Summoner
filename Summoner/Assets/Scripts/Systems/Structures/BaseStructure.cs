@@ -7,6 +7,15 @@ public abstract class BaseStructure : Interactive {
 
 	public int durability;
 	protected int currentDurability;
+
+	public delegate void VoidEvent(BaseStructure structure);
+	public VoidEvent OnShutdown;
+
+	void Awake(){
+		if(WellOfLife.instance != null){
+			WellOfLife.citySetup.RegisterStructure (this);
+		}
+	}
 }
 
 public abstract class InteractiveStructure : BaseStructure {
@@ -20,5 +29,5 @@ public abstract class AutomaticStructure : BaseStructure {
 		isActive = !isActive;
 	}
 
-	public abstract void Update();
+	protected abstract void Update();
 }
