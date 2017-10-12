@@ -7,6 +7,7 @@ public class Player : Entity {
 
 	public static Player instance;
 
+	public int discoveryLevel = 0;
 	public CharacterStats stats;
 	public TalentTree talentTree;
 	public bool hasWeapon;

@@ -27,13 +27,11 @@ public class InputHandler : MonoBehaviour {
 	#endregion
 
 	#region LeftStick
-	public static InputEventAnalog HorizontalLeftStick;
-	public static InputEventAnalog VerticalLeftStick;
+	public static InputEventVector2Analog LeftStick;
 	#endregion
 
 	#region DPad
-	public static InputEventAnalog HorizontalDPad;
-	public static InputEventAnalog VerticalDPad;
+	public static InputEventVector2Analog DPad;
 	#endregion
 
 	void Awake(){
@@ -51,11 +49,9 @@ public class InputHandler : MonoBehaviour {
 		LeftTrigger = new InputEventAnalog ("LT");
 		RightTrigger = new InputEventAnalog ("RT");
 
-		HorizontalLeftStick = new InputEventAnalog ("Horizontal");
-		VerticalLeftStick = new InputEventAnalog ("Vertical");
+		LeftStick = new InputEventVector2Analog ("Horizontal", "Vertical");
 
-		HorizontalDPad = new InputEventAnalog ("DPadHorizontal");
-		VerticalDPad = new InputEventAnalog ("DPadVertical");
+		DPad = new InputEventVector2Analog ("DPadHorizontal", "DPadVertical");
 	}
 
 	void Update (){
@@ -73,11 +69,8 @@ public class InputHandler : MonoBehaviour {
 		Start.Update ();
 		Back.Update ();
 
-		HorizontalLeftStick.Update ();
-		VerticalLeftStick.Update ();
-
-		HorizontalDPad.Update ();
-		VerticalDPad.Update ();
+		LeftStick.Update ();
+		DPad.Update ();
 	}
 }
 
@@ -106,9 +99,13 @@ public class InputEventDigital{
 
 		if (previousState != activeState) {
 			if (activeState) {
-				becameActive ();
+				if (becameActive != null) {
+					becameActive ();
+				}
 			} else {
-				becameInactive ();
+				if (becameInactive != null) {
+					becameInactive ();
+				}
 			}
 
 			if (changedState != null) {
@@ -173,5 +170,54 @@ public class InputEventAnalog{
 				currentTime = 0f;
 			}
 		}
+	}
+}
+
+public class InputEventVector2Analog{
+	public delegate void FloatEvent(float value);
+	public delegate void Vector2Event(Vector2 value);
+
+	public Vector2Event getValue;
+
+	public FloatEvent getHorizontalValue;
+	public FloatEvent getVerticalValue;
+
+	private string horizontalAxisName;
+	private string verticalAxisName;
+
+	private Vector2 input;
+
+	private float horizontalValue;
+	private float verticalValue;
+
+	public InputEventAnalog horizontalAnalogEvent;
+	public InputEventAnalog verticalAnalogEvent;
+
+	public InputEventVector2Analog(string horizontalAxisName, string VerticalAxisName){
+		this.horizontalAxisName = horizontalAxisName;
+		this.verticalAxisName = VerticalAxisName;
+
+		horizontalAnalogEvent = new InputEventAnalog (horizontalAxisName);
+		verticalAnalogEvent = new InputEventAnalog (verticalAxisName);
+	}
+
+	public void Update(){
+		horizontalValue = Input.GetAxis (horizontalAxisName);
+		verticalValue = Input.GetAxis (verticalAxisName);
+
+		input = new Vector2 (horizontalValue, verticalValue);
+
+		if (getValue != null) {
+			getValue (input);
+		}
+		if (getHorizontalValue != null) {
+			getHorizontalValue (horizontalValue);
+		}
+		if (getVerticalValue != null) {
+			getVerticalValue (verticalValue);
+		}
+
+		horizontalAnalogEvent.Update ();
+		verticalAnalogEvent.Update ();
 	}
 }

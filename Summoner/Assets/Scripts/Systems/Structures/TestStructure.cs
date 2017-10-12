@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class TestStructure : BaseStructure {
-	#region implemented abstract members of BaseStructure
+public class TestStructure : InteractiveStructure {
 
-	public override void OnInteract ()
-	{
-		Debug.Log ("You are interacting with me!");
+	#region implemented abstract members of Interactive
+	public override void OnInteract (){
+		Debug.Log ("Hello world I am a Building! :D");
+		Debug.Log (isPowered);
 	}
-
 	#endregion
-
 }

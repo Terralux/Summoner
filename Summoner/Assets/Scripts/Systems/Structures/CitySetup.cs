@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class CitySetup {
 
-	public delegate void OnEvent();
-	public OnEvent placement;
-
 	Vector3 cityCenter;
 	float radius;
 
@@ -16,17 +13,22 @@ public class CitySetup {
 		this.cityCenter = cityCenter;
 		this.radius = radius;
 
-		placement += StructuresInsideCircle;
-		placement += PowerReachableStructures;
 		structuresWithinReach = new List<BaseStructure> ();
+		UpdateStructureStates ();
 	}
 
-	// Delegate Methods
+	public void AdjustStructureRegisterRange(float range){
+		radius = range;
+		UpdateStructureStates ();
+	}
 
 	void StructuresInsideCircle() {
 		Collider[] hitColliders = Physics.OverlapSphere(cityCenter, radius);
 		foreach (Collider col in hitColliders) {
-			structuresWithinReach.Add (col.gameObject.GetComponent<BaseStructure> ());
+			BaseStructure structure = col.gameObject.GetComponent<BaseStructure> ();
+			if (structure != null) {
+				structuresWithinReach.Add (structure);
+			}
 		}
 	}
 
@@ -36,15 +38,21 @@ public class CitySetup {
 		}
 	}
 
-	// Public methods
-
-	public void ShutdownUnreachableStructures() {
+	public void UpdateStructureStates() {
 		foreach (BaseStructure structure in structuresWithinReach) {
 			structure.isPowered = false;
 		}
 		structuresWithinReach.Clear ();
 		StructuresInsideCircle ();
 		PowerReachableStructures ();
+	}
+
+	public void RegisterStructure(BaseStructure structure){
+		structure.OnShutdown += RemoveStructure;
+	}
+
+	public void RemoveStructure(BaseStructure structure){
+		structuresWithinReach.Remove (structure);
 	}
 
 }
