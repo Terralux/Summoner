@@ -17,8 +17,12 @@ public class BaseCharacterMovement {
 		this.anim = anim;
 	}
 
-	public void AdjustMovementBehavior(bool lockViewToCamera){
-		hasLockedViewToCamera = lockViewToCamera;
+	public void AdjustMovementBehavior(float lockViewToCamera){
+		if (Mathf.Abs (lockViewToCamera) > 0.2f) {
+			hasLockedViewToCamera = true;
+		} else {
+			hasLockedViewToCamera = false;
+		}
 	}
 
 	#region movement
