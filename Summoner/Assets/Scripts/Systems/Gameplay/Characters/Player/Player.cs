@@ -14,7 +14,7 @@ public class Player : Entity {
 
 	public Weapon equipped;
 	public Inventory inventory;
-	public HashSet<Blueprint> collectedBlueprints = new List<Blueprint>();
+	public HashSet<Blueprint> collectedBlueprints = new HashSet<Blueprint>();
 
 	void Awake(){
 		if (instance != null) {
