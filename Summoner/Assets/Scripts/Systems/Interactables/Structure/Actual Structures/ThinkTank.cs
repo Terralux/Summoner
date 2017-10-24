@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ThinkTank : AutomaticAndInteractiveStructure {
+public class ThinkTank : AutomaticStructure {
 
 	public HashSet<Blueprint> blueprintCollection;
 
@@ -11,18 +11,13 @@ public class ThinkTank : AutomaticAndInteractiveStructure {
 	protected override void Update ()
 	{
 		if (isActive) {
-			AbsorbBlueprintsFromPlayer ();
+			ObtainBlueprintsFromPlayer ();
 		}
-	}
-
-	public override void OnActionInteract ()
-	{
-		// Toggle menu that shows blueprint combination options
 	}
 
 	#endregion
 
-	void AbsorbBlueprintsFromPlayer() {
+	void ObtainBlueprintsFromPlayer() {
 		foreach (Blueprint blueprint in Player.instance.collectedBlueprints) {
 			int count = blueprintCollection.Count;
 			blueprintCollection.Add (blueprint);
@@ -31,10 +26,6 @@ public class ThinkTank : AutomaticAndInteractiveStructure {
 				Player.instance.RemoveBlueprint (blueprint);
 			}
 		}
-	}
-
-	void MergeBlueprints() {
-		// Blueprint combination into a new structure
 	}
 
 }
