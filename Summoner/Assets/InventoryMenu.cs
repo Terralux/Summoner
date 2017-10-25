@@ -7,6 +7,7 @@ public class InventoryMenu : BaseMenu {
 	public static InventoryMenu instance;
 
 	public static Inventory playerInventory;
+	private HashSet<Blueprint> collectedBlueprints = new HashSet<Blueprint>();
 
 	void Awake(){
 		if(instance == null){
@@ -43,4 +44,5 @@ public class InventoryMenu : BaseMenu {
 	}
 
 	#endregion
+
 }
