@@ -13,7 +13,8 @@ public class Player : Entity {
 	public bool hasWeapon;
 
 	public Weapon equipped;
-	public Inventory inventory;
+	private static Inventory inventory;
+
 	private List<Blueprint> collectedBlueprints = new List<Blueprint>();
 
 	void Awake(){
@@ -32,5 +33,13 @@ public class Player : Entity {
 		if(!collectedBlueprints.Contains(blueprint)){
 			collectedBlueprints.Add (blueprint);
 		}
+	}
+
+	public Inventory GetInventory(){
+		if (inventory == null) {
+			inventory = new Inventory ();
+		}
+
+		return inventory;
 	}
 }

@@ -8,8 +8,18 @@ public class InventoryMenu : BaseMenu {
 
 	public static Inventory playerInventory;
 
+	void Awake(){
+		if(instance == null){
+			instance = this;
+		}else{
+			Destroy(this);
+		}
+		SetInventory ();
+		Hide();
+	}
+
 	public void SetInventory(){
-		playerInventory = GameObject.FindGameObjectWithTag ("Player").GetComponent<Player> ().inventory;
+		playerInventory = GameObject.FindGameObjectWithTag ("Player").GetComponent<Player> ().GetInventory();
 	}
 
 	#region implemented abstract members of BaseMenu
