@@ -108,11 +108,11 @@ public class ActiveItemHotbarHandler : MonoBehaviour {
 	public static void UseItem(){
 		if (instance.utilityBarIsSelected) {
 			if (instance.utility.UseItem (selectedObjectIndex)) {
-				PlayerController.SetPlayerState (PlayerController.PlayerState.CAN_MOVE);
+				
 			}
 		} else {
 			if (instance.placables.UseItem (selectedObjectIndex)) {
-				PlayerController.SetPlayerState (PlayerController.PlayerState.CAN_MOVE);
+				
 			}
 		}
 	}

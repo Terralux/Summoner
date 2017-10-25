@@ -12,28 +12,17 @@ public class PauseMenu : BaseMenu {
 		}else{
 			Destroy(this);
 		}
-		InventoryMenu.instance = GetComponentInChildren<InventoryMenu> ();
-		InventoryMenu.instance.SetInventory ();
-		InventoryMenu.instance.Hide ();
 		Hide();
-	}
-
-	void Update(){
-		if(Input.GetButtonDown("Start")){
-			instance.Hide ();
-
-			foreach (Transform t in GetComponentsInChildren<Transform>()) {
-				
-			}
-		}
 	}
 
 	public override void Show(){
 		instance.gameObject.SetActive(true);
+		InputHandler.BEvent().becameActive += Hide;
 	}
 
 	public override void Hide(){
 		instance.gameObject.SetActive(false);
+		InputHandler.BEvent().becameActive -= Hide;
 	}
 
 	public void ShowCharacterTab(){

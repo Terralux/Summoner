@@ -9,25 +9,7 @@ public class PlayerController : MonoBehaviour {
 
 	private BaseCharacterMovement actions;
 
-	private bool previousRTState = false;
-
 	private static PlaceableObjectHandler placeObjectHandler;
-
-	/*
-	 * Player can either be free roaming allowing for every behavior
-	 * Player can be placing an item, allowing for only movement and 
-	 * Player can be temporarily stunned or knocked back
-	 * Player can be dead
-	*/
-
-	public enum PlayerState{
-		DEAD,
-		STUNNED,
-		CAN_MOVE,
-		FREE_FORM
-	}
-
-	private static PlayerState currentState = PlayerState.FREE_FORM;
 
 	void Awake(){
 		if (instance != null) {
@@ -43,67 +25,31 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Start(){
-		InputHandler.Start.becameActive += TriggerPauseMenu;
-		InputHandler.LeftTrigger.getValue += actions.AdjustMovementBehavior;
-		InputHandler.LeftStick.getValue += actions.Movement;
-		InputHandler.A.becameActive += Jump;
-	}
+		InputHandler.StartEvent ().becameActive += TriggerPauseMenu;
+		InputHandler.LeftTriggerEvent ().getValue += actions.AdjustMovementBehavior;
+		InputHandler.LeftStickEvent ().getValue += actions.Movement;
+		InputHandler.AEvent ().becameActive += Jump;
+		InputHandler.YEvent ().becameActive += CheckItemUsage;
+		InputHandler.BEvent ().becameActive += CheckForDodge;
+		InputHandler.XEvent ().becameActive += Attack;
 
-	/*
-	 * Left stick to move character
-	 * right stick to move camera
-	 * A to jump
-	 * Y to use item
-	 * Right Trigger to attack
-	 * Left Trigger to look in camera direction
-	 * 
-	 * Bumpers Left and Right to shuffle across Item Bar
-	 * 
-	 * Holding a directional button changes the regular attack to use of the selected skill
-	 * 
-	 * 
-	*/
+		InputHandler.LBEvent ().becameActive += HotbarNavigationLeft;
+		InputHandler.RBEvent ().becameActive += HotbarNavigationRight;
 
-	void Update () {
-		switch (currentState) {
-		case PlayerState.FREE_FORM:
-			CheckMovement ();
-			CheckHotbarNavigation ();
-			CheckAttack ();
-			break;
-		case PlayerState.CAN_MOVE:
-			CheckMovement ();
-			CheckHotbarNavigation ();
-			break;
-		case PlayerState.STUNNED:
-			CheckHotbarNavigation ();
-			break;
-		case PlayerState.DEAD:
-			break;
-		}
+		InputHandler.RightTriggerEvent ().becameActive += ChangeHotbar;
 	}
 
 	public void TriggerPauseMenu(){
-		if (PauseMenu.instance.isActiveAndEnabled) {
-			//Close Menu
-			PauseMenu.instance.Hide ();
-			this.enabled = true;
-		}else{
-			//Open Menu
-			PauseMenu.instance.Show ();
-			this.enabled = false;
-		}
+		PauseMenu.instance.Show ();
+		ResetPlayerControls ();
 	}
 
-	void CheckItemUsage(){
-		if(Input.GetButtonDown("Y")){
-			//Use selected Item
-			ActiveItemHotbarHandler.UseItem();
-		}
+	public void ResetPlayerControls(){
+		
 	}
 
-	void CheckMovement(){
-		CheckForDodge ();
+	public void CheckItemUsage(){
+		ActiveItemHotbarHandler.UseItem();
 	}
 
 	public void Jump(){
@@ -114,84 +60,50 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
-	void CheckHotbarNavigation() {
-		float RT = Input.GetAxis ("RT");
-
-		if(Input.GetButtonDown("LB")){
-			//Move left on Item menu
-			ActiveItemHotbarHandler.MoveSelector (false);
-		}
-		if(Input.GetButtonDown("RB")){
-			//Move right on Item menu
-			ActiveItemHotbarHandler.MoveSelector (true);
-		}
-
-		if (!previousRTState) {
-			if (RT > 0.3f) {
-				ActiveItemHotbarHandler.SwitchActiveHotbar ();
-				previousRTState = true;
-				Debug.Log ("switch hotbar");
-			}
-		} else {
-			if (RT < 0.1f) {
-				Debug.Log ("button released");
-				previousRTState = false;
-			}
-		}
-
-		CheckItemUsage ();
+	public void HotbarNavigationLeft(){
+		ActiveItemHotbarHandler.MoveSelector (false);
 	}
 
-	void CheckAttack(){
-		float DH = Input.GetAxis ("DPadHorizontal");
-		float DV = Input.GetAxis ("DPadVertical");
+	public void HotbarNavigationRight(){
+		ActiveItemHotbarHandler.MoveSelector (true);
+	}
 
-		if (Input.GetButtonDown ("X")) {
-			if(DH > 0.1f || DH < -0.1f || DV > 0.1f || DV < -0.1f){
-				//Attack
-			}else{
-				CheckTalents (DH, DV);
-			}
+	public void ChangeHotbar() {
+		ActiveItemHotbarHandler.SwitchActiveHotbar ();
+	}
+
+	public void Attack(){
+		Vector2 input = InputHandler.DPadEvent ().input;
+
+		if(input.x < 0.1f && input.x > -0.1f && input.y < 0.1f && input.y > -0.1f){
+			Debug.Log ("Attack!");
+		}else{
+			CheckTalents (input);
 		}
 	}
 
-	void CheckTalents(float DH, float DV){
-		if(Mathf.Abs(DH) > Mathf.Abs(DV)){
-			if(DH > 0){
-				if (Input.GetButtonDown ("X")) {
-					//Do skill on D-Pad Left
-				}
+	void CheckTalents(Vector2 input){
+		if(Mathf.Abs(input.x) > Mathf.Abs(input.y)){
+			if(input.x > 0){
+				Debug.Log ("Talent Right!");
 			}else{
-				if (Input.GetButtonDown ("X")) {
-					//Do skill on D-Pad Right
-				}
+				Debug.Log ("Talent Left!");
 			}
 		}else{
-			if(DV > 0){
-				if (Input.GetButtonDown ("X")) {
-					//Do skill on D-Pad Down
-				}
+			if(input.y > 0){
+				Debug.Log ("Talent Up!");
 			}else{
-				if (Input.GetButtonDown ("X")) {
-					//Do skill on D-Pad Up
-				}
+				Debug.Log ("Talent Down!");
 			}
 		}
 	}
 
-	void CheckForDodge(){
-		if (Input.GetButtonDown ("B")) {
-			if (placeObjectHandler != null) {
-				Destroy (placeObjectHandler);
-				SetPlayerState (PlayerState.FREE_FORM);
-			} else {
-				//Dodge roll
-			}
+	public void CheckForDodge(){
+		if (placeObjectHandler != null) {
+			Destroy (placeObjectHandler);
+		} else {
+			//Dodge roll
 		}
-	}
-
-	public static void SetPlayerState(PlayerState neoState){
-		currentState = neoState;
 	}
 
 	void FixedUpdate(){

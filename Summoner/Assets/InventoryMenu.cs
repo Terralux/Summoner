@@ -7,9 +7,20 @@ public class InventoryMenu : BaseMenu {
 	public static InventoryMenu instance;
 
 	public static Inventory playerInventory;
+	private HashSet<Blueprint> collectedBlueprints = new HashSet<Blueprint>();
+
+	void Awake(){
+		if(instance == null){
+			instance = this;
+		}else{
+			Destroy(this);
+		}
+		SetInventory ();
+		Hide();
+	}
 
 	public void SetInventory(){
-		playerInventory = GameObject.FindGameObjectWithTag ("Player").GetComponent<Player> ().inventory;
+		playerInventory = GameObject.FindGameObjectWithTag ("Player").GetComponent<Player> ().GetInventory();
 	}
 
 	#region implemented abstract members of BaseMenu
@@ -33,4 +44,5 @@ public class InventoryMenu : BaseMenu {
 	}
 
 	#endregion
+
 }

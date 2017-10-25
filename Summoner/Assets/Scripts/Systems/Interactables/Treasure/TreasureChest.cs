@@ -12,7 +12,7 @@ public class TreasureChest : BaseTreasure {
 	public override void OnInteract ()
 	{
 		if (!hasBeenUsed) {
-			Player.instance.inventory.AddItem (item, quantity);
+			Player.instance.GetInventory().AddItem (item, quantity);
 			hasBeenUsed = true;
 			if(quantity > 1) {  
 				Debug.Log (item.itemName + " x " + quantity + " was added to inventory."); 

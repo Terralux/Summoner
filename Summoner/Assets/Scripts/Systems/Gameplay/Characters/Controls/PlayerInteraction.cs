@@ -11,7 +11,7 @@ public class PlayerInteraction : MonoBehaviour {
 	int index = 0;
 
 	void Awake(){
-		InputHandler.Y.becameActive += Interact;
+		InputHandler.YEvent().becameActive += Interact;
 	}
 
 	void OnTriggerEnter(Collider col){
@@ -24,8 +24,8 @@ public class PlayerInteraction : MonoBehaviour {
 			interactables.Add (col.GetComponent<Interactive> ());
 
 			if (interactables.Count == 1) {
-				InputHandler.A.becameActive -= PlayerController.instance.Jump;
-				InputHandler.A.becameActive += Interact;
+				InputHandler.AEvent().becameActive -= PlayerController.instance.Jump;
+				InputHandler.AEvent().becameActive += Interact;
 			}
 		}
 	}
@@ -40,8 +40,8 @@ public class PlayerInteraction : MonoBehaviour {
 			interactables.Remove (col.GetComponent<Interactive> ());
 
 			if (interactables.Count == 0) {
-				InputHandler.A.becameActive -= Interact;
-				InputHandler.A.becameActive += PlayerController.instance.Jump;
+				InputHandler.AEvent().becameActive -= Interact;
+				InputHandler.AEvent().becameActive += PlayerController.instance.Jump;
 			}
 		}
 	}

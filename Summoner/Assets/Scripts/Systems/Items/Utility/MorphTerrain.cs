@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GrapplingHook : BaseUtility {
+public class MorphTerrain : BaseUtility {
 	#region implemented abstract members of BaseUtility
 
 	public override void OnControlOverride ()
@@ -22,11 +22,11 @@ public class GrapplingHook : BaseUtility {
 
 	#endregion
 
-	void OnHooking() {
+	void OnMorph() {
 		
 	}
 
-	void OnUnHooking() {
+	void OnFinishedMorphing() {
 		
 	}
 
