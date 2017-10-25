@@ -16,6 +16,8 @@ public class Player : Entity {
 	public static Inventory inventory;
 	public HashSet<Blueprint> collectedBlueprints = new HashSet<Blueprint>();
 
+	public BaseItem[] testItems;
+
 	void Awake(){
 		if (instance != null) {
 			Destroy (this);
@@ -39,7 +41,12 @@ public class Player : Entity {
 	public Inventory GetInventory(){
 		if (inventory == null) {
 			inventory = new Inventory ();
+
+			for (int i = 0; i < testItems.Length * 4; i++) {
+				inventory.AddItem (testItems [Random.Range (0, testItems.Length)], Random.Range (3, 13));
+			}
 		}
+
 		return inventory;
 	}
 }

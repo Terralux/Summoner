@@ -6,12 +6,11 @@ using UnityEngine;
 [System.Serializable]
 public class Inventory {
 
-	[Range (0f, 40f)]
-	public int maxSlots = 40;
+	public static int maxSlots = 40;
 	private int usedSlots = 0;
 	public static int maxStackSize = 100;
 
-	public static List<InventorySlot> inventorySlots = new List<InventorySlot> ();
+	public List<InventorySlot> inventorySlots = new List<InventorySlot> ();
 	private InventorySorter inventorySorter = new InventorySorter ();
 
 	public delegate void OnInventoryChanged();
@@ -158,7 +157,7 @@ public class Inventory {
 		}
 	}
 
-	public static void RemoveInventorySlot(InventorySlot slot){
+	public void RemoveInventorySlot(InventorySlot slot){
 		for (int i = 0; i < inventorySlots.Count; i++) {
 			if (inventorySlots[i] == slot) {
 				inventorySlots.RemoveAt (i);
@@ -179,12 +178,7 @@ public class InventorySlot
 		this.quantity = quantity;
 	}
 
-	public int GetSlotsFilled ()
-	{
+	public int GetSlotsFilled (){
 		return (quantity / Inventory.maxStackSize) + 1;
-	}
-
-	public void Remove(){
-		Inventory.RemoveInventorySlot (this);
 	}
 }

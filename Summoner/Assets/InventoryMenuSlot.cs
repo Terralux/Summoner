@@ -5,18 +5,35 @@ using UnityEngine.UI;
 
 public class InventoryMenuSlot : MonoBehaviour {
 	public InventorySlot mySlot;
-	private Image myImage;
+	private Button myButton;
+
+	void Awake(){
+		myButton = GetComponent<Button> ();
+	}
 
 	public void SetInventorySlot(InventorySlot slot){
-		mySlot = slot;
-		myImage.sprite = mySlot.item.image;
+		if (slot != null) {
+			mySlot = slot;
+			myButton.image.sprite = mySlot.item.image;
+		} else {
+			myButton.image.color = new Color (0, 0, 0, 0);
+		}
 	}
 
 	public void RemoveItem(){
-		mySlot.Remove ();
+		
 	}
 
 	public void Move(){
 		
+	}
+
+	public void MarkInventorySlot (bool isMarked){
+		myButton.interactable = isMarked;
+	}
+
+	public void Activate(){
+		myButton.onClick.Invoke ();
+		Debug.Log ("I clicked on " + mySlot.item.itemName);
 	}
 }

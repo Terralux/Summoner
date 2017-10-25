@@ -355,9 +355,9 @@ public class InputEventVector2Analog{
 	public InputEventAnalogAxis horizontalAnalogEvent;
 	public InputEventAnalogAxis verticalAnalogEvent;
 
-	public InputEventVector2Analog(string horizontalAxisName, string VerticalAxisName){
+	public InputEventVector2Analog(string horizontalAxisName, string verticalAxisName){
 		this.horizontalAxisName = horizontalAxisName;
-		this.verticalAxisName = VerticalAxisName;
+		this.verticalAxisName = verticalAxisName;
 
 		horizontalAnalogEvent = new InputEventAnalogAxis (horizontalAxisName, 0.2f, 0.1f);
 		verticalAnalogEvent = new InputEventAnalogAxis (verticalAxisName, 0.2f, 0.1f);
