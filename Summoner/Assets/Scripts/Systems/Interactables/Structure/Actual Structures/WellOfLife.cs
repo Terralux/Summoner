@@ -6,6 +6,7 @@ public class WellOfLife : AutomaticStructure {
 
 	public static WellOfLife instance;
 
+	public int citizenCount;
 	public static CitySetup citySetup;
 	public float radius;
 

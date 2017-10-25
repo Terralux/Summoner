@@ -13,9 +13,8 @@ public class Player : Entity {
 	public bool hasWeapon;
 
 	public Weapon equipped;
-	private static Inventory inventory;
-
-	private List<Blueprint> collectedBlueprints = new List<Blueprint>();
+	public Inventory inventory;
+	public HashSet<Blueprint> collectedBlueprints = new HashSet<Blueprint>();
 
 	void Awake(){
 		if (instance != null) {
@@ -30,16 +29,11 @@ public class Player : Entity {
 	}
 
 	public void AddBlueprint(Blueprint blueprint){
-		if(!collectedBlueprints.Contains(blueprint)){
-			collectedBlueprints.Add (blueprint);
-		}
+		collectedBlueprints.Add (blueprint);
 	}
 
-	public Inventory GetInventory(){
-		if (inventory == null) {
-			inventory = new Inventory ();
-		}
-
-		return inventory;
+	public void RemoveBlueprint(Blueprint blueprint) {
+		collectedBlueprints.Remove (blueprint);
 	}
+
 }

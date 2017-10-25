@@ -53,7 +53,7 @@ public struct Chunk {
 		Vector3 liquidSourcePosition = LiquidGenerator.GenerateLiquidSource(this);
 
 		if(liquidSourcePosition.magnitude > 0.1f){
-			Debug.Log("Liquid potential A-OKAY!");
+			//Debug.Log("Liquid potential A-OKAY!");
 		}
 
 		for(int y = 1; y < slices.Length - 1; y++){
