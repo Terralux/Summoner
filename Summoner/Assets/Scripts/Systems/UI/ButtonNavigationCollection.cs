@@ -9,11 +9,11 @@ public class ButtonNavigationCollection : MonoBehaviour {
 	private int currentButtonIndex = 0;
 	public bool isHorizontal = false;
 
-	public void Move(bool isMovingDown){
-		if (isMovingDown) {
-			MoveDown ();
-		} else {
+	public void Move(bool isMovingUp){
+		if (isMovingUp) {
 			MoveUp ();
+		} else {
+			MoveDown ();
 		}
 	}
 
@@ -35,6 +35,7 @@ public class ButtonNavigationCollection : MonoBehaviour {
 
 	public void Activate(){
 		buttonCollection [currentButtonIndex].onClick.Invoke ();
+		GetComponent<BaseMenu> ().Hide ();
 	}
 
 	private void UpdateButtonsEnabled(){
@@ -50,17 +51,21 @@ public class ButtonNavigationCollection : MonoBehaviour {
 	void OnEnable(){
 		UpdateButtonsEnabled ();
 		if (isHorizontal) {
-			InputHandler.LeftStick.horizontalAnalogEvent.becameActive += Move;
+			InputHandler.LeftStickEvent().horizontalAnalogEvent.becameActive += Move;
 		} else {
-			InputHandler.LeftStick.verticalAnalogEvent.becameActive += Move;
+			InputHandler.LeftStickEvent().verticalAnalogEvent.becameActive += Move;
 		}
+
+		InputHandler.AEvent().becameActive += Activate;
 	}
 
 	void OnDisable(){
 		if (isHorizontal) {
-			InputHandler.LeftStick.horizontalAnalogEvent.becameActive -= Move;
+			InputHandler.LeftStickEvent().horizontalAnalogEvent.becameActive -= Move;
 		} else {
-			InputHandler.LeftStick.verticalAnalogEvent.becameActive -= Move;
+			InputHandler.LeftStickEvent().verticalAnalogEvent.becameActive -= Move;
 		}
+
+		InputHandler.AEvent().becameActive -= Activate;
 	}
 }
