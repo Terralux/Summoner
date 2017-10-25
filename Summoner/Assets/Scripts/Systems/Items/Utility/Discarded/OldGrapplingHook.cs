@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OldGrapplingHook : BaseUtility {
+public class OldGrapplingHook : MonoBehaviour {
 
 	public float maxRange;
 	public float travelSpeed;
@@ -19,21 +19,6 @@ public class OldGrapplingHook : BaseUtility {
 	SpringJoint springJoint;
 
 	GameObject surfaceHooked;
-
-	#region implemented abstract members of BaseUtility
-	public override void OnControlOverride ()
-	{
-		throw new System.NotImplementedException ();
-	}
-	public override void OnActivation ()
-	{
-		throw new System.NotImplementedException ();
-	}
-	public override void OnDeActivation ()
-	{
-		throw new System.NotImplementedException ();
-	}
-	#endregion
 
 	void Awake() {
 		playerRb = GetComponent<Rigidbody> ();
