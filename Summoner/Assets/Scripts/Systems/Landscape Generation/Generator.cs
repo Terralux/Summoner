@@ -78,12 +78,12 @@ public struct Generator {
 
 		string[] numbers = chunkKey.Split (',');
 
-		Vector3 position = new Vector3 (int.Parse(numbers[0]), int.Parse(numbers[1]), int.Parse(numbers[2]));
+		Vector3 position = new Vector3 (int.Parse (numbers [0]), int.Parse (numbers [1]), int.Parse (numbers [2]));
 
 		for (int y = 0; y < maps.Count - 1; y++) {
 			for (int x = 0; x < maps [y].GetLength (0); x++) {
 				for (int z = 0; z < maps [y].GetLength (0); z++) {
-					maps [y] [x, z] = HeightMapManager.GetActiveState ((x - (int)position.x) + ((int)position.x * WorldManager.dimension), (y - (int)position.y) + ((int)position.y * WorldManager.dimension), (z - (int)position.z) + ((int)position.z * WorldManager.dimension));
+					maps [y] [x, z] = HeightMapManager.GetActiveState (x + (int)position.x * WorldManager.dimension, y + (int)position.y * WorldManager.dimension, z + (int)position.z * WorldManager.dimension);
 				}
 			}
 		}

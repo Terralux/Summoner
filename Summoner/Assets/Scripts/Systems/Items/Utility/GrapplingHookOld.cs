@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GrapplingHook : BaseUtility {
+public class GrapplingHookOld : BaseUtility {
 
 	public float maxRange;
 	public float travelSpeed;

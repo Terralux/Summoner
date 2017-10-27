@@ -99,42 +99,45 @@ public class InventoryMenu : BaseMenu {
 	}
 
 	public void MoveUp(){
+		int prevIndex = currentButtonIndex;
 		currentButtonIndex -= columns;
 		if (currentButtonIndex < 0) {
-			currentButtonIndex = playerInventory.inventorySlots.Count - 1;
+			currentButtonIndex = (prevIndex % columns) + ((playerInventory.inventorySlots.Count - 1) / columns) * columns;
+			if (currentButtonIndex >= playerInventory.inventorySlots.Count) {
+				currentButtonIndex -= columns;
+			}
 		}
 	}
 
 	public void MoveDown(){
+		int prevIndex = currentButtonIndex;
 		currentButtonIndex += columns;
 		if (currentButtonIndex >= playerInventory.inventorySlots.Count) {
-			currentButtonIndex = 0;
+			currentButtonIndex = prevIndex % columns;
 		}
 	}
 
 	public void MoveLeft(){
 		currentButtonIndex--;
 		if (currentButtonIndex < 0) {
-			currentButtonIndex = playerInventory.inventorySlots.Count - 1;
+			currentButtonIndex = playerInventory.inventorySlots.Count + currentButtonIndex;
 		}
 	}
 
 	public void MoveRight(){
 		currentButtonIndex++;
 		if (currentButtonIndex >= playerInventory.inventorySlots.Count) {
-			currentButtonIndex = 0;
+			currentButtonIndex = currentButtonIndex - playerInventory.inventorySlots.Count;
 		}
 	}
 
 	public void Activate(){
 		slots [currentButtonIndex].Activate();
-		//GetComponent<BaseMenu> ().Hide ();
 	}
 
 	public void Return(){
 		PauseMenu.instance.Show ();
 		Hide ();
-		//GetComponent<BaseMenu> ().Hide ();
 	}
 
 	void OnEnable(){

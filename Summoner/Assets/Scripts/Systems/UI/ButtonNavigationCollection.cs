@@ -52,8 +52,10 @@ public class ButtonNavigationCollection : MonoBehaviour {
 		UpdateButtonsEnabled ();
 		if (isHorizontal) {
 			InputHandler.LeftStickEvent().horizontalAnalogEvent.becameActive += Move;
+			InputHandler.DPadEvent ().horizontalAnalogEvent.becameActive += Move;
 		} else {
 			InputHandler.LeftStickEvent().verticalAnalogEvent.becameActive += Move;
+			InputHandler.DPadEvent().verticalAnalogEvent.becameActive += Move;
 		}
 
 		InputHandler.AEvent().becameActive += Activate;
@@ -62,8 +64,10 @@ public class ButtonNavigationCollection : MonoBehaviour {
 	void OnDisable(){
 		if (isHorizontal) {
 			InputHandler.LeftStickEvent().horizontalAnalogEvent.becameActive -= Move;
+			InputHandler.DPadEvent ().horizontalAnalogEvent.becameActive -= Move;
 		} else {
 			InputHandler.LeftStickEvent().verticalAnalogEvent.becameActive -= Move;
+			InputHandler.DPadEvent().verticalAnalogEvent.becameActive -= Move;
 		}
 
 		InputHandler.AEvent().becameActive -= Activate;
