@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OldGrapplingHook : MonoBehaviour {
+public class GrapplingHookOld : BaseUtility {
 
 	public float maxRange;
 	public float travelSpeed;
@@ -20,6 +20,13 @@ public class OldGrapplingHook : MonoBehaviour {
 
 	GameObject surfaceHooked;
 
+	#region implemented abstract members of BaseUtility
+
+	public override void OnControlOverride ()
+	{
+		// Enable unique control scheme for grappling hook here, etc. aim and movement
+	}
+
 	void Awake() {
 		playerRb = GetComponent<Rigidbody> ();
 		springJoint = GetComponent<SpringJoint> ();
@@ -33,6 +40,8 @@ public class OldGrapplingHook : MonoBehaviour {
 
 		OnGrappling ();
 	}
+
+	#endregion
 
 	public void Grapple() {
 		playerPosition = new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z);

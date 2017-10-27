@@ -334,7 +334,6 @@ public class InputEventAnalogAxis{
 	}
 }
 
-
 public class InputEventVector2Analog{
 	public delegate void FloatEvent(float value);
 	public delegate void Vector2Event(Vector2 value);
