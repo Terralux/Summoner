@@ -57,6 +57,7 @@ public class ContentHolder : MonoBehaviour {
 			//Activate placable behavior
 		}else if (myItem as Useables != null) {
 			//Activate useable behavior
+			(myItem as Useables).OnActivateFromMenu();
 			return true;
 		}
 
